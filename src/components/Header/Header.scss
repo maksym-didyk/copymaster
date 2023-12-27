@@ -1,0 +1,21 @@
+@import '../../assets/styles/mixins';
+
+.header {
+  border-radius: 0rem 0rem 1rem 1rem;
+  background: #0E0F16;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    padding: 2.5rem 8rem;
+    margin: 0 auto;
+
+    @include onDesktopSmall {
+      padding: 2rem 4rem;
+    }
+
+    @include onTablet {
+      padding: 2rem 2rem;
+    }
+  }
+}

@@ -1,0 +1,1 @@
+# CopyMaster – your assistant in crypto-trading
