@@ -1,12 +1,35 @@
 import React from 'react';
 import './Header.scss';
-const imageLogo = require('../../assets/images/copymaster_logo.svg').default;
+import SidebarRight from '../SidebarRight/SidebarRight';
+
 
 export const Header = () => {
+  const imageLogo = require('../../assets/images/header/copymaster_logo.svg').default;
+
   return (
     <header className='header'>
       <div className='header__container'>
-        <img src={imageLogo} alt='CopyMaster logo' />
+        <div className='d-flex gap-5 align-items-center'>
+          <img src={imageLogo} alt='CopyMaster logo' className='header__logo' />
+          <ul className='d-none d-xl-flex gap-5 align-items-center'>
+            <li><a href='#/'>Buy</a></li>
+            <li><a href='#/'>Markets</a></li>
+            <li><a href='#/'>Trade</a></li>
+            <li><a href='#/'>Assets</a></li>
+            <li><a href='#/'>News</a></li>
+          </ul>
+        </div>
+
+        <button className='header__button header__button--border'>Donate</button>
+
+        <div className='d-none d-sm-flex align-items-center'>
+          <button className='header__button'>Sign in</button>
+          <button className='header__button header__button--fill'>Sign up</button>
+        </div>
+
+        <div className='d-flex d-xl-none'>
+          <SidebarRight />
+        </div>
       </div>
     </header>
   );

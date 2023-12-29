@@ -4,18 +4,75 @@
   border-radius: 0rem 0rem 1rem 1rem;
   background: #0E0F16;
 
+  &__logo {
+    width: 12.75rem;
+    height: auto;
+  }
+
   &__container {
     display: flex;
-    justify-content: space-between;
-    padding: 2.5rem 8rem;
+    justify-content: space-around;
+    gap: 1rem;
+    padding: 2.3rem 0;
     margin: 0 auto;
 
+    @include onDesktopMedium {
+      padding: 2rem 0;
+    }
+
+    @include onPhone {
+      padding: 1.5rem 0;
+    }
+  }
+
+  &__burger {
+    height: 1.7rem;
+    width: 1.7rem;
+    padding: 0;
+    background-color: transparent;
+    background-image: url('../../assets/images/header/burger.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1.75rem;
+    background: none;
+    padding: 0.6rem 2.5rem;
+    color: #fff;
+
+    &:hover {
+      color:#3548FE;
+    }
+
+    @include onDesktopMedium {
+      padding: 0.5rem 1.5rem;
+    }
+
     @include onDesktopSmall {
-      padding: 2rem 4rem;
+      padding: 0.3rem 1rem;
     }
 
     @include onTablet {
-      padding: 2rem 2rem;
+      padding: 0.1rem 1rem;
+    }
+
+    &--fill {
+      background: #3548FE;
+
+      &:hover {
+        background: #283cfa;
+        color: #fff;
+      }
+    }
+
+    &--border {
+      border: 1px solid #3548FE;
     }
   }
 }
