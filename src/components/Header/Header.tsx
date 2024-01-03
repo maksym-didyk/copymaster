@@ -1,11 +1,9 @@
 import React from 'react';
 import './Header.scss';
 import SidebarRight from '../SidebarRight/SidebarRight';
-
+import imageLogo from '../../assets/images/header/copymaster_logo.svg';
 
 export const Header = () => {
-  const imageLogo = require('../../assets/images/header/copymaster_logo.svg').default;
-
   return (
     <header className='header'>
       <div className='header__container'>
@@ -27,7 +25,7 @@ export const Header = () => {
           <button className='header__button header__button--fill'>Sign up</button>
         </div>
 
-        <div className='d-flex d-xl-none'>
+        <div className='d-flex d-xl-none align-items-center'>
           <SidebarRight />
         </div>
       </div>

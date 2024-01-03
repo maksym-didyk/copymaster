@@ -1,6 +1,70 @@
 @import '../styles/mixins';
 
 .main {
-  height: 55vh;
-  ;
+  &__hero {
+    &--text {
+      color: #fff;
+      font-family: Unbounded;
+      font-size: 3rem;
+      font-style: normal;
+      font-weight: 700;
+      text-transform: uppercase;
+
+      @include onDesktopSmall {
+        font-size: 2.5rem;
+      }
+
+      @include onTablet {
+        font-size: 2.2rem;
+      }
+    }
+
+    &--image {
+      width: 24rem;
+      height: auto;
+
+      @include onDesktopSmall {
+        width: 18rem;
+      }
+
+      @include onTablet {
+        width: 14rem;
+      }
+    }
+  }
+
+  &__accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 2rem 1.6rem;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: #0E0F16;
+
+    @include onPhone {
+      margin: 2rem 0;
+      padding: 2rem 1rem;
+    }
+
+    &--text {
+      color: #fff;
+      text-align: center;
+      font-family: Unbounded;
+      font-size: 2rem;
+      font-style: normal;
+      font-weight: 700;
+      text-transform: uppercase;
+
+      @include onDesktopSmall {
+        font-size: 1.5rem;
+      }
+
+      @include onTablet {
+        font-size: 1.2rem;
+      }
+    }
+  }
+  
+
 }
