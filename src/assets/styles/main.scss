@@ -1,5 +1,23 @@
 @import '../styles/mixins';
 
+.accordion {
+  --bs-accordion-bg: transparent;
+}
+
+.accordion-item {
+  --bs-accordion-active-bg: transparent;
+  --bs-accordion-btn-focus-box-shadow: transparent;
+  --bs-accordion-btn-color: #3E435D;
+  --bs-accordion-active-color: #fff;
+  --bs-accordion-btn-icon: none;
+  --bs-accordion-btn-active-icon: none;
+  color: #fff;
+  font-family: Roboto;
+  font-size: 1rem;
+  font-style: normal;
+  line-height: 120%; /* 1.2rem */
+}
+
 .main {
   &__hero {
     &--text {
@@ -62,6 +80,43 @@
 
       @include onTablet {
         font-size: 1.2rem;
+      }
+    }
+  }
+
+  &__start {
+    position: relative;
+    border-radius: 1rem;
+    background: #0E0F16;
+    margin: 6rem 1.6rem;
+    padding: 6rem 10rem;
+    color: #fff;
+
+    @include onDesktopSmall {
+      padding: 6rem;
+    }
+
+    @include onPhone {
+      margin: 2rem 0;
+      padding: 2rem 1rem;
+    }
+
+    &-barrel {
+      position: absolute;
+      top: 50%;
+      left: 70%;
+      transform: translate(-50%, -50%);
+
+      @include onDesktopSmall {
+        height: 80%;
+      }
+
+      @include onTablet {
+        height: 70%;
+      }
+
+      @include onPhone {
+        display: none;
       }
     }
   }

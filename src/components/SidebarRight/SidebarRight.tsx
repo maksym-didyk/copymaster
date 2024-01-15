@@ -16,7 +16,7 @@ const SidebarRight = () => {
 
     
     <Offcanvas show={show} onHide={handleClose} placement='end' data-bs-theme='dark' className='bg-black' >
-        <Offcanvas.Header closeButton>
+        <Offcanvas.Header  className='mt-2 me-1' closeButton>
           <Offcanvas.Title>
             <img src={imageLogo} alt='CopyMaster logo' className='header__logo' />
           </Offcanvas.Title>
