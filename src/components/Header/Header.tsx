@@ -2,13 +2,17 @@ import React from 'react';
 import './Header.scss';
 import SidebarRight from '../SidebarRight/SidebarRight';
 import imageLogo from '../../assets/images/header/copymaster_logo.svg';
+import { Link } from 'react-router-dom';
 
 export const Header = () => {
   return (
     <header className='header'>
       <div className='header__container'>
         <div className='d-flex gap-5 align-items-center'>
-          <img src={imageLogo} alt='CopyMaster logo' className='header__logo' />
+          <Link to={'/'} >
+            <img src={imageLogo} alt='CopyMaster logo' className='header__logo' />
+          </Link>
+
           <ul className='d-none d-xl-flex gap-5 align-items-center'>
             <li><a href='#/'>Buy</a></li>
             <li><a href='#/'>Markets</a></li>

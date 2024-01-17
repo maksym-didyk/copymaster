@@ -7,10 +7,10 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    padding: 2rem 1.6rem;
+    padding: 0 1.6rem 2rem;
 
     @include onPhone {
-      padding: 2rem 0;
+      padding: 0 0 2rem;
     }
   }
 

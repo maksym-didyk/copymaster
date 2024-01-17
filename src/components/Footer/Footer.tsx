@@ -26,7 +26,7 @@ export const Footer = () => {
             </div>
 
             <div>
-              <h4 className='mb-3'>About us</h4>
+              <h4 className='mb-3 text-white'>About us</h4>
               <ul className='d-flex flex-column gap-2'>
                 <li><a href='#/'>For investors</a></li>
                 <li><a href='#/'>Our brand</a></li>
@@ -36,7 +36,7 @@ export const Footer = () => {
             </div>
 
             <div>
-                <h4 className='mb-3'>Support</h4>
+                <h4 className='mb-3 text-white'>Support</h4>
                 <ul className='d-flex flex-column gap-2'>
                   <li><a href='#/'>Help center</a></li>
                   <li><a href='#/'>CopyMaster learn</a></li>

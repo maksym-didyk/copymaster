@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { Accordion } from 'react-bootstrap';
 import imageScreenOne from '../assets/images/screenshots/home-1.png';
 import imageBarrel from '../assets/images/home-barrel.png';
-import { Accordion } from 'react-bootstrap';
+import imageAccordion from '../assets/images/screenshots/home-2.svg';
 
 export const HomePage = () => {
   const fagContent = [
@@ -22,28 +23,28 @@ export const HomePage = () => {
       title: 'Trading bot',
       content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
     },
-    {
-      id: '04',
-      title: 'Security and Transparency:',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
-    },
-    {
-      id: '05',
-      title: 'Intuitive Interface:',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
-    },
-    {
-      id: '06',
-      title: 'Intuitive Interface:',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
-    },
+    // {
+    //   id: '04',
+    //   title: 'Security and Transparency',
+    //   content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+    // },
+    // {
+    //   id: '05',
+    //   title: 'Intuitive Interface',
+    //   content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+    // },
+    // {
+    //   id: '06',
+    //   title: 'Intuitive Interface',
+    //   content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+    // },
   ];
   return (
     <>
       <Header />
 
       <main className='main'>
-        <section className='d-flex justify-content-around align-items-center gap-3 m-5'>
+        <section className='d-flex justify-content-around align-items-center gap-3 p-5'>
           <div>
             <h1 className='main__hero--text'>Your assistant <br /> in crypto-trading</h1>
           </div>
@@ -51,7 +52,6 @@ export const HomePage = () => {
           <div className='d-none d-sm-block'>
             <img src={imageScreenOne} alt='Screenshot' className='main__hero--image' />
           </div>
-
         </section>
 
         <section className='main__accordion'>
@@ -60,24 +60,29 @@ export const HomePage = () => {
               <button className='header__button header__button--border'>Sign in</button>
             </div>
 
-            <h2 className='main__accordion--text'>Sign up and get started today</h2>
+            <h2 className='main__accordion-text text-white'>Sign up and get started today</h2>
 
             <div className='d-none d-sm-block'>
               <button className='header__button header__button--fill'>Sign up</button>
             </div>
           </div>
 
-          <div className='mt-4'>
-          <Accordion flush>
-            {fagContent.map((item, idx) => 
+          <div className='mt-4 position-relative'>
+            <Accordion flush>
+              {fagContent.map((item, idx) => 
               <Accordion.Item eventKey={String(idx)}>
-              <Accordion.Header>{`${item.id} ${item.title}`}</Accordion.Header>
-              <Accordion.Body>
-                {item.content}
-              </Accordion.Body>
-            </Accordion.Item>
-            )}           
-          </Accordion>
+                <Accordion.Header>
+                  <span className='main__accordion--text'>{item.id}</span>
+                  <span className='main__accordion--title'>{item.title}</span>
+                </Accordion.Header>
+                <Accordion.Body>
+                  {item.content}
+                </Accordion.Body>
+              </Accordion.Item>
+              )}           
+            </Accordion>
+
+            <img src={imageAccordion} alt='Coins barrel' className='main__accordion--image' />
           </div>
         </section>
 
@@ -89,6 +94,7 @@ export const HomePage = () => {
                   <span className='d-block m-2 ps-4'>Crypto story</span>
                 </h3>
               </div>
+
               <div className='col'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="106" height="30" viewBox="0 0 106 30" fill="none">
                   <path d="M89.704 15.1755L88.81 18.798C89.914 19.0755 93.316 20.1795 93.82 18.1365C94.345 16.005 90.8065 15.453 89.704 15.1755ZM90.9235 10.23L90.1135 13.5165C91.0315 13.7475 93.8635 14.6925 94.3225 12.834C94.7995 10.8945 91.8415 10.4625 90.9235 10.23ZM91 0C88.0333 0 85.1332 0.879734 82.6665 2.52796C80.1997 4.17618 78.2771 6.51885 77.1418 9.25974C76.0065 12.0006 75.7094 15.0166 76.2882 17.9263C76.867 20.8361 78.2956 23.5088 80.3934 25.6066C82.4912 27.7044 85.1639 29.133 88.0737 29.7118C90.9834 30.2905 93.9994 29.9935 96.7403 28.8582C99.4811 27.7229 101.824 25.8003 103.472 23.3335C105.12 20.8668 106 17.9667 106 15C106 13.0302 105.612 11.0796 104.858 9.25974C104.104 7.43986 102.999 5.78628 101.607 4.3934C100.214 3.00052 98.5601 1.89563 96.7403 1.14181C94.9204 0.387986 92.9698 0 91 0ZM97.537 12.8625C97.5055 13.4379 97.2847 13.9868 96.909 14.4239C96.5333 14.8609 96.0237 15.1615 95.4595 15.279C95.8304 15.43 96.166 15.6562 96.4452 15.9433C96.7243 16.2304 96.941 16.5722 97.0815 16.9472C97.222 17.3222 97.2833 17.7222 97.2615 18.1221C97.2397 18.5219 97.1354 18.913 96.955 19.2705C96.076 21.8085 93.9895 22.023 91.2145 21.492L90.541 24.222L88.9135 23.811L89.578 21.1185C89.1446 21.0105 88.7126 20.897 88.282 20.778L87.6145 23.484L85.9885 23.0745L86.6635 20.3385C86.2825 20.241 85.897 20.136 85.5025 20.037L83.3845 19.503L84.193 17.619C84.193 17.619 85.393 17.9415 85.375 17.9175C85.4496 17.9416 85.5283 17.9506 85.6065 17.944C85.6846 17.9374 85.7607 17.9153 85.8302 17.879C85.8997 17.8427 85.9614 17.7929 86.0115 17.7326C86.0615 17.6722 86.0991 17.6025 86.122 17.5275L87.9475 10.119C87.9709 9.89221 87.9048 9.66526 87.7633 9.4865C87.6218 9.30773 87.4161 9.1913 87.19 9.162C87.214 9.1455 86.0065 8.865 86.0065 8.865L86.4415 7.107L88.684 7.674L88.6825 7.683C89.02 7.767 89.368 7.848 89.722 7.929L90.388 5.2275L92.0155 5.637L91.3615 8.286C91.798 8.388 92.2375 8.4885 92.6665 8.5965L93.3145 5.964L94.942 6.375L94.2745 9.078C96.3295 9.7935 97.8325 10.8675 97.537 12.8625Z" fill="white"/>
@@ -97,16 +103,19 @@ export const HomePage = () => {
                 </svg>
               </div>
             </div>
+
             <div className='row mt-3 gap-4'>
               <div className='col col-md-9'>
                 An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.
               </div>
+
               <div>
                 <button className='header__button header__button--fill'>Get started</button>
               </div>
             </div>
           </div>
-          <img src={imageBarrel} alt='Coins barrel' className='main__start-barrel' />
+
+          <img src={imageBarrel} alt='Coins barrel' className='main__start--image' />
         </section>
       </main>
 

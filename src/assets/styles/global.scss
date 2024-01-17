@@ -6,7 +6,6 @@ html {
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  color: #fff;
   box-sizing: border-box;
 
   @include onDesktopMedium {
@@ -19,8 +18,11 @@ html {
 }
 
 body {
-  background-color: #3548FE;
+  color: #fff;
   box-sizing: border-box;
+  background-color: #3548FE;
+  background: bottom left / contain #3548FE no-repeat url('../images/102.png');
+
 
   &::-webkit-scrollbar {
     width: 8px; /* Ширина скроллбара */

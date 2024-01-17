@@ -4,6 +4,16 @@
   --bs-accordion-bg: transparent;
 }
 
+.accordion-button.collapsed {
+  padding: 2rem;
+  gap: 0;
+}
+
+.accordion-button {
+  padding: 2rem;
+  gap: 3rem;
+}
+
 .accordion-item {
   --bs-accordion-active-bg: transparent;
   --bs-accordion-btn-focus-box-shadow: transparent;
@@ -18,7 +28,33 @@
   line-height: 120%; /* 1.2rem */
 }
 
+.accordion-body {
+  width: 60%;
+  margin-left: 7rem;
+
+  @include onDesktopMedium {
+    width: 50%;
+    margin-left: 6rem;
+  }
+
+  @include onTablet {
+    width: 50%;
+    margin-left: 5rem;
+  }
+
+  @include onPhone {
+    width: 100%;
+    margin-left: 1rem;
+  }
+}
+
 .main {
+  background: top left / contain no-repeat url('../images/101.png');
+
+  @include onPhone {
+    background: top left / contain no-repeat url('../images/100.png');
+  }
+
   &__hero {
     &--text {
       color: #fff;
@@ -66,8 +102,6 @@
     }
 
     &--text {
-      color: #fff;
-      text-align: center;
       font-family: Unbounded;
       font-size: 2rem;
       font-style: normal;
@@ -80,6 +114,42 @@
 
       @include onTablet {
         font-size: 1.2rem;
+      }
+    }
+
+    &--title {
+      font-family: Roboto;
+      font-size: 1.6rem;
+      font-style: normal;
+      font-weight: 700;
+      margin-left: 2.5rem;
+
+      @include onDesktopSmall {
+        font-size: 1.2rem;
+      }
+
+      @include onTablet {
+        font-size: 1rem;
+      }
+    }
+
+    &--image {
+      position: absolute;
+      height: 90%;
+      top: 50%;
+      left: 80%;
+      transform: translate(-50%, -50%);
+
+      @include onDesktopSmall {
+        height: 80%;
+      }
+
+      @include onTablet {
+        height: 70%;
+      }
+
+      @include onPhone {
+        display: none;
       }
     }
   }
@@ -101,11 +171,17 @@
       padding: 2rem 1rem;
     }
 
-    &-barrel {
+    &--image {
       position: absolute;
       top: 50%;
       left: 70%;
       transform: translate(-50%, -50%);
+      transition: transform 0.3s ease;
+      cursor: grab;
+
+      &:hover {
+        transform: translate(-50%, -50%) rotate(5deg); /* Применяем вращение при наведении мыши */
+      }
 
       @include onDesktopSmall {
         height: 80%;
