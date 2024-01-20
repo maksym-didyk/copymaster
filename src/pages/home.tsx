@@ -1,10 +1,12 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Accordion } from 'react-bootstrap';
 import imageScreenOne from '../assets/images/screenshots/home-1.png';
 import imageBarrel from '../assets/images/home-barrel.png';
-import imageAccordion from '../assets/images/screenshots/home-2.svg';
+import imageAccordionFirst from '../assets/images/screenshots/home-2.svg';
+import imageAccordionSecond from '../assets/images/screenshots/home-3.svg';
 
 export const HomePage = () => {
   const fagContent = [
@@ -23,22 +25,31 @@ export const HomePage = () => {
       title: 'Trading bot',
       content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
     },
-    // {
-    //   id: '04',
-    //   title: 'Security and Transparency',
-    //   content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
-    // },
-    // {
-    //   id: '05',
-    //   title: 'Intuitive Interface',
-    //   content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
-    // },
-    // {
-    //   id: '06',
-    //   title: 'Intuitive Interface',
-    //   content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
-    // },
+    {
+      id: '04',
+      title: 'Security and Transparency',
+      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+    },
+    {
+      id: '05',
+      title: 'Intuitive Interface',
+      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+    },
+    {
+      id: '06',
+      title: 'Intuitive Interface',
+      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+    },
   ];
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+      scrollToTop();
+    }, []);
+
   return (
     <>
       <Header />
@@ -63,18 +74,33 @@ export const HomePage = () => {
             <h2 className='main__accordion-text text-white'>Sign up and get started today</h2>
 
             <div className='d-none d-sm-block'>
-              <button className='header__button header__button--fill'>Sign up</button>
+              <Link to={'/signup'} className='header__button header__button--fill'>Sign up</Link>
             </div>
           </div>
 
+          <div className='d-sm-flex d-md-none justify-content-center'>
+              <button className='header__button header__button--fill'>Sign up</button>
+          </div>
+
           <div className='mt-4 position-relative'>
-            <Accordion flush>
-              {fagContent.map((item, idx) => 
-              <Accordion.Item eventKey={String(idx)}>
-                <Accordion.Header>
-                  <span className='main__accordion--text'>{item.id}</span>
-                  <span className='main__accordion--title'>{item.title}</span>
-                </Accordion.Header>
+            <Accordion id='test' flush>
+              {fagContent.map((item, index) => 
+              <Accordion.Item eventKey={String(index)}>
+                  {index < 3
+                  ? (
+                    <Accordion.Header>
+                      <span className='main__accordion--id'>{item.id}</span>
+                      <span className='main__accordion--title first'>{item.title}</span>
+                    </Accordion.Header>
+   
+                  )
+                : (
+                  <Accordion.Header>
+                    <span className='main__accordion--id'>{item.id}</span>
+                    <span className='main__accordion--title first'>{item.title}</span>
+                  </Accordion.Header>
+                )}
+
                 <Accordion.Body>
                   {item.content}
                 </Accordion.Body>
@@ -82,7 +108,8 @@ export const HomePage = () => {
               )}           
             </Accordion>
 
-            <img src={imageAccordion} alt='Coins barrel' className='main__accordion--image' />
+            <img src={imageAccordionFirst} alt='Coins barrel' className='main__accordion--image-first' />
+            <img src={imageAccordionSecond} alt='Coins barrel' className='main__accordion--image-second' />
           </div>
         </section>
 
@@ -110,7 +137,7 @@ export const HomePage = () => {
               </div>
 
               <div>
-                <button className='header__button header__button--fill'>Get started</button>
+                <Link className='header__button header__button--fill' to={'/signup'}>Get started</Link>
               </div>
             </div>
           </div>
@@ -121,7 +148,7 @@ export const HomePage = () => {
 
       <Footer />
     </>
-  )
-}
+  );
+};
 
 export default HomePage;

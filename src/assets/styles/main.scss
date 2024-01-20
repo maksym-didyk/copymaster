@@ -7,17 +7,19 @@
 .accordion-button.collapsed {
   padding: 2rem;
   gap: 0;
+  // flex-direction: row-reverse;
 }
 
 .accordion-button {
   padding: 2rem;
   gap: 3rem;
+  // flex-direction: row-reverse;
 }
 
 .accordion-item {
   --bs-accordion-active-bg: transparent;
   --bs-accordion-btn-focus-box-shadow: transparent;
-  --bs-accordion-btn-color: #3E435D;
+  --bs-accordion-btn-color: #86878a;
   --bs-accordion-active-color: #fff;
   --bs-accordion-btn-icon: none;
   --bs-accordion-btn-active-icon: none;
@@ -49,11 +51,7 @@
 }
 
 .main {
-  background: top left / contain no-repeat url('../images/101.png');
-
-  @include onPhone {
-    background: top left / contain no-repeat url('../images/100.png');
-  }
+  background: top left / contain no-repeat url('../images/100.png');
 
   &__hero {
     &--text {
@@ -101,7 +99,7 @@
       padding: 2rem 1rem;
     }
 
-    &--text {
+    &--id {
       font-family: Unbounded;
       font-size: 2rem;
       font-style: normal;
@@ -122,7 +120,6 @@
       font-size: 1.6rem;
       font-style: normal;
       font-weight: 700;
-      margin-left: 2.5rem;
 
       @include onDesktopSmall {
         font-size: 1.2rem;
@@ -131,21 +128,49 @@
       @include onTablet {
         font-size: 1rem;
       }
+
+      &.first {
+        margin-left: 2.5rem;
+      }
+
+      &.second {
+        margin-right: 2.5rem;
+      }
     }
 
-    &--image {
+    &--image-first {
       position: absolute;
-      height: 90%;
-      top: 50%;
+      height: 46%;
+      top: 24%;
       left: 80%;
       transform: translate(-50%, -50%);
 
       @include onDesktopSmall {
-        height: 80%;
+        height: 40%;
       }
 
       @include onTablet {
-        height: 70%;
+        height: 32%;
+      }
+
+      @include onPhone {
+        display: none;
+      }
+    }
+
+    &--image-second {
+      position: absolute;
+      height: 30%;
+      top: 80%;
+      left: 80%;
+      transform: translate(-50%, -50%);
+
+      @include onDesktopSmall {
+        height: 32%;
+      }
+
+      @include onTablet {
+        height: 28%;
       }
 
       @include onPhone {

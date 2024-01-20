@@ -38,6 +38,6 @@ const SidebarRight = () => {
     </Offcanvas>
     </>
   );
-}
+};
 
 export default SidebarRight;
