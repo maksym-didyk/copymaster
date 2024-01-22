@@ -68,7 +68,7 @@ export const HomePage = () => {
         <section className='main__accordion'>
           <div className='d-flex justify-content-around align-items-center gap-2'>
             <div className='d-none d-sm-block'>
-              <button className='header__button header__button--border'>Sign in</button>
+              <Link to={'/signup'}  className='header__button header__button--border'>Sign in</Link>
             </div>
 
             <h2 className='main__accordion-text text-white'>Sign up and get started today</h2>
@@ -78,8 +78,8 @@ export const HomePage = () => {
             </div>
           </div>
 
-          <div className='d-sm-flex d-md-none justify-content-center'>
-              <button className='header__button header__button--fill'>Sign up</button>
+          <div className='d-flex d-sm-none justify-content-center mt-4'>
+            <Link to={'/signup'} className='header__button header__button--fill px-5'>Sign up</Link>
           </div>
 
           <div className='mt-4 position-relative'>

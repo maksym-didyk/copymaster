@@ -9,6 +9,7 @@ function App() {
       <Routes>
         <Route index element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signin" element={<SignUpPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
         
       </Routes>

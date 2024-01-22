@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Offcanvas } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import imageLanguage from '../../assets/images/header/language.svg'
 
 const SidebarRight = () => {
   const [show, setShow] = useState(false);
@@ -23,8 +25,8 @@ const SidebarRight = () => {
         </Offcanvas.Header>
         <Offcanvas.Body className='d-flex flex-column gap-4 p-4'>
           <div className='d-flex align-items-center gap-3'>
-            <button className='header__button header__button--border w-50'>Sign in</button>
-            <button className='header__button header__button--fill w-50'>Sign up</button>
+            <Link to={'/signin'} className='header__button header__button--border w-50'>Sign in</Link>
+            <Link to={'/signup'} className='header__button header__button--fill w-50'>Sign up</Link>
           </div>
 
           <ul className='d-flex flex-column gap-2'>
@@ -33,6 +35,7 @@ const SidebarRight = () => {
             <li><a href='#/'>Trade</a></li>
             <li><a href='#/'>Assets</a></li>
             <li><a href='#/'>News</a></li>
+            <li><img src={imageLanguage} alt='Language switcher' /> English</li>
           </ul>
         </Offcanvas.Body>
     </Offcanvas>
