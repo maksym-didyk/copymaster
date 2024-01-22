@@ -1,0 +1,53 @@
+.calculator {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #58606C;
+  font-size: 0.7rem;
+
+  &__balance {
+    color: #3D9333;
+    padding-left: 1rem;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // display: grid;
+    // gap: 0.5rem 0.5rem;
+    // grid-template-columns: repeat(3, 1fr);
+    // justify-items: stretch;
+    // grid-template-rows: repeat(4, 1fr);
+    // border: 1px solid white;
+
+    padding: 0 0.2rem;
+    background: #2B3139;
+  }
+
+  &__input {
+    color: #D9D9D9;
+    font-size: 0.7rem;
+    background: transparent;
+    border: 0;
+    outline: none;
+    text-align: center;
+    width: 4rem;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    cursor: pointer;
+    padding: 0.2rem 0;
+
+    &.buy {
+      background: #45FBB4;
+    }
+
+    &.sell {
+      background: #F6465D;
+    }
+  }
+}

@@ -8,3 +8,12 @@ export enum ButtonType {
   subscribe_blue = 'custombutton__subscribe-blue',
   subscribe_purple = 'custombutton__subscribe-purple',
 };
+
+export enum CalculatorButtonType {
+  buy = 'BUY',
+  sell = 'Sell',
+};
+
+export enum DropDownType {
+  pair,
+};

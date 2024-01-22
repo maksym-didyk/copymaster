@@ -7,6 +7,7 @@ import imageScreenOne from '../assets/images/screenshots/home-1.png';
 import imageBarrel from '../assets/images/home-barrel.png';
 import imageAccordionFirst from '../assets/images/screenshots/home-2.svg';
 import imageAccordionSecond from '../assets/images/screenshots/home-3.svg';
+import useTitle from '../hooks/useTitle';
 
 export const HomePage = () => {
   const fagContent = [
@@ -41,6 +42,8 @@ export const HomePage = () => {
       content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
     },
   ];
+
+  useTitle('CopyMaster – your assistant in crypto-trading');
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

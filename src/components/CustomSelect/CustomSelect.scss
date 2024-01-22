@@ -1,0 +1,20 @@
+.custom-select {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: flex-start;
+
+  &__select {
+    background-color: #312F2F;
+    color:#58606C;
+    font-size: 0.7rem;
+    padding: 0.1rem;
+    padding-right: 1rem;
+    cursor: pointer;
+  }
+
+  &__value {
+    color: #D9D9D9;
+    font-size: 0.7rem;
+  }
+}
