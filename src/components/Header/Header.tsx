@@ -22,8 +22,8 @@ export const Header = () => {
             <Link to='#'>Buy</Link>
             <Link to='/markets'>Markets</Link>
             <Link to='#'>Trade</Link>
-            <Link to='#'>Assets</Link>
-            <Link to='#'>News</Link>
+            {/* <Link to='#'>Assets</Link>
+            <Link to='#'>News</Link> */}
           </nav>
         </div>
 
@@ -58,13 +58,11 @@ export const Header = () => {
 
         )
         : (
-          <div className='d-none d-sm-flex align-items-center'>
-            <Link to={'/signin'} className='header__button'>Sign in</Link>
+          <div className='d-none d-sm-flex align-items-center gap-4'>
+            <Link to={'/signin'}>Sign in</Link>
             <Link to={'/signup'} className='header__button header__button--fill' >Sign up</Link>
-          </div>
-        )}
 
-        <OverlayTrigger
+            <OverlayTrigger
           placement='bottom'
           overlay={
             <Tooltip id={`tooltip-language`} data-bs-theme='dark'>
@@ -74,6 +72,8 @@ export const Header = () => {
         >
           <img src={imageLanguage} alt='Language switcher' className='d-none d-sm-block' style={{ cursor: 'pointer' }} />
         </OverlayTrigger>
+          </div>
+        )}
 
         <div className='d-flex d-xl-none align-items-center'>
           <SidebarRight />

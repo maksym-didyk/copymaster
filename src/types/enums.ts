@@ -10,7 +10,7 @@ export enum ButtonType {
 };
 
 export enum CalculatorButtonType {
-  buy = 'BUY',
+  buy = 'Buy',
   sell = 'Sell',
 };
 

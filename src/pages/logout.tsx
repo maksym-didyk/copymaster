@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 export const LogoutPage = () => {
-  const { setAuth } = useAuth()
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
   
   useEffect(() => {

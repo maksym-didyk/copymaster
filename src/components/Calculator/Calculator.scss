@@ -4,9 +4,13 @@
   gap: 0.5rem;
   color: #58606C;
   font-size: 0.7rem;
+  border-radius: 1rem;
+  background: #161822;
+  padding: 2rem;
+  color: #FFF;
 
   &__balance {
-    color: #3D9333;
+    color: #36FF6C;
     padding-left: 1rem;
   }
 
@@ -22,32 +26,53 @@
     // border: 1px solid white;
 
     padding: 0 0.2rem;
-    background: #2B3139;
+    // background: #2B3139;
   }
 
   &__input {
-    color: #D9D9D9;
-    font-size: 0.7rem;
-    background: transparent;
+    border-radius: 1.45rem;
+    background: #232533;
     border: 0;
     outline: none;
-    text-align: center;
-    width: 4rem;
+    width: 16rem;
+    color: #9C9FA4;
+    text-align: right;
+    font-family: Roboto;
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 0.96rem */
+    padding: 0.5rem;
   }
 
   &__button {
     display: flex;
     justify-content: center;
     width: 100%;
+    padding: 0.7rem;
+    border-radius: 1.75rem;
+    color: #FFF;
+    font-family: Roboto;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 1.2rem */
     cursor: pointer;
-    padding: 0.2rem 0;
 
     &.buy {
-      background: #45FBB4;
+      background: #20854E;
+
+      &:hover {
+        background: #2ea363;
+      }
     }
 
     &.sell {
-      background: #F6465D;
+      background: #CB2E33;
+
+      &:hover {
+        background: #F6465D;
+      }
     }
   }
 }

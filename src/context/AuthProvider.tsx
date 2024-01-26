@@ -26,4 +26,3 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
 };
 
 export default AuthContext;
-

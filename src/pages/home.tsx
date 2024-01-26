@@ -71,7 +71,7 @@ export const HomePage = () => {
         <section className='main__accordion'>
           <div className='d-flex justify-content-around align-items-center gap-2'>
             <div className='d-none d-sm-block'>
-              <Link to={'/signup'}  className='header__button header__button--border'>Sign in</Link>
+              <Link to={'/signin'}  className='header__button header__button--border'>Sign in</Link>
             </div>
 
             <h2 className='main__accordion-text text-white'>Sign up and get started today</h2>
@@ -88,7 +88,7 @@ export const HomePage = () => {
           <div className='mt-4 position-relative'>
             <Accordion id='test' flush>
               {fagContent.map((item, index) => 
-              <Accordion.Item eventKey={String(index)}>
+              <Accordion.Item eventKey={String(index)} key={item.id}>
                   {index < 3
                   ? (
                     <Accordion.Header>

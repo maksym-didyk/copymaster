@@ -33,6 +33,10 @@
     font-size: 0.6rem;
     margin: 0.2rem;
     opacity: 0;
+
+    &.active {
+      opacity: 1;
+    }
   }
 
   &__hr {

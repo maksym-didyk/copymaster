@@ -1,22 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import './SignUp.scss';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import imageLogo from '../../assets/images/header/copymaster_logo.svg';
 import useAuth from '../../hooks/useAuth';
+import { client } from '../../utils/fetchClient';
 // import useTitle from '../hooks/useTitle';
 
 export const SignUp = () => {
+  const [inputEmail, setInputEmail] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+
   const { setAuth } = useAuth();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
 
+  const loadData = async () => {
+    const productsData = await client.get<any>(`/j_spring_security_check?j_login=${inputEmail}&j_password=${inputPassword}&remember-me=true`);
+
+
+    if (productsData.body.authorized === true) {
+      setAuth(true);
+      navigate(from, { replace: true });
+    }
+  };
+
   let register = false;
 
   if (location.pathname === '/signup') {
     register = true;
   }
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (inputEmail || inputPassword) {
+      loadData();
+    }
+
+    // setAuth(true);
+    // navigate(from, { replace: true });
+  };
 
   useEffect(() => {
     if (isAuthenticated === true) {
@@ -31,7 +56,7 @@ export const SignUp = () => {
           <img src={imageLogo} alt='CopyMaster logo' className='header__logo my-5' />
         </Link>
 
-        <form autoComplete='off' className='d-flex flex-column justify-content-center align-items-center gap-2'>
+        <form onSubmit={handleSubmit} className='d-flex flex-column justify-content-center align-items-center gap-2'>
           <h1 className='mb-4'>
             {register ? 'Sign up' : 'Sign in'}
           </h1>
@@ -44,23 +69,33 @@ export const SignUp = () => {
           )}
 
           <label>
-            <input type='email' className='signup__input' placeholder='E-mail' pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' />
+            <input 
+              type='text'
+              value={inputEmail}
+              onChange={e => setInputEmail(e.target.value)}
+              placeholder='Login'
+              className='signup__input' 
+              pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' 
+            />
             <p className='signup__error'>Error e-mail</p>
           </label>
 
           <label>
-            <input type='password' className='signup__input' placeholder='Password' />
+            <input 
+              type='password'
+              value={inputPassword}
+              onChange={e => setInputPassword(e.target.value)}
+              placeholder='Password'
+              className='signup__input'
+            />
             <p className='signup__error'>Error password</p>
           </label> 
 
           {register
           ? (<Link to={'/signin'} className='header__button header__button--fill px-5 py-2'>Sign up</Link>)
-          : (<button 
-              className='header__button header__button--fill px-5 py-2' 
-              onClick={() => {
-                setAuth(true)
-                navigate(from, { replace: true });
-              }}
+          : (<button
+              type="submit"
+              className='header__button header__button--fill px-5 py-2'
               >
                 Sign in
               </button>)
