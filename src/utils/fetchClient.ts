@@ -1,6 +1,7 @@
 // const API_KEY = process.env.REACT_APP_STRAPI_API_TOKEN;
 // const API_URL = process.env.REACT_APP_STRAPI_API_URL;
-const API_URL = 'https://copymaster.com.ua';
+// const API_URL = 'https://copymaster.com.ua';
+const API_URL = 'https://185.25.118.208';
 
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
@@ -18,6 +19,8 @@ function request<T>(
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       'Cookie': cookies,
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Accept': '*/*',
       // 'Authorization': `Bearer ${API_KEY}`,
     },
    };
@@ -32,10 +35,11 @@ function request<T>(
         throw new Error();
       }
 
-      const cookies = response.headers.get('Set-Cookie');
+      const cookies = response.headers.get('set-cookie');
 
       // Делаем что-то с cookies
       console.log('Cookies:', cookies);
+      console.log(response.headers);
 
       return response.text();
     })
@@ -46,7 +50,8 @@ function request<T>(
 
 export const client = {
   get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
+  // post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
+  post: <T>(url: string) => request<T>(url, 'POST'),
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
   delete: (url: string) => request(url, 'DELETE'),
 };

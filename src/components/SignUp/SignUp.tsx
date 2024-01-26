@@ -17,10 +17,10 @@ export const SignUp = () => {
   const from = location.state?.from?.pathname || '/';
 
   const loadData = async () => {
-    const productsData = await client.get<any>(`/j_spring_security_check?j_login=${inputEmail}&j_password=${inputPassword}&remember-me=true`);
+    const userData = await client.post<any>(`/j_spring_security_check?j_login=${inputEmail}&j_password=${inputPassword}&remember-me=true`);
 
 
-    if (productsData.body.authorized === true) {
+    if (userData.body.authorized === true) {
       setAuth(true);
       navigate(from, { replace: true });
     }
@@ -75,7 +75,7 @@ export const SignUp = () => {
               onChange={e => setInputEmail(e.target.value)}
               placeholder='Login'
               className='signup__input' 
-              pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' 
+              // pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' 
             />
             <p className='signup__error'>Error e-mail</p>
           </label>

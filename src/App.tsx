@@ -5,6 +5,7 @@ import SignUpPage from './pages/signup';
 import MarketsPage from './pages/markets';
 import { PrivateRoute } from './components/PrivateRoute';
 import LogoutPage from './pages/logout';
+import TestPage from './pages/test';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/signin" element={<SignUpPage />} />
+        <Route path="/test" element={<TestPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
         
         <Route element={<PrivateRoute />}>

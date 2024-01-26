@@ -1,6 +1,7 @@
 import React from 'react';
 import './Footer.scss';
 import imageLogo from '../../assets/images/header/copymaster_logo.svg';
+import { Link } from 'react-router-dom';
 
 export const Footer = () => {
   return (
@@ -28,20 +29,20 @@ export const Footer = () => {
             <div>
               <h4 className='mb-3 text-white'>About us</h4>
               <ul className='d-flex flex-column gap-2'>
-                <li><a href='#/'>For investors</a></li>
-                <li><a href='#/'>Our brand</a></li>
-                <li><a href='#/'>Announcements</a></li>
-                <li><a href='#/'>Risk Disclosure</a></li>
+                <li><Link to='#'>For investors</Link></li>
+                <li><Link to='#'>Our brand</Link></li>
+                <li><Link to='#'>Announcements</Link></li>
+                <li><Link to='#'>Risk Disclosure</Link></li>
               </ul>
             </div>
 
             <div>
                 <h4 className='mb-3 text-white'>Support</h4>
                 <ul className='d-flex flex-column gap-2'>
-                  <li><a href='#/'>Help center</a></li>
-                  <li><a href='#/'>CopyMaster learn</a></li>
-                  <li><a href='#/'>FAQ</a></li>
-                  <li><a href='#/'>Suggestions</a></li>
+                  <li><Link to='#'>Help center</Link></li>
+                  <li><Link to='#'>CopyMaster learn</Link></li>
+                  <li><Link to='#'>FAQ</Link></li>
+                  <li><Link to='#'>Suggestions</Link></li>
                 </ul>
               </div>
           </div>
@@ -51,9 +52,9 @@ export const Footer = () => {
           <p>2024 CopyMaster. All Rights Reserved</p>
 
           <ul className='footer__icons'>
-            <li><a href='#/'>Sitemap</a></li>
-            <li><a href='#/'>Privacy policy</a></li>
-            <li><a href='#/'>Cookie settings</a></li>
+            <li><Link to='#'>Sitemap</Link></li>
+            <li><Link to='#'>Privacy policy</Link></li>
+            <li><Link to='#'>Cookie settings</Link></li>
           </ul>
 
           <div className='footer__icons'>
