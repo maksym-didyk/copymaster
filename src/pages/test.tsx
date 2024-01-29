@@ -52,7 +52,7 @@ export const TestPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('https://copymaster.com.ua/user', {
-          // withCredentials: true, // Включаем передачу cookies
+          withCredentials: true, // Включаем передачу cookies
         });
     
         console.log(response.data);
