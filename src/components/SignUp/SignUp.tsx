@@ -7,6 +7,7 @@ import { client } from '../../utils/fetchClient';
 // import useTitle from '../hooks/useTitle';
 
 export const SignUp = () => {
+  const [inputName, setInputName] = useState('');
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
 
@@ -18,7 +19,6 @@ export const SignUp = () => {
 
   const loadData = async () => {
     const userData = await client.post<any>(`/j_spring_security_check?j_login=${inputEmail}&j_password=${inputPassword}&remember-me=true`);
-
 
     if (userData.body.authorized === true) {
       setAuth(true);
@@ -35,12 +35,9 @@ export const SignUp = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    if (inputEmail || inputPassword) {
+    if (inputEmail && inputPassword) {
       loadData();
     }
-
-    // setAuth(true);
-    // navigate(from, { replace: true });
   };
 
   useEffect(() => {
@@ -63,9 +60,15 @@ export const SignUp = () => {
 
           {register && (
             <label>
-              <input type='text' className='signup__input' placeholder='Name' />
+              <input 
+                type='text'
+                value={inputName}
+                onChange={e => setInputName(e.target.value)}
+                placeholder='Name'
+                className='signup__input'
+              />
               <p className='signup__error'>Error name</p>
-          </label>
+            </label>
           )}
 
           <label>
@@ -116,21 +119,22 @@ export const SignUp = () => {
 
         <div>
           {register 
-          ? (<>
-          
-            Already have an account?
-            {' '}
-            <Link to={'/signin'} className='signup__link'>
-              Sign in
-            </Link>
+          ? (
+            <>
+              Already have an account?
+              {' '}
+              <Link to={'/signin'} className='signup__link'>
+                Sign in
+              </Link>
             </>
           )
-          : (<>
-            Don't have an account?
-            {' '}
-            <Link to={'/signup'} className='signup__link'>
-              Sign up
-            </Link>
+          : (
+            <>
+              Don't have an account?
+              {' '}
+              <Link to={'/signup'} className='signup__link'>
+                Sign up
+              </Link>
             </>
           )
         }

@@ -1,14 +1,43 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import './Header.scss';
 import SidebarRight from '../SidebarRight/SidebarRight';
 import imageLogo from '../../assets/images/header/copymaster_logo.svg';
 import imageLanguage from '../../assets/images/header/language.svg';
 import { Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import useAuth from '../../hooks/useAuth';
+import { client } from '../../utils/fetchClient';
+import { UserData } from '../../types/user';
 
 export const Header = () => {
-  const { isAuthenticated } = useAuth();
+  const [userData, setUserData] = useState<UserData>();
+  const { isAuthenticated, setAuth } = useAuth();
+
+  const loadData = async () => {
+    const loadedData = await client.get<UserData>(`/user`);
+
+    if(loadedData.hasOwnProperty('login')) {
+      setUserData(() => loadedData);
+    }
+  };
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const loadedData = await client.get<UserData>(`/user`);
+  
+      if(loadedData.hasOwnProperty('login')) {
+        setAuth(true);
+      }
+    };
+
+    if (isAuthenticated === true) {
+      loadData();
+    }
+
+    if (isAuthenticated !== true) {
+      checkUser();
+    }
+  }, [isAuthenticated, setAuth]);
 
   return (
     <header className='header'>
@@ -19,9 +48,9 @@ export const Header = () => {
           </Link>
 
           <nav className='d-none d-xl-flex gap-5 align-items-center'>
-            <Link to='#'>Buy</Link>
-            <Link to='/markets'>Markets</Link>
-            <Link to='#'>Trade</Link>
+            <NavLink to='/#'>Buy</NavLink>
+            <NavLink to='/markets'>Markets</NavLink>
+            <NavLink to='/#'>Trade</NavLink>
             {/* <Link to='#'>Assets</Link>
             <Link to='#'>News</Link> */}
           </nav>
@@ -40,6 +69,7 @@ export const Header = () => {
                 <path id='Intersect' fillRule='evenodd' clipRule='evenodd' d='M36.5394 36.6559C36.5959 36.7532 36.5783 36.8762 36.4973 36.9544C33.2598 40.0784 28.8542 42 23.9999 42C19.1462 42 14.7412 40.0789 11.5038 36.9556C11.4228 36.8775 11.4051 36.7545 11.4616 36.6572C13.7546 32.7111 18.5084 30 24.0009 30C29.4928 30 34.2461 32.7105 36.5394 36.6559Z' fill='#0F0F0F'/>
                 </g>
               </svg>
+              <p>{userData?.nickname ? userData?.nickname : 'Username'}</p>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>

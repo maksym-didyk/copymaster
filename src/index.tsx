@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
 import App from './App';
 import './assets/styles/index.scss';
+import { ToastContainer } from 'react-toastify';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +13,10 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <>
+          <App />
+          <ToastContainer position='bottom-right' autoClose={2000} />
+        </>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
