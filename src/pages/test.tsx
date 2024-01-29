@@ -51,7 +51,7 @@ export const TestPage = () => {
   
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://185.25.118.208/user', {
+        const response = await axios.get('https://copymaster.com.ua/user', {
           withCredentials: true, // Включаем передачу cookies
         });
     

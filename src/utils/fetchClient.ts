@@ -1,6 +1,6 @@
 // const API_URL = process.env.REACT_APP_STRAPI_API_URL;
-// const API_URL = 'https://copymaster.com.ua';
-const API_URL = 'https://185.25.118.208';
+const API_URL = 'https://copymaster.com.ua';
+// const API_URL = 'https://185.25.118.208';
 
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
