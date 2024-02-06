@@ -1,11 +1,14 @@
-// const API_URL = process.env.REACT_APP_STRAPI_API_URL;
-const API_URL = 'https://copymaster.com.ua';
+import { toast } from "react-toastify";
+
+export const API_URL = process.env.REACT_APP_STRAPI_API_URL;
+// const API_URL = 'https://copymaster.com.ua';
 // const API_URL = 'https://185.25.118.208';
+// const API_URL = 'http://localhost';
 
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 // Чтение куков из document.cookie
-const cookies = document.cookie;
+// const cookies = document.cookie;
 
 function request<T>(
   url: string,
@@ -15,14 +18,11 @@ function request<T>(
   const options: RequestInit = { 
     method,
     // mode: 'no-cors', // Установите режим no-cors
-    // credentials: 'include', // Это важно для отправки куки
+    credentials: 'include', // Это важно для отправки куки
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
-      'Cookie': cookies,
-      // 'Accept-Encoding': 'gzip, deflate, br',
-      // 'Accept': '*/*',
+      // 'Cookie': cookies,
       // 'Authorization': `Bearer ${API_KEY}`,
-      // 'Access-Control-Allow-Origin': 'https://copymaster.netlify.app/',
     },
    };
 
@@ -33,14 +33,9 @@ function request<T>(
   return fetch(API_URL + url, options)
     .then((response) => {
       if (!response.ok) {
-        throw new Error();
+        // throw new Error();
+        toast.error('Error loading back-end');
       }
-
-      // const cookies = response.headers.get('set-cookie');
-
-      // // Делаем что-то с cookies
-      // console.log('Cookies:', cookies);
-      // console.log(response.headers);
 
       return response.text();
     })

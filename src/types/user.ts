@@ -1,4 +1,7 @@
 export interface UserData {
-  login: string;
-  nickname: boolean;
+  body: {
+    email: string;
+    nickname: string;
+    telegram: string;
+  }
 }

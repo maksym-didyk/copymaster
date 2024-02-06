@@ -88,27 +88,27 @@ export const HomePage = () => {
           <div className='mt-4 position-relative'>
             <Accordion id='test' flush>
               {fagContent.map((item, index) => 
-              <Accordion.Item eventKey={String(index)} key={item.id}>
-                  {index < 3
-                  ? (
+                <Accordion.Item eventKey={String(index)} key={item.id}>
+                    {index < 3
+                    ? (
+                      <Accordion.Header>
+                        <span className='main__accordion--id'>{item.id}</span>
+                        <span className='main__accordion--title first'>{item.title}</span>
+                      </Accordion.Header>
+    
+                    )
+                  : (
                     <Accordion.Header>
                       <span className='main__accordion--id'>{item.id}</span>
                       <span className='main__accordion--title first'>{item.title}</span>
                     </Accordion.Header>
-   
-                  )
-                : (
-                  <Accordion.Header>
-                    <span className='main__accordion--id'>{item.id}</span>
-                    <span className='main__accordion--title first'>{item.title}</span>
-                  </Accordion.Header>
-                )}
+                  )}
 
-                <Accordion.Body>
-                  {item.content}
-                </Accordion.Body>
-              </Accordion.Item>
-              )}           
+                  <Accordion.Body>
+                    {item.content}
+                  </Accordion.Body>
+                </Accordion.Item>
+              )}
             </Accordion>
 
             <img src={imageAccordionFirst} alt='Coins barrel' className='main__accordion--image-first' />

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useEffect } from 'react';
+import { API_URL } from '../api/fetchClient';
 
-export const TestPage = () => { 
-  // const corsAnywhereUrl = 'https://cors-anywhere.herokuapp.com/';
+export const TestPage = () => {
   // const apiUrl = 'https://185.25.118.208/';
   // const apiUrl = 'https://185.25.118.208/j_spring_security_check?j_login=maxim&j_password=maxim&remember-me=true';
 
@@ -15,7 +15,6 @@ export const TestPage = () => {
     //     // mode: 'no-cors', // Установите режим no-cors
     //     headers: {
     //       'Content-Type': 'application/json',
-    //       // 'Current-Host': 'http://localhost:3000/',
     //     },
     //     // body: JSON.stringify({
     //     //   // Ваш запрос тело
@@ -51,7 +50,7 @@ export const TestPage = () => {
   
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://copymaster.com.ua/user', {
+        const response = await axios.get(API_URL + '/user', {
           withCredentials: true, // Включаем передачу cookies
         });
     
@@ -66,7 +65,7 @@ export const TestPage = () => {
 
   return (
     <></>
-  )
-}
+  );
+};
 
 export default TestPage;
