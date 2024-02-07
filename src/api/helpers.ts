@@ -8,10 +8,10 @@ export const logout = async () => {
     const userData = await client.get<any>('/logout');
 
     if (userData.body.authorized === false) {
-      toast.success('You are logged out');
+      toast.info('You are logged out');
       status = true;
     } else {
-      toast.error(`Something went wrong`);
+      toast.error('Something went wrong');
       status = false;
     }
   } catch (error) {

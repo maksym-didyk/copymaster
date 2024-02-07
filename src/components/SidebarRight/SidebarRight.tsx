@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
-import { Dropdown, Offcanvas } from 'react-bootstrap';
+import { Container, Dropdown, Offcanvas } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import imageLanguage from '../../assets/images/header/language.svg';
 import imageLogo from '../../assets/images/header/copymaster_logo.svg';
+import { logout } from '../../api/helpers';
 
 const SidebarRight = () => {
   const [show, setShow] = useState(false);
 
+  const { isAuthenticated, setAuth } = useAuth();
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { isAuthenticated } = useAuth();
+  const handleLogout = async () => {
+    if (await logout()) {
+      setAuth(false);
+    }
+  };
 
   return (
     <>
@@ -37,23 +44,21 @@ const SidebarRight = () => {
             <li><Link to='#'>Buy</Link></li>
             <li><Link to='/markets'>Markets</Link></li>
             <li><Link to='#'>Trade</Link></li>
-            <li><Link to='#'>Assets</Link></li>
-            <li><Link to='#'>News</Link></li>
             <li><img src={imageLanguage} alt='Language switcher' /> English</li>
-            {isAuthenticated &&  <li><Link to='/logout'>Logout</Link></li>}
+            {isAuthenticated &&  <li><Link to='#' onClick={handleLogout}>Logout</Link></li>}
           </ul>
 
-          <Dropdown>
-          <Dropdown.Menu>
-            <Dropdown.Item eventKey="1">
-                <Link to='/logout'>Logout</Link>
-            </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item eventKey="1">
-                <Link to='/logout'>Logout</Link>
+          <Container fluid>
+            <Dropdown.Menu show>
+              <Dropdown.Item eventKey="1" onClick={handleLogout}>
+                Logout
               </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item eventKey="1" onClick={handleLogout}>
+                  Logout
+                </Dropdown.Item>
             </Dropdown.Menu>
-          </Dropdown>
+          </Container>
         </Offcanvas.Body>
     </Offcanvas>
     </>

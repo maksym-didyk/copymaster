@@ -7,9 +7,6 @@ export const API_URL = process.env.REACT_APP_STRAPI_API_URL;
 
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-// Чтение куков из document.cookie
-// const cookies = document.cookie;
-
 function request<T>(
   url: string,
   method: RequestMethod = 'GET',
@@ -18,10 +15,9 @@ function request<T>(
   const options: RequestInit = { 
     method,
     // mode: 'no-cors', // Установите режим no-cors
-    credentials: 'include', // Это важно для отправки куки
+    credentials: 'include',
     headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      // 'Cookie': cookies,
+      'Content-Type': 'application/json',
       // 'Authorization': `Bearer ${API_KEY}`,
     },
    };
@@ -34,7 +30,7 @@ function request<T>(
     .then((response) => {
       if (!response.ok) {
         // throw new Error();
-        toast.error('Error loading back-end');
+        toast.error('Error response fetch');
       }
 
       return response.text();
@@ -47,7 +43,6 @@ function request<T>(
 export const client = {
   get: <T>(url: string) => request<T>(url),
   post: <T>(url: string, data: any = null) => request<T>(url, 'POST', data),
-  // post: <T>(url: string) => request<T>(url, 'POST'),
   patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
   delete: (url: string) => request(url, 'DELETE'),
 };

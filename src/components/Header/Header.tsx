@@ -7,7 +7,7 @@ import imageLanguage from '../../assets/images/header/language.svg';
 import { Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import useAuth from '../../hooks/useAuth';
 import { client } from '../../api/fetchClient';
-import { UserData } from '../../types/user';
+import { UserDataType } from '../../types/types';
 import { toast } from 'react-toastify';
 import { logout } from '../../api/helpers';
 
@@ -16,12 +16,12 @@ interface Props {
 }
 
 export const Header: FC<Props> = ({ homepage = false }) => {
-  const [userData, setUserData] = useState<UserData>();
+  const [userData, setUserData] = useState<UserDataType>();
   const { isAuthenticated, setAuth } = useAuth();
 
   const loadUserData = async () => {
     try {
-      const loadedData = await client.get<UserData>('/user');
+      const loadedData = await client.get<UserDataType>('/user');
 
       setUserData(() => loadedData);
     } catch (error) {
@@ -38,7 +38,7 @@ export const Header: FC<Props> = ({ homepage = false }) => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const loadedData = await client.get<UserData>('/user');
+        const loadedData = await client.get<UserDataType>('/user');
   
         if(loadedData.body.hasOwnProperty('email')) {
           setAuth(true);
@@ -113,7 +113,7 @@ export const Header: FC<Props> = ({ homepage = false }) => {
           <OverlayTrigger
             placement='bottom'
             overlay={
-              <Tooltip id={`tooltip-language`} data-bs-theme='dark'>
+              <Tooltip id={'tooltip-language'} data-bs-theme='dark'>
                 English
               </Tooltip>
             }
