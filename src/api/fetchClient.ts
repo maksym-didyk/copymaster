@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-export const API_URL = process.env.REACT_APP_STRAPI_API_URL;
+export const API_URL = process.env.REACT_APP_API_URL;
 // const API_URL = 'https://copymaster.com.ua';
 // const API_URL = 'https://185.25.118.208';
 // const API_URL = 'http://localhost';
@@ -26,7 +26,7 @@ function request<T>(
     options.body = JSON.stringify(data);
   }
 
-  return fetch(API_URL + url, options)
+  return fetch(url, options)
     .then((response) => {
       if (!response.ok) {
         // throw new Error();

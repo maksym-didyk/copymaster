@@ -16,7 +16,7 @@ root.render(
       <AuthProvider>
         <>
           <App />
-          <ToastContainer 
+          <ToastContainer
             position='bottom-right'
             autoClose={5000}
             theme="dark"

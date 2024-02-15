@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './Header.scss';
 import SidebarRight from '../SidebarRight/SidebarRight';
@@ -9,13 +9,9 @@ import useAuth from '../../hooks/useAuth';
 import { client } from '../../api/fetchClient';
 import { UserDataType } from '../../types/types';
 import { toast } from 'react-toastify';
-import { logout } from '../../api/helpers';
+import { logout } from '../../api/api_helpers';
 
-interface Props {
-  homepage?: boolean
-}
-
-export const Header: FC<Props> = ({ homepage = false }) => {
+export const Header = () => {
   const [userData, setUserData] = useState<UserDataType>();
   const { isAuthenticated, setAuth } = useAuth();
 
@@ -42,6 +38,8 @@ export const Header: FC<Props> = ({ homepage = false }) => {
   
         if(loadedData.body.hasOwnProperty('email')) {
           setAuth(true);
+        } else {
+          setAuth(false);
         }
       } catch (error) {
         toast.error(`${error}`);
@@ -66,9 +64,10 @@ export const Header: FC<Props> = ({ homepage = false }) => {
           </Link>
 
           <nav className='d-none d-xl-flex gap-5 align-items-center'>
-            <NavLink to='/#'>Buy</NavLink>
-            <NavLink to='/markets'>Markets</NavLink>
-            <NavLink to='/#'>Trade</NavLink>
+            <NavLink to='/bots' className='header__links'>Bots</NavLink>
+            <NavLink to='/markets' className='header__links'>Markets</NavLink>
+            <NavLink to='/alerts' className='header__links'>Alerts</NavLink>
+            {/* <NavLink to='/websocket'>WebSocket</NavLink> */}
           </nav>
         </div>
 

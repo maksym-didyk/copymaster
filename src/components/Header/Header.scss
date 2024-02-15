@@ -2,7 +2,12 @@
 
 .header {
   border-radius: 0rem 0rem 1rem 1rem;
-  background: #0E0F16;
+  background: #161822;
+
+  &--home {
+    border-radius: 0rem 0rem 1rem 1rem;
+    background: #13141C;
+  }
 
   &__logo {
     width: 12.75rem;
@@ -75,6 +80,19 @@
 
     &--border {
       border: 2px solid #3548FE;
+    }
+  }
+
+  &__links {
+    color: #fff;
+    transition: color 0.2s;
+
+    &:hover {
+      color:#3548FE;
+    }
+
+    &.active {
+      color:#3548FE;
     }
   }
 }

@@ -2,6 +2,7 @@
 
 .footer {
   font-size: 0.8rem;
+  background-color: #3548FE;
 
   &__container {
     display: flex;
@@ -15,7 +16,7 @@
   }
 
   &__header {
-    border-radius: 1rem 1rem 0rem 0rem ;
+    border-radius: 1rem 1rem 0rem 0rem;
     background: #0E0F16;
   }
 

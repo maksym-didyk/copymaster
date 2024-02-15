@@ -55,7 +55,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <Header homepage />
+      <Header />
 
       <main className='main'>
         <section className='d-flex justify-content-around align-items-center gap-3 p-5'>

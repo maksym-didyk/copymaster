@@ -19,3 +19,16 @@ export interface UserPostDataType {
   password: string;
   passwordConfirmation: string;
 }
+
+export interface MarketsSpotType {
+  body: {
+    market: string;
+    symbol: string;
+    markets: string[];
+    symbols: string[];
+    symbolPrice: number | null;
+    counterEarning: boolean;
+    tradeType: string;
+    tradeTypes: string[];
+  }
+}

@@ -14,10 +14,6 @@ export enum CalculatorButtonType {
   sell = 'Sell',
 };
 
-export enum DropDownType {
-  pair,
-};
-
 export enum InputPasswordType {
   text = 'text',
   password = 'password'

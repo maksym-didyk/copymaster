@@ -49,12 +49,13 @@ export const Sign = () => {
       const userData = await client.post<any>(`/j_spring_security_check?j_email=${inputEmail}&j_password=${inputPassword}&remember-me=true`);
 
       if (userData.body.authorized === false) {
+        setAuth(false);
         toast.update(id, { render: 'E-mail or password wrong', type: 'error', autoClose: 5000, isLoading: false });
       } else {
         setAuth(true);
         toNavigate();
         toast.update(id, { render: 'You are authorized', type: 'success', autoClose: 5000, isLoading: false });
-      } 
+      }
     } catch (error) {
       toast.error(`${error}`);
     }

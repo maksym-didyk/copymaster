@@ -5,6 +5,7 @@ import SignPage from './pages/sign';
 import MarketsPage from './pages/markets';
 import { PrivateRoute } from './components/PrivateRoute';
 import TestPage from './pages/test';
+import WebsocketPage from './pages/websocket';
 
 function App() {
   return (
@@ -14,8 +15,9 @@ function App() {
         <Route path="/signup" element={<SignPage />} />
         <Route path="/signin" element={<SignPage />} />
         <Route path="/test" element={<TestPage />} />
+        <Route path="/websocket" element={<WebsocketPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
-        
+
         <Route element={<PrivateRoute />}>
           <Route path="/markets" element={<MarketsPage />} />
         </Route>
@@ -23,4 +25,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
