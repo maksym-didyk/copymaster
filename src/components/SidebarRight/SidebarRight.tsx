@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import imageLanguage from '../../assets/images/header/language.svg';
 import imageLogo from '../../assets/images/header/copymaster_logo.svg';
-import { logout } from '../../api/api_helpers';
+import { toast } from 'react-toastify';
+import { client } from '../../api/fetchClient';
 
 const SidebarRight = () => {
   const [show, setShow] = useState(false);
@@ -15,8 +16,17 @@ const SidebarRight = () => {
   const handleShow = () => setShow(true);
 
   const handleLogout = async () => {
-    if (await logout()) {
-      setAuth(false);
+    try {
+      const userData = await client.get<any>('/logout');
+  
+      if (userData.body.authorized === false) {
+        toast.info('You are logged out');
+        setAuth(false)
+      } else {
+        toast.error('Something went wrong');
+      }
+    } catch (error) {
+      toast.error(`${error}`);
     }
   };
 

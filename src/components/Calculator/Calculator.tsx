@@ -4,14 +4,16 @@ import './Calculator.scss';
 import { CalculatorButtonType } from '../../types/enums';
 import classNames from 'classnames';
 import { Col, Stack, Row } from 'react-bootstrap';
+import { BalanceTypeData } from '../../types/types';
 
 interface Props {
   currency: string[],
   type: CalculatorButtonType,
   marketPrice: number,
+  balance?: BalanceTypeData,
 }
 
-export const Calculator: FC<Props> = ({ currency, type, marketPrice }) => {
+export const Calculator: FC<Props> = ({ currency, type, marketPrice, balance }) => {
   const [inputPrice, setInputPrice] = useState<string | number>('');
   const [inputQuantity, setInputQuantity] = useState<string | number>('');
   const [inputAll, setInputAll] = useState<string | number>('');
@@ -63,8 +65,8 @@ export const Calculator: FC<Props> = ({ currency, type, marketPrice }) => {
           <Col>
             Balance
             <span className='calculator__balance'>
-              {`168.7 
-              ${type === CalculatorButtonType.buy ? currency[1] : currency[0]}`}
+              {balance && `${balance?.quantity} ${balance?.currency}`}
+              {/* ${type === CalculatorButtonType.buy ? currency[1] : currency[0]}`} */}
             </span>
           </Col>
         </Row>
@@ -116,45 +118,6 @@ export const Calculator: FC<Props> = ({ currency, type, marketPrice }) => {
           </button>
         </Row>
       </Stack>
-
-      {/* <div>
-        Balance
-        <span className='calculator__balance'>
-          {`168.7 
-          ${type === CalculatorButtonType.buy ? '$' : 'XRP'}`}
-        </span>
-      </div>
-
-      <div className='calculator__row'>
-        Price 
-        <CalculatorInput inputValue={inputPrice} setInputValue={handleSetInputPrice} />
-        {currency}
-      </div>
-
-      <div className='calculator__row'>
-        Quantity 
-        <CalculatorInput inputValue={inputQuantity} setInputValue={handleSetInputQuantity} />
-        XRP
-      </div>
-
-      <div className='calculator__row'>
-        All 
-        <CalculatorInput inputValue={inputAll} setInputValue={handleSetInputAll} />
-        {currency}
-      </div> */}
-
-      {/* <div>
-        <button 
-          className={classNames('calculator__button', {
-            buy: type === CalculatorButtonType.buy,
-            sell: type === CalculatorButtonType.sell,
-            })}
-        >
-            {type}
-        </button>
-      </div> */}
-
-    {/* </div> */}
     </>
   );
 };

@@ -6,6 +6,7 @@ import MarketsPage from './pages/markets';
 import { PrivateRoute } from './components/PrivateRoute';
 import TestPage from './pages/test';
 import WebsocketPage from './pages/websocket';
+import NotFoundPage from './pages/404';
 
 function App() {
   return (
@@ -16,10 +17,12 @@ function App() {
         <Route path="/signin" element={<SignPage />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="/websocket" element={<WebsocketPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
+        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
 
         <Route element={<PrivateRoute />}>
-          <Route path="/markets" element={<MarketsPage />} />
+          <Route path="/markets/:tradeTypeUrl/:currentMarketUrl/:currentSymbolUrl" element={<MarketsPage />} />
+          <Route path="/markets" element={<Navigate to="/markets/spot/binance/XRP_USDT" />} />
         </Route>
       </Routes>
   );

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import './Header.scss';
 import SidebarRight from '../SidebarRight/SidebarRight';
 import imageLogo from '../../assets/images/header/copymaster_logo.svg';
@@ -12,18 +12,19 @@ import { toast } from 'react-toastify';
 import { logout } from '../../api/api_helpers';
 
 export const Header = () => {
-  const [userData, setUserData] = useState<UserDataType>();
+  // const [userData, setUserData] = useState<UserDataType>();
   const { isAuthenticated, setAuth } = useAuth();
+  const { pathname } = useLocation();
 
-  const loadUserData = async () => {
-    try {
-      const loadedData = await client.get<UserDataType>('/user');
+  // const loadUserData = async () => {
+  //   try {
+  //     const loadedData = await client.get<UserDataType>('/user');
 
-      setUserData(() => loadedData);
-    } catch (error) {
-      toast.error(`${error}`);
-    }
-  };
+  //     setUserData(() => loadedData);
+  //   } catch (error) {
+  //     toast.error(`${error}`);
+  //   }
+  // };
 
   const handleLogout = async () => {
     if (await logout()) {
@@ -36,7 +37,7 @@ export const Header = () => {
       try {
         const loadedData = await client.get<UserDataType>('/user');
   
-        if(loadedData.body.hasOwnProperty('email')) {
+        if (loadedData.body.hasOwnProperty('email')) {
           setAuth(true);
         } else {
           setAuth(false);
@@ -46,17 +47,17 @@ export const Header = () => {
       }
     };
 
-    if (isAuthenticated === true) {
-      loadUserData();
-      return;
-    }
+    // if (isAuthenticated === true) {
+    //   checkUser();
+    //   return;
+    // }
 
     checkUser();
 
   }, [isAuthenticated, setAuth]);
 
   return (
-    <header className='header'>
+    <header className={pathname === '/' ? 'header' : ''}>
       <div className='header__container'>
         <div className='d-flex gap-5 align-items-center'>
           <Link to={'/'}>
@@ -67,7 +68,6 @@ export const Header = () => {
             <NavLink to='/bots' className='header__links'>Bots</NavLink>
             <NavLink to='/markets' className='header__links'>Markets</NavLink>
             <NavLink to='/alerts' className='header__links'>Alerts</NavLink>
-            {/* <NavLink to='/websocket'>WebSocket</NavLink> */}
           </nav>
         </div>
 
@@ -85,7 +85,6 @@ export const Header = () => {
                     <path id='Intersect' fillRule='evenodd' clipRule='evenodd' d='M36.5394 36.6559C36.5959 36.7532 36.5783 36.8762 36.4973 36.9544C33.2598 40.0784 28.8542 42 23.9999 42C19.1462 42 14.7412 40.0789 11.5038 36.9556C11.4228 36.8775 11.4051 36.7545 11.4616 36.6572C13.7546 32.7111 18.5084 30 24.0009 30C29.4928 30 34.2461 32.7105 36.5394 36.6559Z' fill='#0F0F0F' />
                   </g>
                 </svg>
-                {userData?.body.nickname}
               </Dropdown.Toggle>
 
               <Dropdown.Menu>

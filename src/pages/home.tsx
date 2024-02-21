@@ -147,6 +147,8 @@ export const HomePage = () => {
 
           <img src={imageBarrel} alt='Coins barrel' className='main__start--image' />
         </section>
+
+        <div className='pt-5'></div>
       </main>
 
       <Footer />

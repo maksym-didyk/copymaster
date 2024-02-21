@@ -7,23 +7,28 @@ import classNames from 'classnames';
 import { toast } from 'react-toastify';
 import { client } from '../../api/fetchClient';
 import { Stack } from 'react-bootstrap';
-import { MarketsSpotType } from '../../types/types';
+import { BalanceType, BalanceTypeBody, MarketsSpotType } from '../../types/types';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { capitalizeFirstLetter } from '../../utils/helpers';
 import { useLocalStorage } from '../../utils/useLocalStorage';
+import { useParams, useNavigate } from 'react-router-dom';
+import { MarketsTable } from '../MarketsTable/MarketsTable';
 
 export const Markets = () => {
   const [markets, setMarkets] = useState<string[]>([]);
-  const [currentMarket, setCurrentMarket] = useLocalStorage('currentMarket', 'BINANCE');
+  const [currentMarket, setCurrentMarket] = useState('BINANCE');
   const [symbols, setSymbols] = useState<string[]>([]);
-  const [currentSymbol, setCurrentSymbol] = useLocalStorage('currentSymbol', 'XRP_USDT');
+  const [currentSymbol, setCurrentSymbol] = useState('XRP_USDT');
   const [symbolPrice, setSymbolPrice] = useState(0);
   const [counterEarning, setCounterEarning] = useLocalStorage('counterEarning', true);
-  const [tradeType, setTradeType] = useLocalStorage('tradeType', 'SPOT');
+  const [tradeType, setTradeType] = useState('SPOT');
   const [tradeTypes, setTradeTypes] = useState<string[]>([]);
+  const [userBalance, setUserBalance] = useState<BalanceType>();
 
   const websocketUrl = '/websocket-url';
+  let { tradeTypeUrl, currentMarketUrl, currentSymbolUrl } = useParams();
+  const navigate = useNavigate();
 
   const currentSymbolArray = currentSymbol.split('_');
   const counterEarningIndex = counterEarning ? 0 : 1;
@@ -31,20 +36,34 @@ export const Markets = () => {
   const getMarketsData = useCallback(async (url = '') => {
     try {
       const loadedData = await client.get<MarketsSpotType>('/api/markets' + url);
-      const { markets, market, symbols, symbol, symbolPrice, counterEarning, tradeType, tradeTypes } = loadedData.body;
 
-      setMarkets([...markets, 'BYBIT', 'COINBASE']);
-      setCurrentMarket(market);
-      setSymbols(symbols);
-      setCurrentSymbol(symbol);
-      setCounterEarning(counterEarning);
-      setTradeType(tradeType);
-      setTradeTypes([...tradeTypes, 'FUTURES', 'INVERSE']);
-      setSymbolPrice(symbolPrice === null ? 0 : symbolPrice);
+      if (loadedData.hasOwnProperty('error')) {
+        navigate('/markets');
+      } else {
+        const { markets, market, symbols, symbol, symbolPrice, counterEarning, tradeType, tradeTypes } = loadedData.body;
+
+        setMarkets([...markets, 'BYBIT', 'COINBASE']);
+        setCurrentMarket(market);
+        setSymbols(symbols);
+        setCurrentSymbol(symbol);
+        setCounterEarning(counterEarning);
+        setTradeType(tradeType);
+        setTradeTypes([...tradeTypes, 'FUTURES', 'INVERSE']);
+        setSymbolPrice(symbolPrice === null ? 0 : symbolPrice);
+      }
     } catch (error) {
       toast.error(`${error}`);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getUserBalance = useCallback(async (url = '') => {
+    try {
+      const loadedData = await client.get<BalanceTypeBody>('/api/markets' + url);
+      setUserBalance(loadedData.body);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
   }, []);
 
   const handleCurrentSymbolChange = async (index: number) => {
@@ -56,10 +75,12 @@ export const Markets = () => {
   const handleSymbolsChange = async (symbol: string) => {
     setSymbolPrice(() => 0);
     await getMarketsData(`/${tradeType}/${currentMarket}/${symbol}?counterEarning=${counterEarning}`);
+
+    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentMarket.toLocaleLowerCase()}/${symbol}`);
   };
 
   useEffect(() => {
-    getMarketsData(`/${tradeType}/${currentMarket}/${currentSymbol}?counterEarning=${counterEarning}`);
+    getMarketsData(`/${tradeTypeUrl}/${currentMarketUrl}/${currentSymbolUrl}?counterEarning=${counterEarning}`);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -86,6 +107,8 @@ export const Markets = () => {
     };
 
     const websocketMarketPrice = () => {
+      handleSocketClose();
+
       stompClient.connect({ symbol: currentSymbol, market: currentMarket }, (frame: any) => {
         isConnected = true;
         const userName = frame.headers['user-name'];
@@ -110,14 +133,17 @@ export const Markets = () => {
       websocketMarketPrice();
     }
 
+    getUserBalance(`/${tradeType}/symbol-quantities/${currentMarket}/${currentSymbol}`);
+
     return () => {
       handleSocketClose();
     };
-  }, [currentSymbol, currentMarket]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSymbol, currentMarket, tradeType]);
 
   return (
     <main className='markets px-3 px-md-5'>
-      <Stack direction="horizontal" gap={3} className='justify-content-end justify-content-sm-between my-3 flex-wrap'>
+      <Stack direction="horizontal" gap={3} className='justify-content-end justify-content-lg-between my-3 flex-wrap'>
         <Stack direction="horizontal" gap={3}>
           <div className='markets__spot'>
             {tradeTypes.map((trade, index) =>
@@ -142,9 +168,9 @@ export const Markets = () => {
         </Stack>
       </Stack>
 
-      <div className='d-flex gap-3 flex-wrap'>
-        <Calculator currency={currentSymbolArray} type={CalculatorButtonType.buy} marketPrice={symbolPrice} />
-        <Calculator currency={currentSymbolArray} type={CalculatorButtonType.sell} marketPrice={symbolPrice} />
+      <div className='d-flex gap-3 flex-wrap flex-lg-row flex-column-reverse'>
+        <Calculator currency={currentSymbolArray} type={CalculatorButtonType.buy} marketPrice={symbolPrice} balance={userBalance?.first} />
+        <Calculator currency={currentSymbolArray} type={CalculatorButtonType.sell} marketPrice={symbolPrice} balance={userBalance?.second} />
 
         <Stack direction="vertical" gap={3}>
           <div className='markets__marketprice earn'>
@@ -165,6 +191,8 @@ export const Markets = () => {
           </div>
         </Stack>
       </div>
+
+      <MarketsTable />
     </main>
   );
 };

@@ -1,0 +1,62 @@
+.markets-table {
+  font-family: Roboto;
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-align: center;
+
+  &__row {
+    border-radius: 1rem;
+    background: #1c1e2c;
+    padding: 0.7rem 0;
+
+    &.header {
+      background: #161822; 
+    }
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    background: #ff8001;
+    height: 100%;
+
+    // &--one {
+    //   position: relative;
+    //   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="34" height="15" viewBox="0 0 34 15" fill="none"><rect x="1.5" y="1.5" width="12" height="12" rx="6" stroke="#0E0F16" stroke-width="3"/><path d="M19 2.5293H32" stroke="#0E0F16" stroke-width="3" stroke-linecap="round"/><path d="M19 7.5293H32" stroke="#0E0F16" stroke-width="3" stroke-linecap="round"/><path d="M19 12.5293H32" stroke="#0E0F16" stroke-width="3" stroke-linecap="round"/></svg>');
+    //   background-position: center;
+    //   background-repeat: no-repeat;
+    // }
+  }
+
+  &__progressbar {
+    border-radius: 0.6rem;
+    background: #3e435d;
+    width: 100%;
+  }
+
+  &__button {
+    position: relative;
+    max-width: 4.45rem;
+    height: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.4rem 1.45rem 0.4rem 1.45rem;
+    border-radius: 2rem;
+    background: #3e435d;
+
+    &--w {
+      position: absolute;
+      width: 13.15rem;
+      height: 1.6rem;
+      left: 73.85rem;
+      right: -73.85rem;
+      top: 46.7rem;
+      bottom: -46.7rem;
+      border-radius: 1.45rem;
+      background: #151620;
+    }
+  }
+}

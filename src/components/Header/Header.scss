@@ -1,13 +1,9 @@
 @import '../../assets/styles/mixins';
 
 .header {
-  border-radius: 0rem 0rem 1rem 1rem;
-  background: #161822;
-
-  &--home {
-    border-radius: 0rem 0rem 1rem 1rem;
-    background: #13141C;
-  }
+  // border-radius: 0rem 0rem 1rem 1rem;
+  // background: #161822;
+  background-color: #3548fe;
 
   &__logo {
     width: 12.75rem;
@@ -19,8 +15,10 @@
     justify-content: space-around;
     align-items: center;
     gap: 1rem;
-    padding: 2rem 0;
+    padding: 1rem 0;
     margin: 0 auto;
+    border-radius: 0rem 0rem 1rem 1rem;
+    background: #13141c;
 
     @include onDesktopMedium {
       padding: 1.8rem 0;

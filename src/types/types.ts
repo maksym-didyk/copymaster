@@ -32,3 +32,18 @@ export interface MarketsSpotType {
     tradeTypes: string[];
   }
 }
+
+export interface BalanceTypeBody {
+  body: BalanceType;
+}
+
+export interface BalanceType {
+    first: BalanceTypeData;
+    second: BalanceTypeData;
+}
+
+export interface BalanceTypeData {
+    quantity: number;
+    scale: number;
+    currency: string;
+}
