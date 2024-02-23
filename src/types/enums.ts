@@ -18,3 +18,11 @@ export enum InputPasswordType {
   text = 'text',
   password = 'password'
 };
+
+export enum MarketsTabType {
+  buy = 'buy',
+  sell = 'sell',
+  all = 'all',
+  alert = 'alerts',
+  history = 'history',
+};

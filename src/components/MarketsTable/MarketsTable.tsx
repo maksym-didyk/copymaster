@@ -1,14 +1,42 @@
-import React from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import './MarketsTable.scss';
 import { Col, Container, Row } from 'react-bootstrap';
-import { MarketsTableRow } from './MarketsTableRow/TableRow';
+import { MarketsTableRow } from './MarketsTableRow/MarketsTableRow';
+import { toast } from 'react-toastify';
+import { client } from '../../api/fetchClient';
+import { MarketsTabType } from '../../types/enums';
 
-export const MarketsTable = () => {
+interface Props {
+  type: MarketsTabType,
+  counterEarning: boolean,
+}
+
+export const MarketsTable: FC<Props> = ({ type, counterEarning }) => {
+  const [tableData, setTableData] = useState<any>({});
+  const [dataKeys, setDataKeys] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getData = async (url: string) => {
+      try {
+        const loadedData = await client.get<any>('/api/markets' + url);
+        const loadedDataKeys = Object.keys(loadedData);
+
+        setTableData(loadedData);
+        setDataKeys(loadedDataKeys);
+      } catch (error) {
+        toast.error(`${error}`);
+      }
+    };
+
+    getData('/spot/order-block/buy/binance/XRP_USDT');
+
+  }, []);
+
   return (
-    <Container fluid className='markets-table mt-5' id='test'>
+    <Container fluid className='markets-table mt-4' id='test'>
       <Row>
         <Col>
-          <div className='markets-table__row header'>4</div>
+          <div className='markets-table__row header'>{dataKeys.length}</div>
         </Col>
         <Col xs={9}>
           <Row className='markets-table__row header'>
@@ -28,55 +56,14 @@ export const MarketsTable = () => {
           </Col>
       </Row>
 
-      <MarketsTableRow />
-      <MarketsTableRow />
-      <MarketsTableRow />
-      <MarketsTableRow />
-      <MarketsTableRow />
-      <MarketsTableRow />
-      <MarketsTableRow />
-    </Container>
+      {dataKeys.map((key) => 
+        <MarketsTableRow 
+          key={key}
+          data={tableData[key]}
+          counterEarning={counterEarning} 
+          type={type}
+        />)}
 
-/* <div className="container text-center text-black">
-<div className="row">
-  <div className="col">
-   <div className="bg-light">Custom column padding</div>
-  </div>
-  <div className="col-9">
-    <div className="row">
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-      <div className="col">
-        <div className="bg-light">Custom column padding</div>
-      </div>
-    </div>
-  </div>
-  <div className="col-2">
-    <div className="bg-light">Custom column padding</div>
-  </div>
-</div>
-</div> */
+    </Container>
   );
 };

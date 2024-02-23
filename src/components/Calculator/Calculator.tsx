@@ -60,9 +60,9 @@ export const Calculator: FC<Props> = ({ currency, type, marketPrice, balance }) 
   return (
 <>
     {/* <div className='calculator'> */}
-      <Stack gap={3} className='calculator'>
+      <Stack gap={2} className='calculator'>
         <Row>
-          <Col>
+          <Col className='mb-3'>
             Balance
             <span className='calculator__balance'>
               {balance && `${balance?.quantity} ${balance?.currency}`}

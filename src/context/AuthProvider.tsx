@@ -2,8 +2,8 @@ import { createContext, useState } from "react";
 
 // Определяем тип контекста
 type AuthContextType = {
-  isAuthenticated: boolean; // флаг, показывающий, аутентифицирован ли пользователь
-  setAuth: (auth: boolean) => void; // функция для изменения значения isAuthenticated
+  isAuthenticated: boolean;
+  setAuth: (auth: boolean) => void;
 };
 
 // Создаем контекст с типом AuthContextType и начальными значениями по умолчанию
@@ -14,7 +14,6 @@ const AuthContext = createContext<AuthContextType>({
 
 // Создаем компонент провайдера, который предоставляет данные контекста всем дочерним компонентам
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
-  // Используем хук useState для создания переменной isAuthenticated и функции setAuth для ее изменения
   const [isAuthenticated, setAuth] = useState<boolean>(false);
   
   // Возвращаем контекст провайдера, передавая значения isAuthenticated и setAuth в качестве значения контекста

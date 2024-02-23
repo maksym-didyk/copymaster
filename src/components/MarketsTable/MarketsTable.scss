@@ -4,13 +4,32 @@
   font-weight: 400;
   text-align: center;
 
+  &__row-main {
+    border-radius: 1rem 1rem 0 0;
+    height: 100%;
+
+    &.open {
+      background: #13141d;
+    }
+
+    &--collapsed {
+      background: #13141d;
+      height: 100%;
+    }
+  }
+
   &__row {
     border-radius: 1rem;
+    border: 0.1rem solid 0.1rem #212434;
     background: #1c1e2c;
     padding: 0.7rem 0;
 
     &.header {
       background: #161822; 
+    }
+
+    &.subrow {
+      background: #151620;
     }
   }
 
@@ -19,22 +38,40 @@
     align-items: center;
     justify-content: center;
     border-radius: 1rem;
-    background: #ff8001;
+    background: #1c1E2c;
     height: 100%;
 
-    // &--one {
-    //   position: relative;
-    //   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="34" height="15" viewBox="0 0 34 15" fill="none"><rect x="1.5" y="1.5" width="12" height="12" rx="6" stroke="#0E0F16" stroke-width="3"/><path d="M19 2.5293H32" stroke="#0E0F16" stroke-width="3" stroke-linecap="round"/><path d="M19 7.5293H32" stroke="#0E0F16" stroke-width="3" stroke-linecap="round"/><path d="M19 12.5293H32" stroke="#0E0F16" stroke-width="3" stroke-linecap="round"/></svg>');
-    //   background-position: center;
-    //   background-repeat: no-repeat;
-    // }
+    &.two {
+      background-image: url("data:image/svg+xml,%3Csvg width='34' height='15' viewBox='0 0 34 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1.5' y='1.5' width='12' height='12' rx='6' stroke='%230E0F16' stroke-width='3'/%3E%3Cpath d='M19 2.5293H32' stroke='%230E0F16' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M19 7.5293H32' stroke='%230E0F16' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M19 12.5293H32' stroke='%230E0F16' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    &.three {
+      background-image: url("data:image/svg+xml,%3Csvg width='16' height='17' viewBox='0 0 16 17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8.11914' r='8' fill='white'/%3E%3C/svg%3E%0A");
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    &--blue {
+      background: #377bff;
+    }
+
+    &--orange {
+      background: #ff8001;
+    }
   }
 
-  &__progressbar {
-    border-radius: 0.6rem;
-    background: #3e435d;
-    width: 100%;
-  }
+  // &__progressbar {
+  //   border-radius: 0.6rem;
+  //   background: #3e435d;
+  //   width: 5.9rem;
+  //   height: 1.2rem;
+
+  //   &.subrow {
+  //     background: #232533;
+  //   }
+  // }
 
   &__button {
     position: relative;

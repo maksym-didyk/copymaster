@@ -21,8 +21,8 @@ function App() {
         {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
 
         <Route element={<PrivateRoute />}>
-          <Route path="/markets/:tradeTypeUrl/:currentMarketUrl/:currentSymbolUrl" element={<MarketsPage />} />
-          <Route path="/markets" element={<Navigate to="/markets/spot/binance/XRP_USDT" />} />
+          <Route path="/markets/:tradeTypeUrl/:currentMarketUrl/:currentSymbolUrl/:currentTabUrl" element={<MarketsPage />} />
+          <Route path="/markets" element={<Navigate to="/markets/spot/binance/XRP_USDT/buy" />} />
         </Route>
       </Routes>
   );

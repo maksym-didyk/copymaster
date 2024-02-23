@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './Markets.scss';
 import { Calculator } from '../Calculator';
-import { CalculatorButtonType } from '../../types/enums';
+import { CalculatorButtonType, MarketsTabType } from '../../types/enums';
 import { CustomSelect } from '../CustomSelect';
 import classNames from 'classnames';
 import { toast } from 'react-toastify';
@@ -14,6 +14,7 @@ import { capitalizeFirstLetter } from '../../utils/helpers';
 import { useLocalStorage } from '../../utils/useLocalStorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MarketsTable } from '../MarketsTable/MarketsTable';
+import { MarketsTabs } from './MarketsTabs/MarketsTabs';
 
 export const Markets = () => {
   const [markets, setMarkets] = useState<string[]>([]);
@@ -25,10 +26,29 @@ export const Markets = () => {
   const [tradeType, setTradeType] = useState('SPOT');
   const [tradeTypes, setTradeTypes] = useState<string[]>([]);
   const [userBalance, setUserBalance] = useState<BalanceType>();
+  const [currentTab, setCurrentTab] = useState<MarketsTabType>(MarketsTabType.buy);
 
   const websocketUrl = '/websocket-url';
-  let { tradeTypeUrl, currentMarketUrl, currentSymbolUrl } = useParams();
+
+  let { tradeTypeUrl, currentMarketUrl, currentSymbolUrl, currentTabUrl } = useParams();
   const navigate = useNavigate();
+
+  const handleCurrentTabChange = (tab: MarketsTabType) => {
+    setCurrentTab(tab);
+    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentMarket.toLocaleLowerCase()}/${currentSymbol}/${tab}`);
+  }
+
+  const currentUrlToType = (tabValue: string | undefined) => {
+    const enumValue = Object.values(MarketsTabType).find(tab => tab === tabValue);
+
+    if (enumValue !== undefined) {
+      setCurrentTab(enumValue);
+    }
+  }
+
+  useEffect(() => {
+    currentUrlToType(currentTabUrl);
+  }, [currentTabUrl]);
 
   const currentSymbolArray = currentSymbol.split('_');
   const counterEarningIndex = counterEarning ? 0 : 1;
@@ -76,7 +96,7 @@ export const Markets = () => {
     setSymbolPrice(() => 0);
     await getMarketsData(`/${tradeType}/${currentMarket}/${symbol}?counterEarning=${counterEarning}`);
 
-    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentMarket.toLocaleLowerCase()}/${symbol}`);
+    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentMarket.toLocaleLowerCase()}/${symbol}/${currentTab}`);
   };
 
   useEffect(() => {
@@ -136,7 +156,7 @@ export const Markets = () => {
     getUserBalance(`/${tradeType}/symbol-quantities/${currentMarket}/${currentSymbol}`);
 
     return () => {
-      handleSocketClose();
+        handleSocketClose();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSymbol, currentMarket, tradeType]);
@@ -192,7 +212,9 @@ export const Markets = () => {
         </Stack>
       </div>
 
-      <MarketsTable />
+      <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} />
+
+      <MarketsTable type={currentTab} counterEarning={counterEarning} />
     </main>
   );
 };
