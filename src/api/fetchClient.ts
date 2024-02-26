@@ -32,10 +32,9 @@ function request<T>(
         // throw new Error();
         toast.error('Error response fetch');
       }
-
       return response.text();
     })
-    .then(text => {
+    .then((text) => {
       return text ? JSON.parse(text) : null;
     });
 }

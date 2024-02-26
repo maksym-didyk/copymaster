@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Col, ProgressBar, Row } from 'react-bootstrap';
 // import { useLocalStorage } from '../../../utils/useLocalStorage';
 
@@ -9,10 +9,20 @@ interface Props {
 
 export const MarketsTableSubRow: FC<Props> = ({ data, counterEarning }) => {
   // const [counterEarning] = useLocalStorage('counterEarning', true);
+  const [isfilledData, setIsFilledData] = useState(false);
 
   const currentSymbolArray = data.symbol.split('/');
   const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
   const dataValue = counterEarning ? data.buyQuantity : data.buyCounterQuantity;
+
+  const dataPogress = isfilledData? (Math.round(((data.buyFilledQuantity / data.buyQuantity ) * 100) * 100) / 100) : 0;
+  const dataProgressRemain = dataPogress > 0 ? 100 - dataPogress : 0;
+
+  useEffect(() => {
+    if (data.buyFilledTime !== 0) {
+      setIsFilledData(true);
+    }
+  }, [data.buyFilledTime]);
 
   return (
     <Row>
@@ -26,7 +36,12 @@ export const MarketsTableSubRow: FC<Props> = ({ data, counterEarning }) => {
           <Col className='text-success'></Col>
           <Col className='text-danger'></Col>
           <Col className='text-danger'></Col>
-          <Col><ProgressBar variant="success" now={100} label={'100%'} data-bs-theme='dark' /></Col>
+          <Col>
+            <ProgressBar data-bs-theme='dark'>
+              <ProgressBar variant="success" now={dataPogress} label={`${dataPogress}%`} key={1} />
+              <ProgressBar variant="danger" now={dataProgressRemain} label={`${dataProgressRemain}%`} key={2} />
+            </ProgressBar>
+          </Col>
           <Col>
             <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_541_19518)">
