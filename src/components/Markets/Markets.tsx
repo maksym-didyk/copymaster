@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './Markets.scss';
 import { Calculator } from '../Calculator';
-import { CalculatorButtonType, MarketsTabType } from '../../types/enums';
+import { CalculatorButtonType, MarketsTabsType } from '../../types/enums';
 import { CustomSelect } from '../CustomSelect';
 import classNames from 'classnames';
 import { toast } from 'react-toastify';
@@ -26,20 +26,20 @@ export const Markets = () => {
   const [tradeType, setTradeType] = useState('SPOT');
   const [tradeTypes, setTradeTypes] = useState<string[]>([]);
   const [userBalance, setUserBalance] = useState<BalanceType>();
-  const [currentTab, setCurrentTab] = useState<MarketsTabType>(MarketsTabType.buy);
+  const [currentTab, setCurrentTab] = useState<MarketsTabsType>(MarketsTabsType.buy);
 
   const websocketUrl = '/websocket-url';
 
   let { tradeTypeUrl, currentMarketUrl, currentSymbolUrl, currentTabUrl } = useParams();
   const navigate = useNavigate();
 
-  const handleCurrentTabChange = (tab: MarketsTabType) => {
+  const handleCurrentTabChange = (tab: MarketsTabsType) => {
     setCurrentTab(tab);
     navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentMarket.toLocaleLowerCase()}/${currentSymbol}/${tab}`);
   }
 
   const currentUrlToType = (tabValue: string | undefined) => {
-    const enumValue = Object.values(MarketsTabType).find(tab => tab === tabValue);
+    const enumValue = Object.values(MarketsTabsType).find(tab => tab === tabValue);
 
     if (enumValue !== undefined) {
       setCurrentTab(enumValue);
@@ -214,7 +214,7 @@ export const Markets = () => {
 
       <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} />
 
-      <MarketsTable type={currentTab} counterEarning={counterEarning} />
+      <MarketsTable tabType={currentTab} counterEarning={counterEarning} />
     </main>
   );
 };

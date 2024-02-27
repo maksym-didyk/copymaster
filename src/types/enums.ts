@@ -19,7 +19,7 @@ export enum InputPasswordType {
   password = 'password'
 };
 
-export enum MarketsTabType {
+export enum MarketsTabsType {
   buy = 'buy',
   sell = 'sell',
   all = 'all',

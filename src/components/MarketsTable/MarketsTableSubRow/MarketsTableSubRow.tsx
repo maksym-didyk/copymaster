@@ -1,45 +1,37 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Col, ProgressBar, Row } from 'react-bootstrap';
-// import { useLocalStorage } from '../../../utils/useLocalStorage';
+import bigDecimal from 'js-big-decimal';
+import { showProgress, takeAverage } from '../../../utils/helpers';
 
 interface Props {
   data: any,
-  counterEarning: boolean
+  currentSymbol: string,
+  counterEarning: boolean,
+  isFilled?: boolean,
 };
 
-export const MarketsTableSubRow: FC<Props> = ({ data, counterEarning }) => {
-  // const [counterEarning] = useLocalStorage('counterEarning', true);
-  const [isfilledData, setIsFilledData] = useState(false);
-
-  const currentSymbolArray = data.symbol.split('/');
-  const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
+export const MarketsTableSubRow: FC<Props> = ({ data, currentSymbol, counterEarning, isFilled = false }) => {
   const dataValue = counterEarning ? data.buyQuantity : data.buyCounterQuantity;
-
-  const dataPogress = isfilledData? (Math.round(((data.buyFilledQuantity / data.buyQuantity ) * 100) * 100) / 100) : 0;
-  const dataProgressRemain = dataPogress > 0 ? 100 - dataPogress : 0;
-
-  useEffect(() => {
-    if (data.buyFilledTime !== 0) {
-      setIsFilledData(true);
-    }
-  }, [data.buyFilledTime]);
+  const dataValueFiled = counterEarning ? data.buyFilledQuantity : data.buyFilledCounterQuantity;
+  const dataProgress = isFilled ? takeAverage(data.buyFilledQuantity, data.buyQuantity) : 0;
+  const dataProgressRemain = dataProgress > 0 ? 100 - dataProgress : 0;
 
   return (
     <Row>
-      <Col><div className='markets-table__row-main--collapsed'></div></Col>
+      <Col><div className='markets-table__row-main--collapsed ms-2'></div></Col>
       <Col xs={9}>
         <Row className='markets-table__row subrow mt-1'>
           <Col></Col>
+          <Col style={{ color: '#5b6aff' }}>{isFilled ? bigDecimal.round(data.buyFilledPrice, 2) : bigDecimal.round(data.buyCreationPrice, 2)}</Col>
           <Col>{data.nickname}</Col>
-          <Col>{data.symbol}</Col>
-          <Col>{`${dataValue} ${currentSymbol}`}</Col>
+          <Col>{isFilled ? dataValueFiled : dataValue} {currentSymbol}</Col>
           <Col className='text-success'></Col>
           <Col className='text-danger'></Col>
           <Col className='text-danger'></Col>
           <Col>
             <ProgressBar data-bs-theme='dark'>
-              <ProgressBar variant="success" now={dataPogress} label={`${dataPogress}%`} key={1} />
-              <ProgressBar variant="danger" now={dataProgressRemain} label={`${dataProgressRemain}%`} key={2} />
+              <ProgressBar variant="success" now={dataProgress} label={showProgress(dataProgress)} key={1} />
+              <ProgressBar variant="danger" now={dataProgressRemain} label={showProgress(dataProgressRemain)} key={2} />
             </ProgressBar>
           </Col>
           <Col>

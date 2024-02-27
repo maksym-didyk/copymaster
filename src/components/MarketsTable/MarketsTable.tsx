@@ -1,17 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import './MarketsTable.scss';
-import { Col, Container, Row } from 'react-bootstrap';
-import { MarketsTableRow } from './MarketsTableRow/MarketsTableRow';
+import { Col, Container, DropdownDivider, Row } from 'react-bootstrap';
+import { MarketsTableRows } from './MarketsTableRows/MarketsTableRows';
 import { toast } from 'react-toastify';
 import { client } from '../../api/fetchClient';
-import { MarketsTabType } from '../../types/enums';
+import { MarketsTabsType } from '../../types/enums';
 
 interface Props {
-  type: MarketsTabType,
+  tabType: MarketsTabsType,
   counterEarning: boolean,
 }
 
-export const MarketsTable: FC<Props> = ({ type, counterEarning }) => {
+export const MarketsTable: FC<Props> = ({ tabType, counterEarning }) => {
   const [tableData, setTableData] = useState<any>({});
   const [dataKeys, setDataKeys] = useState<string[]>([]);
 
@@ -33,9 +33,9 @@ export const MarketsTable: FC<Props> = ({ type, counterEarning }) => {
   }, []);
 
   return (
-    <Container fluid className='markets-table mt-4' id='test'>
+    <Container fluid className='markets-table my-4' id='test'>
       <Row>
-        <Col>
+        <Col className='ms-2'>
           <div className='markets-table__row header'>{dataKeys.length}</div>
         </Col>
         <Col xs={9}>
@@ -57,12 +57,14 @@ export const MarketsTable: FC<Props> = ({ type, counterEarning }) => {
       </Row>
 
       {dataKeys.map((key) => 
-        <MarketsTableRow 
+        <MarketsTableRows 
           key={key}
           data={tableData[key]}
           counterEarning={counterEarning} 
-          type={type}
+          tabType={tabType}
         />)}
+
+        <DropdownDivider />
 
     </Container>
   );

@@ -67,19 +67,8 @@
     }
   }
 
-  // &__progressbar {
-  //   border-radius: 0.6rem;
-  //   background: #3e435d;
-  //   width: 5.9rem;
-  //   height: 1.2rem;
-
-  //   &.subrow {
-  //     background: #232533;
-  //   }
-  // }
-
   &__button {
-    position: relative;
+    // position: relative;
     max-width: 4.45rem;
     height: 1.6rem;
     display: flex;
@@ -90,7 +79,7 @@
     background: #3e435d;
 
     &--w {
-      position: absolute;
+      // position: absolute;
       width: 13.15rem;
       height: 1.6rem;
       left: 73.85rem;

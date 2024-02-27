@@ -1,20 +1,20 @@
 import React, { FC } from 'react';
 import { OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
-import { MarketsTabType } from '../../../types/enums';
+import { MarketsTabsType } from '../../../types/enums';
 
 interface Props {
-  currentTab: MarketsTabType,
-  tabChange: (tab: MarketsTabType) => void,
+  currentTab: MarketsTabsType,
+  tabChange: (tab: MarketsTabsType) => void,
 }
 
 export const MarketsTabs: FC<Props> = ({ currentTab, tabChange: handleCurrentTabChange }) => {
   return (
     <Stack direction="horizontal" gap={3} className='mt-5 ps-5 text-secondary' >
-    <div onClick={() => handleCurrentTabChange(MarketsTabType.buy)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabType.buy ? 'text-white' : ''}>BUY</div>
-    <div onClick={() => handleCurrentTabChange(MarketsTabType.sell)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabType.sell ? 'text-white' : ''}>SELL</div>
-    <div onClick={() => handleCurrentTabChange(MarketsTabType.all)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabType.all ? 'text-white' : ''}>ALL Positions</div>
-    <div onClick={() => handleCurrentTabChange(MarketsTabType.alert)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabType.alert ? 'text-white' : ''}>Alert</div>
-    <div onClick={() => handleCurrentTabChange(MarketsTabType.history)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabType.history ? 'text-white' : ''}>History</div>
+    <div onClick={() => handleCurrentTabChange(MarketsTabsType.buy)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.buy ? 'text-white' : ''}>BUY</div>
+    <div onClick={() => handleCurrentTabChange(MarketsTabsType.sell)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.sell ? 'text-white' : ''}>SELL</div>
+    <div onClick={() => handleCurrentTabChange(MarketsTabsType.all)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.all ? 'text-white' : ''}>ALL Positions</div>
+    <div onClick={() => handleCurrentTabChange(MarketsTabsType.alert)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.alert ? 'text-white' : ''}>Alert</div>
+    <div onClick={() => handleCurrentTabChange(MarketsTabsType.history)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.history ? 'text-white' : ''}>History</div>
     <OverlayTrigger
       placement='auto'
       overlay={
