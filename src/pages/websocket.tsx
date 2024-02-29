@@ -44,8 +44,6 @@ export const WebsocketPage = () => {
         const marketMessage = JSON.parse(message.body);
 
         setMarketPrice(() => marketMessage.price);
-
-        console.log(marketMessage.price);
     });
   };
 

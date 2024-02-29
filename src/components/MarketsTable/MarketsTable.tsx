@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import './MarketsTable.scss';
-import { Col, Container, DropdownDivider, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { MarketsTableRows } from './MarketsTableRows/MarketsTableRows';
 import { toast } from 'react-toastify';
 import { client } from '../../api/fetchClient';
@@ -9,9 +9,10 @@ import { MarketsTabsType } from '../../types/enums';
 interface Props {
   tabType: MarketsTabsType,
   counterEarning: boolean,
+  marketPrice: number
 }
 
-export const MarketsTable: FC<Props> = ({ tabType, counterEarning }) => {
+export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice }) => {
   const [tableData, setTableData] = useState<any>({});
   const [dataKeys, setDataKeys] = useState<string[]>([]);
 
@@ -29,11 +30,10 @@ export const MarketsTable: FC<Props> = ({ tabType, counterEarning }) => {
     };
 
     getData('/spot/order-block/buy/binance/XRP_USDT');
-
   }, []);
 
   return (
-    <Container fluid className='markets-table my-4' id='test'>
+    <Container fluid className='markets-table my-4'>
       <Row>
         <Col className='ms-2'>
           <div className='markets-table__row header'>{dataKeys.length}</div>
@@ -62,10 +62,8 @@ export const MarketsTable: FC<Props> = ({ tabType, counterEarning }) => {
           data={tableData[key]}
           counterEarning={counterEarning} 
           tabType={tabType}
+          marketPrice={marketPrice}
         />)}
-
-        <DropdownDivider />
-
     </Container>
   );
 };

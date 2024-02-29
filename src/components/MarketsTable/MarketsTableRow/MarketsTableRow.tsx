@@ -10,7 +10,7 @@ interface Props {
   data: any,
   counterEarning: boolean,
   tabType: MarketsTabsType,
-  sumQuantity: string,
+  sumQuantity: string
 }
 
 export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQuantity }) => {
@@ -70,7 +70,7 @@ export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQ
           </div>
         </Col>
       </Row>
-      
+
       <Collapse in={open}>
         <div id={collapseId}>
           {data.map((subRow: any, index: number) => (

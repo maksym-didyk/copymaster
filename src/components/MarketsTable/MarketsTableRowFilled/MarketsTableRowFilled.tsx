@@ -13,9 +13,11 @@ interface Props {
   tabType: MarketsTabsType,
   sumFilledQuantity: string,
   averageQuantity: number,
+  profitValue: number,
+  marketPrice: number
 }
 
-export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType, sumFilledQuantity, averageQuantity }) => {
+export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType, sumFilledQuantity, averageQuantity, profitValue, marketPrice }) => {
   const [open, setOpen] = useState(false);
   const collapseId = useId();
 
@@ -24,6 +26,9 @@ export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType
   const currentSymbolArray = dataRow.symbol.split('/');
   const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
   const averageQuantityRemain = averageQuantity > 0 ? 100 - averageQuantity : 0;
+
+  const profitPercentCalculate = +sumFilledQuantity === 0 ? new bigDecimal(sumFilledQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumFilledQuantity)).round(2, bigDecimal.RoundingModes.FLOOR);
+  const profitPercentValue = Number(profitPercentCalculate.getValue());
 
   return (
     <div>
@@ -49,8 +54,14 @@ export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType
             <Col style={{ color: '#5b6aff' }}>{bigDecimal.round(dataRow.buyFilledPrice, 2)}</Col>
             <Col>{dataRow.symbol}</Col>
             <Col>{`${sumFilledQuantity} ${currentSymbol}`}</Col>
-            <Col className='text-danger'></Col>
-            <Col className='text-danger'></Col>
+            {profitValue > 0
+            ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>
+            : <Col className='text-danger'>{`${profitValue} ${currentSymbol}`}</Col>
+            }
+            {profitPercentValue > 0
+            ? <Col className='text-success'>{`+${profitPercentValue}%`}</Col>
+            : <Col className='text-danger'>{`${profitPercentValue}%`}</Col>
+            }
             <Col className='text-success'>Buy</Col>
             <Col>
               <ProgressBar data-bs-theme='dark'>
@@ -81,11 +92,11 @@ export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType
           </div>
         </Col>
       </Row>
-      
+
       <Collapse in={open}>
         <div id={collapseId}>
           {data.map((subRow: any, index: number) => (
-            <MarketsTableSubRow key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} isFilled />
+            <MarketsTableSubRow key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} marketPrice={marketPrice} isFilled />
           ))}
         </div>
       </Collapse>
