@@ -18,7 +18,7 @@ interface Props {
   marketPrice: number
 }
 
-export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType, sumFilledQuantity, averageQuantity, profitValue, marketPrice }) => {
+export const MarketsTableRowFilledAdditional: FC<Props> = ({ data, counterEarning, tabType, sumFilledQuantity, averageQuantity, profitValue, marketPrice }) => {
   const [open, setOpen] = useState(false);
   const collapseId = useId();
 
@@ -45,15 +45,21 @@ export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType
           <div className={classNames('markets-table__row-main', { open })}>
             <div className={classNames('markets-table__status', { 
               three: true, // need to add logic of state
-              'markets-table__status--deep-blue': (tabType === MarketsTabsType.buy || tabType === MarketsTabsType.all) && averageQuantity > 0,
+              'markets-table__status--dark-blue': (tabType === MarketsTabsType.buy || tabType === MarketsTabsType.all) && averageQuantity > 0,
               'markets-table__status--orange': tabType === MarketsTabsType.sell,
              })}></div>
           </div>
         </Col>
         <Col xs={9}>
           <Row className='markets-table__row'>
-            <Col>{dateString}</Col>
-            <Col style={{ color: '#5b6aff' }}>{dataBuyCreationPrice}</Col>
+            <Col>
+              <p style={{ color: '#8997dc' }}>{dateString}</p>
+              <p>{dateString}</p>
+            </Col>
+            <Col>
+              <p style={{ color: '#5b6aff' }}>{dataBuyCreationPrice}</p>
+              <p style={{ color: '#ff363a' }}>{dataBuyCreationPrice}</p>
+              </Col>
             <Col>{dataRow.symbol}</Col>
             <Col>{`${sumFilledQuantity} ${currentSymbol}`}</Col>
             {profitValue > 0
@@ -102,7 +108,7 @@ export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType
       <Collapse in={open}>
         <div id={collapseId}>
           {data.map((subRow: any, index: number) => (
-            <MarketsTableSubRow key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} marketPrice={marketPrice} isFilled />
+            <MarketsTableSubRow key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} marketPrice={marketPrice} isFilled isAdditional />
           ))}
         </div>
       </Collapse>

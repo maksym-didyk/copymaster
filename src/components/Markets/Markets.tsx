@@ -35,7 +35,7 @@ export const Markets = () => {
 
   const handleCurrentTabChange = (tab: MarketsTabsType) => {
     setCurrentTab(tab);
-    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentMarket.toLocaleLowerCase()}/${currentSymbol}/${tab}`);
+    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${tab}/${currentMarket.toLocaleLowerCase()}/${currentSymbol}`);
   }
 
   const currentUrlToType = (tabValue: string | undefined) => {
@@ -96,7 +96,7 @@ export const Markets = () => {
     setSymbolPrice(() => 0);
     await getMarketsData(`/${tradeType}/${currentMarket}/${symbol}?counterEarning=${counterEarning}`);
 
-    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentMarket.toLocaleLowerCase()}/${symbol}/${currentTab}`);
+    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentTab}/${currentMarket.toLocaleLowerCase()}/${symbol}`);
   };
 
   useEffect(() => {

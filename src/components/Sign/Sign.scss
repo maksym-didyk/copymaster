@@ -17,15 +17,15 @@
 
   &__input {
     border: none;
-    border-bottom: 1px solid #8997DC;
+    border-bottom: 1px solid #8997dc;
     outline: none;
     background-color: transparent;
     width: 100%;
-    color: #8997DC;
+    color: #8997dc;
     // transition: background-color 5000s ease-in-out 0s;
 
     &::placeholder {
-      color: #8997DC;
+      color: #8997dc;
       transition: opacity 0.3s ease;
     }
 
@@ -57,7 +57,7 @@
   &__hr {
     width: 8.5rem;
     height: 1px;
-    background: #8997DC;
+    background: #8997dc;
   }
 
   &__link {
@@ -77,7 +77,7 @@
     padding: 0.5rem 6rem;
     width: 20rem;
     border-radius: 1.6rem;
-    border: 1px solid #8997DC;
+    border: 1px solid #8997dc;
     background: transparent;
     color: #fff;
     font-size: 1rem;

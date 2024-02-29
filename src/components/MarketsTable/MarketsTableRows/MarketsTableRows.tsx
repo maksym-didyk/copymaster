@@ -4,6 +4,7 @@ import bigDecimal from 'js-big-decimal';
 import { MarketsTableRow } from '../MarketsTableRow/MarketsTableRow';
 import { MarketsTableRowFilled } from '../MarketsTableRowFilled/MarketsTableRowFilled';
 import { takeAverage } from '../../../utils/helpers';
+import { MarketsTableRowFilledAdditional } from '../MarketsTableRowFilledAdditional/MarketsTableRowFilledAdditional';
 
 interface Props {
   data: any,
@@ -40,7 +41,7 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
   const profitValue = counterEarning ? Number(profitQuantity) : Number(profitCounterQuantity);
 
   return (
-    <div className='mt-4' style={{ borderLeft: '1px solid #545d88' }}>
+    <div className='mt-4' style={{ borderLeft: (averageQuantity === 100 || averageQuantity === 0) ? '1px solid transparent' : '1px solid #545d88' } }>
       {averageQuantity === 100
       ? null
       : <MarketsTableRow
@@ -53,16 +54,30 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
 
       {averageQuantity === 0
       ? null
-      : <MarketsTableRowFilled
-          data={data}
-          counterEarning={counterEarning}
-          tabType={tabType}
-          sumFilledQuantity={sumFilledQuantity.getValue()}
-          averageQuantity={averageQuantity}
-          profitValue={profitValue}
-          marketPrice={marketPrice}
-        />
+      : <>
+          <MarketsTableRowFilled
+            data={data}
+            counterEarning={counterEarning}
+            tabType={tabType}
+            sumFilledQuantity={sumFilledQuantity.getValue()}
+            averageQuantity={averageQuantity}
+            profitValue={profitValue}
+            marketPrice={marketPrice}
+          />
+
+          <MarketsTableRowFilledAdditional
+            data={data}
+            counterEarning={counterEarning}
+            tabType={tabType}
+            sumFilledQuantity={sumFilledQuantity.getValue()}
+            averageQuantity={averageQuantity}
+            profitValue={profitValue}
+            marketPrice={marketPrice}
+          />
+        </>
       }
+
+
     </div>
   );
 };

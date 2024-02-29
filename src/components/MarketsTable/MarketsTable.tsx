@@ -34,9 +34,9 @@ export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice }
 
   return (
     <Container fluid className='markets-table my-4'>
-      <Row>
-        <Col className='ms-2'>
-          <div className='markets-table__row header'>{dataKeys.length}</div>
+      <Row className='text-center'>
+        <Col className='ms-2 text-center'>
+          <div className='markets-table__row header text-center'>{dataKeys.length}</div>
         </Col>
         <Col xs={9}>
           <Row className='markets-table__row header'>

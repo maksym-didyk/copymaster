@@ -1,10 +1,11 @@
 import React, { FC, useId, useState } from 'react';
 import classNames from 'classnames';
-import { Col, Collapse, ProgressBar, Row } from 'react-bootstrap';
+import { Col, Collapse, ProgressBar, Row, Stack } from 'react-bootstrap';
 import { milisecondsToDate } from '../../../utils/helpers';
 import MarketsTableSubRow from '../MarketsTableSubRow/MarketsTableSubRow';
 import { MarketsTabsType } from '../../../types/enums';
 import bigDecimal from 'js-big-decimal';
+import { MarketsTableInput } from '../MarketsTableInput/MarketsTableInput';
 
 interface Props {
   data: any,
@@ -19,12 +20,13 @@ export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQ
 
   const dataRow = data[0];
   const dateString = milisecondsToDate(dataRow.buyCreationTime);
+  const dataBuyCreationPrice = bigDecimal.round(dataRow.buyCreationPrice, 2);
   const currentSymbolArray = dataRow.symbol.split('/');
   const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
 
   return (
     <div>
-      <Row className='fw-bold mt-2'>
+      <Row className='align-items-center fw-bold mt-2 '>
         <Col
           onClick={() => setOpen(!open)}
           aria-controls={collapseId}
@@ -43,7 +45,7 @@ export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQ
         <Col xs={9}>
           <Row className='markets-table__row'>
             <Col>{dateString}</Col>
-            <Col style={{ color: '#5b6aff' }}>{bigDecimal.round(dataRow.buyCreationPrice, 2)}</Col>
+            <Col style={{ color: '#5b6aff' }}>{dataBuyCreationPrice}</Col>
             <Col>{dataRow.symbol}</Col>
             <Col>{`${sumQuantity} ${currentSymbol}`}</Col>
             <Col className='text-danger'></Col>
@@ -64,10 +66,12 @@ export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQ
           </Row>
         </Col>
         <Col xs={2}>
-          <div className='markets-table__button'>
-            <div className='markets-table__button--w' />
-            Price
-          </div>
+          <Stack direction="horizontal" className='markets-table__inputwrapper'>
+            <MarketsTableInput inputValue={dataBuyCreationPrice} />
+            <button className='markets-table__button'>
+              Price
+            </button>
+          </Stack>
         </Col>
       </Row>
 

@@ -8,20 +8,22 @@ interface Props {
   currentSymbol: string,
   counterEarning: boolean,
   marketPrice?: number,
-  isFilled?: boolean
+  isFilled?: boolean,
+  isAdditional?: boolean
 };
 
-export const MarketsTableSubRow: FC<Props> = ({ data, currentSymbol, counterEarning, marketPrice = 0, isFilled = false }) => {
+export const MarketsTableSubRow: FC<Props> = ({ data, currentSymbol, counterEarning, marketPrice = 0, isFilled = false, isAdditional = false }) => {
   const dataValue = counterEarning ? data.buyQuantity : data.buyCounterQuantity;
   const dataValueFilled = counterEarning ? data.buyFilledQuantity : data.buyFilledCounterQuantity;
   const dataProgress = isFilled ? takeAverage(data.buyFilledQuantity, data.buyQuantity) : 0;
   const dataProgressRemain = dataProgress > 0 ? 100 - dataProgress : 0;
 
-  const profitCounterQuantityCalculate = new bigDecimal(data.buyFilledQuantity).multiply(new bigDecimal(marketPrice)).subtract(new bigDecimal(data.buyFilledCounterQuantity)).round(data.counterRound, bigDecimal.RoundingModes.FLOOR);
+  const marketPriceDecimal = new bigDecimal(marketPrice);
+  const profitCounterQuantityCalculate = new bigDecimal(data.buyFilledQuantity).multiply(marketPriceDecimal).subtract(new bigDecimal(data.buyFilledCounterQuantity)).round(data.counterRound, bigDecimal.RoundingModes.FLOOR);
   const profitCounterQuantity = profitCounterQuantityCalculate.getValue();
-  const profitQuantity = marketPrice === 0 ? new bigDecimal('0') : profitCounterQuantityCalculate.divide(new bigDecimal(marketPrice)).round(data.baseRound, bigDecimal.RoundingModes.DOWN).getValue();
+  const profitQuantity = marketPrice === 0 ? new bigDecimal('0') : profitCounterQuantityCalculate.divide(marketPriceDecimal).round(data.baseRound, bigDecimal.RoundingModes.DOWN).getValue();
   const profitValue = counterEarning ? Number(profitQuantity) : Number(profitCounterQuantity);
-  const profitPercentCalculate = dataValueFilled === 0 ? new bigDecimal(dataValueFilled) : new bigDecimal(profitValue).divide(new bigDecimal (dataValueFilled)).round(2, bigDecimal.RoundingModes.FLOOR);
+  const profitPercentCalculate = dataValueFilled === 0 ? new bigDecimal(dataValueFilled) : new bigDecimal(profitValue).divide(new bigDecimal (dataValueFilled)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
   const profitPercentValue = Number(profitPercentCalculate.getValue());
 
   return (
@@ -30,11 +32,14 @@ export const MarketsTableSubRow: FC<Props> = ({ data, currentSymbol, counterEarn
       <Col xs={9}>
         <Row className='markets-table__row subrow mt-1'>
           <Col></Col>
-          <Col style={{ color: '#5b6aff' }}>{isFilled ? bigDecimal.round(data.buyFilledPrice, 2) : bigDecimal.round(data.buyCreationPrice, 2)}</Col>
+          <Col>
+            <p style={{ color: '#5b6aff' }}>{isFilled ? bigDecimal.round(data.buyFilledPrice, 2) : bigDecimal.round(data.buyCreationPrice, 2)}</p>
+            {isAdditional && <p style={{ color: '#ff363a' }}>{isFilled ? bigDecimal.round(data.buyFilledPrice, 2) : bigDecimal.round(data.buyCreationPrice, 2)}</p>}
+          </Col>
           <Col>{data.nickname}</Col>
           <Col>{isFilled ? dataValueFilled : dataValue} {currentSymbol}</Col>
-          <Col className={profitValue > 0 ? 'text-success' : 'text-danger'}>{isFilled && profitValue > 0 ? `+${profitValue} ${currentSymbol}` : `${profitValue} ${currentSymbol}`}</Col>
-          <Col className={profitPercentValue > 0 ? 'text-success' : 'text-danger'}>{isFilled && profitPercentValue > 0 ? (`+${profitPercentValue}%`) : (`${profitPercentValue}%`)}</Col>
+          <Col className={profitValue > 0 ? 'text-success' : 'text-danger'}>{isFilled && (profitValue > 0 ? `+${profitValue} ${currentSymbol}` : `${profitValue} ${currentSymbol}`)}</Col>
+          <Col className={profitPercentValue > 0 ? 'text-success' : 'text-danger'}>{isFilled && (profitPercentValue > 0 ? `+${profitPercentValue}%` : `${profitPercentValue}%`)}</Col>
           <Col className='text-danger'></Col>
           <Col>
             <ProgressBar data-bs-theme='dark'>
@@ -56,12 +61,7 @@ export const MarketsTableSubRow: FC<Props> = ({ data, currentSymbol, counterEarn
           </Col>
         </Row>
       </Col>
-      <Col xs={2}>
-        <div className='markets-table__button'>
-          <div className='markets-table__button--w' />
-            {isFilled ? 'More' : 'Price'}
-        </div>
-      </Col>
+      <Col xs={2}></Col>
     </Row>
   );
 };
