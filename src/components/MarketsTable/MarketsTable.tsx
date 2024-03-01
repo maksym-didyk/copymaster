@@ -9,10 +9,13 @@ import { MarketsTabsType } from '../../types/enums';
 interface Props {
   tabType: MarketsTabsType,
   counterEarning: boolean,
-  marketPrice: number
+  marketPrice: number,
+  tradeType: string,
+  currentMarket: string,
+  currentSymbol: string
 }
 
-export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice }) => {
+export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice, tradeType, currentMarket, currentSymbol }) => {
   const [tableData, setTableData] = useState<any>({});
   const [dataKeys, setDataKeys] = useState<string[]>([]);
 
@@ -20,6 +23,11 @@ export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice }
     const getData = async (url: string) => {
       try {
         const loadedData = await client.get<any>('/api/markets' + url);
+
+        if (loadedData.error !== undefined) {
+          return toast.error(loadedData.error);
+        }
+
         const loadedDataKeys = Object.keys(loadedData);
 
         setTableData(loadedData);
@@ -29,8 +37,8 @@ export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice }
       }
     };
 
-    getData('/spot/order-block/buy/binance/XRP_USDT');
-  }, []);
+    getData(`/${tradeType}/${tabType}/${currentMarket}/${currentSymbol}`);
+  }, [currentMarket, currentSymbol, tabType, tradeType]);
 
   return (
     <Container fluid className='markets-table my-4'>

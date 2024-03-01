@@ -214,7 +214,7 @@ export const Markets = () => {
 
       <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} />
 
-      <MarketsTable tabType={currentTab} counterEarning={counterEarning} marketPrice={symbolPrice} />
+      <MarketsTable tabType={currentTab} counterEarning={counterEarning} marketPrice={symbolPrice} tradeType={tradeType} currentMarket={currentMarket} currentSymbol={currentSymbol} />
     </main>
   );
 };
