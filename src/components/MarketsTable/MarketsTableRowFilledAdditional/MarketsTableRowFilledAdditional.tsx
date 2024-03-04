@@ -1,7 +1,7 @@
 import React, { FC, useId, useState } from 'react';
 import classNames from 'classnames';
 import { Col, Collapse, ProgressBar, Row, Stack } from 'react-bootstrap';
-import { milisecondsToDate, showProgress } from '../../../utils/helpers';
+import { milisecondsToDate } from '../../../utils/helpers';
 import MarketsTableSubRow from '../MarketsTableSubRow/MarketsTableSubRow';
 import { MarketsTabsType } from '../../../types/enums';
 import { toast } from 'react-toastify';
@@ -18,18 +18,28 @@ interface Props {
   marketPrice: number
 }
 
-export const MarketsTableRowFilledAdditional: FC<Props> = ({ data, counterEarning, tabType, sumFilledQuantity, averageQuantity, profitValue, marketPrice }) => {
+export const MarketsTableRowFilledAdditional: FC<Props> = ({
+  data,
+  counterEarning,
+  tabType,
+  sumFilledQuantity,
+  averageQuantity,
+  profitValue,
+  marketPrice
+}) => {
   const [open, setOpen] = useState(false);
   const collapseId = useId();
 
   const dataRow = data[0];
-  const dateString = milisecondsToDate(dataRow.buyFilledTime);
-  const dataBuyCreationPrice = bigDecimal.round(dataRow.buyCreationPrice, 2);
+  const isTakeProfit = dataRow.sellTakeProfitPrice > 0 ? true : false;
+  const dateFilledTime = milisecondsToDate(dataRow.buyFilledTime);
+  const dateTime = isTakeProfit ? milisecondsToDate(dataRow.sellTakeProfitTime) : milisecondsToDate(dataRow.sellStopLossTime);
+  const dataFilledPrice = bigDecimal.round(dataRow.buyFilledPrice, 2);
+  const dataPrice = isTakeProfit ? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : bigDecimal.round(dataRow.sellStopLossPrice, 2);
   const currentSymbolArray = dataRow.symbol.split('/');
   const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
-  const averageQuantityRemain = averageQuantity > 0 ? 100 - averageQuantity : 0;
 
-  const profitPercentCalculate = +sumFilledQuantity === 0 ? new bigDecimal(sumFilledQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumFilledQuantity)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
+  const profitPercentCalculate = Number(sumFilledQuantity) === 0 ? new bigDecimal(sumFilledQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumFilledQuantity)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
   const profitPercentValue = Number(profitPercentCalculate.getValue());
 
   return (
@@ -53,12 +63,12 @@ export const MarketsTableRowFilledAdditional: FC<Props> = ({ data, counterEarnin
         <Col xs={9}>
           <Row className='markets-table__row'>
             <Col>
-              <p style={{ color: '#8997dc' }}>{dateString}</p>
-              <p>{dateString}</p>
+              <p style={{ color: '#8997dc' }}>{dateFilledTime}</p>
+              <p>{dateTime}</p>
             </Col>
             <Col>
-              <p style={{ color: '#5b6aff' }}>{dataBuyCreationPrice}</p>
-              <p style={{ color: '#ff363a' }}>{dataBuyCreationPrice}</p>
+              <p style={{ color: '#5b6aff' }}>{dataFilledPrice}</p>
+              <p style={{ color: '#ff363a' }}>{dataPrice}</p>
               </Col>
             <Col>{dataRow.symbol}</Col>
             <Col>{`${sumFilledQuantity} ${currentSymbol}`}</Col>
@@ -73,8 +83,8 @@ export const MarketsTableRowFilledAdditional: FC<Props> = ({ data, counterEarnin
             <Col className='text-success'>Buy</Col>
             <Col>
               <ProgressBar data-bs-theme='dark'>
-                <ProgressBar variant="success" now={averageQuantity} label={showProgress(averageQuantity)} key={1} />
-                <ProgressBar variant="danger" now={averageQuantityRemain} label={showProgress(averageQuantityRemain)} key={2} />
+                <ProgressBar variant="success" now={0} key={1} />
+                <ProgressBar variant="danger" now={0} key={2} />
               </ProgressBar>
             </Col>
             <Col>
@@ -95,9 +105,9 @@ export const MarketsTableRowFilledAdditional: FC<Props> = ({ data, counterEarnin
         </Col>
         <Col xs={2}>
         <Stack direction="horizontal" className='markets-table__inputwrapper'>
-            <MarketsTableInput placeHolder={'S.L.'} />
+            <MarketsTableInput placeHolder={'S.L.'} inputValue={isTakeProfit ? '' : bigDecimal.round(dataRow.sellStopLossPrice, 2)} />
             <span style={{color: '#7783c0'}}>/</span>
-            <MarketsTableInput placeHolder={'T.P.'} />
+            <MarketsTableInput placeHolder={'T.P.'} inputValue={isTakeProfit? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : ''} />
             <button className='markets-table__button'>
               More
             </button>

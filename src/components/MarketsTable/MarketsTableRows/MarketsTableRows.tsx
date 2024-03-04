@@ -15,33 +15,41 @@ interface Props {
 
 export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, marketPrice }) => {
   const dataQuantity = counterEarning ? 'buyQuantity' : 'buyCounterQuantity';
-  const dataFilledQuantity = counterEarning ? 'buyFilledQuantity' : 'buyFilledCounterQuantity';
   const marketPriceDecimal = new bigDecimal(marketPrice);
 
-  const { sumQuantity, sumFilledQuantity, sumFilledCounterQuantity, sumFilledQuantityStable } = data.reduce((acc: any, item: any) => {
-    const quantity = new bigDecimal(item[dataQuantity]);
-    const filledQuantity = new bigDecimal(item[dataFilledQuantity]);
-    const filledCounterQuantity = new bigDecimal(item['buyFilledCounterQuantity']);
-    const filledQuantityStable = new bigDecimal(item['buyFilledQuantity']);
+  const { 
+    sumQuantity,
+    sumFilledCounterQuantity,
+    sumFilledQuantityStable
+    } = data.reduce((acc: any, item: any) => {
+      const quantity = new bigDecimal(item[dataQuantity]);
+      const filledCounterQuantity = new bigDecimal(item['buyFilledCounterQuantity']);
+      const filledQuantityStable = new bigDecimal(item['buyFilledQuantity']);
 
-    return {
-      sumQuantity: acc.sumQuantity.add(quantity),
-      sumFilledQuantity: acc.sumFilledQuantity.add(filledQuantity),
-      sumFilledCounterQuantity: acc.sumFilledCounterQuantity.add(filledCounterQuantity),
-      sumFilledQuantityStable: acc.sumFilledQuantityStable.add(filledQuantityStable),
-    };
-  }, { sumQuantity: new bigDecimal('0'), sumFilledQuantity: new bigDecimal('0'), sumFilledCounterQuantity: new bigDecimal('0'), sumFilledQuantityStable: new bigDecimal('0') });
+      return {
+        sumQuantity: acc.sumQuantity.add(quantity),
+        sumFilledCounterQuantity: acc.sumFilledCounterQuantity.add(filledCounterQuantity),
+        sumFilledQuantityStable: acc.sumFilledQuantityStable.add(filledQuantityStable)
+      };
+  }, {
+    sumQuantity: new bigDecimal('0'),
+    sumFilledCounterQuantity: new bigDecimal('0'),
+    sumFilledQuantityStable: new bigDecimal('0')
+    });
 
+  const sumFilledQuantity = counterEarning ? sumFilledQuantityStable : sumFilledCounterQuantity;
   const averageQuantity = takeAverage(sumFilledQuantity, sumQuantity);
 
   const profitCounterQuantityCalculate = sumFilledQuantityStable.multiply(marketPriceDecimal).subtract(sumFilledCounterQuantity).round(data[0].counterRound, bigDecimal.RoundingModes.FLOOR);
   const profitCounterQuantity = profitCounterQuantityCalculate.getValue();
   const profitQuantity = marketPrice === 0 ? new bigDecimal('0') : profitCounterQuantityCalculate.divide(marketPriceDecimal).round(data[0].baseRound, bigDecimal.RoundingModes.DOWN).getValue();
-  
+
   const profitValue = counterEarning ? Number(profitQuantity) : Number(profitCounterQuantity);
+  const isThirdState = data[0].sellTakeProfitPrice > 0 || data[0].sellStopLossPrice > 0;
 
   return (
-    <div className='mt-4' style={{ borderLeft: (averageQuantity === 100 || averageQuantity === 0) ? '1px solid transparent' : '1px solid #545d88' } }>
+    <div className='mt-4' style={{ borderLeft: '1px solid #545d88' } }>
+      {/* (averageQuantity === 100 || averageQuantity === 0) ? '1px solid transparent' : */}
       {averageQuantity === 100
       ? null
       : <MarketsTableRow
@@ -64,20 +72,20 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
             profitValue={profitValue}
             marketPrice={marketPrice}
           />
-
-          <MarketsTableRowFilledAdditional
-            data={data}
-            counterEarning={counterEarning}
-            tabType={tabType}
-            sumFilledQuantity={sumFilledQuantity.getValue()}
-            averageQuantity={averageQuantity}
-            profitValue={profitValue}
-            marketPrice={marketPrice}
-          />
         </>
       }
 
-
+      {isThirdState &&
+        <MarketsTableRowFilledAdditional
+          data={data}
+          counterEarning={counterEarning}
+          tabType={tabType}
+          sumFilledQuantity={sumFilledQuantity.getValue()}
+          averageQuantity={averageQuantity}
+          profitValue={profitValue}
+          marketPrice={marketPrice}
+        />
+      }
     </div>
   );
 };

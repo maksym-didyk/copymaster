@@ -15,7 +15,7 @@ interface Props {
 export const MarketsTableSubRow: FC<Props> = ({ data, currentSymbol, counterEarning, marketPrice = 0, isFilled = false, isAdditional = false }) => {
   const dataValue = counterEarning ? data.buyQuantity : data.buyCounterQuantity;
   const dataValueFilled = counterEarning ? data.buyFilledQuantity : data.buyFilledCounterQuantity;
-  const dataProgress = isFilled ? takeAverage(data.buyFilledQuantity, data.buyQuantity) : 0;
+  const dataProgress = isAdditional ? 0 : isFilled ? takeAverage(data.buyFilledQuantity, data.buyQuantity) : 0;
   const dataProgressRemain = dataProgress > 0 ? 100 - dataProgress : 0;
 
   const marketPriceDecimal = new bigDecimal(marketPrice);
@@ -34,7 +34,7 @@ export const MarketsTableSubRow: FC<Props> = ({ data, currentSymbol, counterEarn
           <Col></Col>
           <Col>
             <p style={{ color: '#5b6aff' }}>{isFilled ? bigDecimal.round(data.buyFilledPrice, 2) : bigDecimal.round(data.buyCreationPrice, 2)}</p>
-            {isAdditional && <p style={{ color: '#ff363a' }}>{isFilled ? bigDecimal.round(data.buyFilledPrice, 2) : bigDecimal.round(data.buyCreationPrice, 2)}</p>}
+            {isAdditional && <p style={{ color: '#ff363a' }}>{data.sellTakeProfitPrice > 0 ? bigDecimal.round(data.sellTakeProfitPrice, 2) : bigDecimal.round(data.sellStopLossPrice, 2)}</p>}
           </Col>
           <Col>{data.nickname}</Col>
           <Col>{isFilled ? dataValueFilled : dataValue} {currentSymbol}</Col>

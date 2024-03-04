@@ -22,5 +22,5 @@ export const takeAverage = (partNumber: number | bigDecimal, number: number | bi
   const numPart = (partNumber instanceof bigDecimal) ? partNumber : new bigDecimal(partNumber);
   const numAll = (number instanceof bigDecimal) ? number : new bigDecimal(number);
 
-  return Number(numPart.divide(numAll).multiply(new bigDecimal('100')).getValue());
+  return Number(numPart.divide(numAll).multiply(new bigDecimal('100')).round().getValue());
 }
