@@ -8,8 +8,8 @@ export const milisecondsToDate = (miliseconds: number): string => {
   const dateObject = new Date(miliseconds);
 
   const year = dateObject.getFullYear();
-  const month = dateObject.getMonth() + 1; // Months are 0 indexed, so we add 1
-  const day = dateObject.getDate();
+  const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+  const day = dateObject.getDate().toString().padStart(2, '0');
 
   return `${day}.${month}.${year}`;
 };
@@ -19,6 +19,7 @@ export const showProgress = (value: number) => {
 };
 
 export const takeAverage = (partNumber: number | bigDecimal, number: number | bigDecimal) => {
+  if (number === 0) { return 0 }
   const numPart = (partNumber instanceof bigDecimal) ? partNumber : new bigDecimal(partNumber);
   const numAll = (number instanceof bigDecimal) ? number : new bigDecimal(number);
 

@@ -26,3 +26,9 @@ export enum MarketsTabsType {
   alert = 'alerts',
   history = 'history',
 };
+
+export enum TakeProfitStopLossType {
+  takeprofit,
+  stoploss,
+  none
+};
