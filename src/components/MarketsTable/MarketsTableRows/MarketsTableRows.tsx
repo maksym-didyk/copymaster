@@ -99,7 +99,13 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
     <div className='mt-4' style={{ borderLeft: '1px solid #545d88' } }>
       {/* (averageQuantity === 100 || averageQuantity === 0) ? '1px solid transparent' : */}
       {averageQuantity === 100
-      ? null
+      ? <MarketsTableRow
+      data={data}
+      counterEarning={counterEarning}
+      tabType={tabType}
+      sumQuantity={sumQuantity.getValue()}
+      isRed
+    />
       : <MarketsTableRow
           data={data}
           counterEarning={counterEarning}
@@ -133,8 +139,8 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
         />
       }
 
-      {averageTakeProfitStopLossQuantity > 0 &&
-        <MarketsTableRowAdditional
+      {averageTakeProfitStopLossQuantity > 0
+      ? <MarketsTableRowAdditional
           data={data}
           counterEarning={counterEarning}
           tabType={tabType}
@@ -143,6 +149,17 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
           profitValue={profitTakeProfitStopLossValue}
           marketPrice={marketPrice}
           isFilled
+        />
+      : <MarketsTableRowAdditional
+          data={data}
+          counterEarning={counterEarning}
+          tabType={tabType}
+          sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantity.getValue()}
+          averageQuantity={averageTakeProfitStopLossQuantity}
+          profitValue={profitTakeProfitStopLossValue}
+          marketPrice={marketPrice}
+          isFilled
+          isRed
         />
       }
     </div>

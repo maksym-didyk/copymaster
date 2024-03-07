@@ -16,7 +16,8 @@ interface Props {
   averageQuantity?: number,
   profitValue?: number,
   marketPrice?: number,
-  isFilled?: boolean
+  isFilled?: boolean,
+  isRed?: boolean
 }
 
 export const MarketsTableRowAdditional: FC<Props> = ({
@@ -27,7 +28,8 @@ export const MarketsTableRowAdditional: FC<Props> = ({
   averageQuantity = 0,
   profitValue = 0,
   marketPrice = 0,
-  isFilled = false
+  isFilled = false,
+  isRed = false
 }) => {
   const [open, setOpen] = useState(false);
   const collapseId = useId();
@@ -47,7 +49,7 @@ export const MarketsTableRowAdditional: FC<Props> = ({
   const profitPercentValue = Number(profitPercentCalculate.getValue());
 
   return (
-    <div>
+    <div style={{border: isRed ? '1px solid red': ''}}>
       <Row className='align-items-center fw-bold mt-2'>
         <Col
           onClick={() => setOpen(!open)}
@@ -102,14 +104,16 @@ export const MarketsTableRowAdditional: FC<Props> = ({
           </Row>
         </Col>
         <Col xs={2}>
-        <Stack direction="horizontal" className='markets-table__inputwrapper'>
-            <MarketsTableInput placeHolder={'S.L.'} inputValue={isTakeProfit ? '' : bigDecimal.round(dataRow.sellStopLossPrice, 2)} />
-            <span style={{color: '#7783c0'}}>/</span>
-            <MarketsTableInput placeHolder={'T.P.'} inputValue={isTakeProfit? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : ''} />
-            <button className='markets-table__button'>
-              More
-            </button>
-          </Stack>
+          {isFilled ||
+            <Stack direction="horizontal" className='markets-table__inputwrapper'>
+                <MarketsTableInput placeHolder={'S.L.'} inputValue={isTakeProfit ? '' : bigDecimal.round(dataRow.sellStopLossPrice, 2)} />
+                <span style={{color: '#7783c0'}}>/</span>
+                <MarketsTableInput placeHolder={'T.P.'} inputValue={isTakeProfit? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : ''} />
+                <button className='markets-table__button'>
+                  More
+                </button>
+              </Stack>
+          }
         </Col>
       </Row>
 

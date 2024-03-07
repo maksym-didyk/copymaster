@@ -11,10 +11,11 @@ interface Props {
   data: any,
   counterEarning: boolean,
   tabType: MarketsTabsType,
-  sumQuantity: string
+  sumQuantity: string,
+  isRed?: boolean
 }
 
-export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQuantity }) => {
+export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQuantity, isRed = false }) => {
   const [open, setOpen] = useState(false);
   const collapseId = useId();
 
@@ -25,7 +26,7 @@ export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQ
   const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
 
   return (
-    <div>
+    <div style={{border: isRed ? '1px solid red': ''}}>
       <Row className='align-items-center fw-bold mt-2 '>
         <Col
           onClick={() => setOpen(!open)}

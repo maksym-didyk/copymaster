@@ -13,33 +13,33 @@ export const HomePage = () => {
   const fagContent = [
     {
       id: '01',
-      title: 'Site features',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+      title: 'Copy Trading',
+      content: 'You have the opportunity to add the API of your clients and they will duplicate your deals'
     },
     {
       id: '02',
-      title: 'Copy trading',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+      title: 'Trading bot',
+      content: 'You can create different bots that will help you in trading and making money'
     },
     {
       id: '03',
-      title: 'Trading bot',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+      title: 'Alerts',
+      content: 'Ability to add notifications with comments for all coins on different exchanges'
     },
     {
       id: '04',
-      title: 'Security and Transparency',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+      title: 'Security and transparency',
+      content: 'All data is protected and you can safely manage your funds'
     },
     {
       id: '05',
-      title: 'Intuitive Interface',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+      title: 'Site features',
+      content: '- Ability to manage your own and investment assets at the same time. - Ability to create bots for trading. - Ability to set notifications for different coins and not miss good deals'
     },
     {
       id: '06',
-      title: 'Intuitive Interface',
-      content: 'An easy-to-use and intuitive interface makes cryptocurrency trading accessible to everyone. Simple analysis tools and charts help you make informed decisions.'
+      title: 'Intuitive interface',
+      content: '- Add API quickly and easily - Convenient visualization of deals- It\'s easy to create a bot of varying complexity'
     },
   ];
 
