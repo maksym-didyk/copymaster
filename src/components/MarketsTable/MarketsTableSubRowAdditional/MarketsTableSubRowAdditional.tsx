@@ -19,7 +19,7 @@ export const MarketsTableSubRowAdditional: FC<Props> = ({ data, currentSymbol, c
   const dataValueFilled = counterEarning
     ? isTakeProfit ? data.sellFilledTakeProfitQuantity : data.sellFilledStopLossQuantity
     : isTakeProfit ? data.sellFilledTakeProfitCounterQuantity : data.sellFilledStopLossCounterQuantity;
-  const dataProgress = isFilled 
+  const dataProgress = isFilled
     ? isTakeProfit ? takeAverage(data.sellFilledTakeProfitQuantity, data.sellTakeProfitQuantity) : takeAverage(data.sellFilledStopLossQuantity, data.sellStopLossQuantity)
     : 0;
   const dataProgressRemain = dataProgress > 0 ? 100 - dataProgress : 0;
@@ -46,8 +46,8 @@ export const MarketsTableSubRowAdditional: FC<Props> = ({ data, currentSymbol, c
           </Col>
           <Col>{data.nickname}</Col>
           <Col>{isFilled ? dataValueFilled : dataValue} {currentSymbol}</Col>
-          <Col className={profitValue > 0 ? 'text-success' : 'text-danger'}>{isFilled && (profitValue > 0 ? `+${profitValue} ${currentSymbol}` : `${profitValue} ${currentSymbol}`)}</Col>
-          <Col className={profitPercentValue > 0 ? 'text-success' : 'text-danger'}>{isFilled && (profitPercentValue > 0 ? `+${profitPercentValue}%` : `${profitPercentValue}%`)}</Col>
+          <Col className={profitValue > 0 ? 'text-success' : 'text-danger'}>{(profitValue > 0 ? `+${profitValue} ${currentSymbol}` : `${profitValue} ${currentSymbol}`)}</Col>
+          <Col className={profitPercentValue > 0 ? 'text-success' : 'text-danger'}>{(profitPercentValue > 0 ? `+${profitPercentValue}%` : `${profitPercentValue}%`)}</Col>
           <Col className='text-danger'></Col>
           <Col>
             <ProgressBar data-bs-theme='dark'>

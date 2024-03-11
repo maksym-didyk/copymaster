@@ -18,7 +18,15 @@ interface Props {
   marketPrice: number
 }
 
-export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType, sumFilledQuantity, averageQuantity, profitValue, marketPrice }) => {
+export const MarketsTableRowFilled: FC<Props> = ({
+  data,
+  counterEarning,
+  tabType,
+  sumFilledQuantity,
+  averageQuantity,
+  profitValue,
+  marketPrice
+}) => {
   const [open, setOpen] = useState(false);
   const collapseId = useId();
 
@@ -57,12 +65,12 @@ export const MarketsTableRowFilled: FC<Props> = ({ data, counterEarning, tabType
             <Col>{dataRow.symbol}</Col>
             <Col>{`${sumFilledQuantity} ${currentSymbol}`}</Col>
             {profitValue > 0
-            ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>
-            : <Col className='text-danger'>{`${profitValue} ${currentSymbol}`}</Col>
+              ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>
+              : <Col className='text-danger'>{`${profitValue} ${currentSymbol}`}</Col>
             }
             {profitPercentValue > 0
-            ? <Col className='text-success'>{`+${profitPercentValue}%`}</Col>
-            : <Col className='text-danger'>{`${profitPercentValue}%`}</Col>
+              ? <Col className='text-success'>{`+${profitPercentValue}%`}</Col>
+              : <Col className='text-danger'>{`${profitPercentValue}%`}</Col>
             }
             <Col className='text-success'>Buy</Col>
             <Col>

@@ -15,7 +15,7 @@ interface Props {
   sumFilledQuantity: string,
   averageQuantity?: number,
   profitValue?: number,
-  marketPrice?: number,
+  marketPrice: number,
   isFilled?: boolean,
   isRed?: boolean
 }
@@ -27,7 +27,7 @@ export const MarketsTableRowAdditional: FC<Props> = ({
   sumFilledQuantity,
   averageQuantity = 0,
   profitValue = 0,
-  marketPrice = 0,
+  marketPrice,
   isFilled = false,
   isRed = false
 }) => {
@@ -42,7 +42,7 @@ export const MarketsTableRowAdditional: FC<Props> = ({
   const dataPrice = isTakeProfit ? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : bigDecimal.round(dataRow.sellStopLossPrice, 2);
   const currentSymbolArray = dataRow.symbol.split('/');
   const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
-  const averageQuantityProgressBar = isFilled ? averageQuantity : 0
+  const averageQuantityProgressBar = isFilled ? averageQuantity : 0;
   const averageQuantityRemain = averageQuantityProgressBar > 0 ? 100 - averageQuantityProgressBar : 0;
 
   const profitPercentCalculate = Number(sumFilledQuantity) === 0 ? new bigDecimal(sumFilledQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumFilledQuantity)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
@@ -78,8 +78,14 @@ export const MarketsTableRowAdditional: FC<Props> = ({
               </Col>
             <Col>{dataRow.symbol}</Col>
             <Col>{`${sumFilledQuantity} ${currentSymbol}`}</Col>
-            <Col className={profitValue > 0 ? 'text-success' : 'text-danger'}>{isFilled && (profitValue > 0 ? `+${profitValue} ${currentSymbol}` : `${profitValue} ${currentSymbol}`)}</Col>
-            <Col className={profitPercentValue > 0 ? 'text-success' : 'text-danger'}>{isFilled && (profitPercentValue > 0 ? `+${profitPercentValue}%` : `${profitPercentValue}%`)}</Col>
+            {profitValue > 0
+              ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>
+              : <Col className='text-danger'>{`${profitValue} ${currentSymbol}`}</Col>
+            }
+            {profitPercentValue > 0
+              ? <Col className='text-success'>{`+${profitPercentValue}%`}</Col>
+              : <Col className='text-danger'>{`${profitPercentValue}%`}</Col>
+            }
             <Col className='text-success'>Buy</Col>
             <Col>
             <ProgressBar data-bs-theme='dark'>

@@ -19,6 +19,9 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
   const [dataTakeProfitStopLossQuantity, setDataTakeProfitStopLossQuantity] = useState('');
   const [dataFilledTakeProfitStopLossCounterQuantity, setDataFilledTakeProfitStopLossCounterQuantity] = useState('');
   const [dataFilledTakeProfitStopLossQuantity, setDataFilledTakeProfitStopLossQuantity] = useState('');
+  // const [dataFilledTakeProfitStopLossPrice, setDataFilledTakeProfitStopLossPrice] = useState('');
+
+  // console.log(data[0][dataFilledTakeProfitStopLossPrice]);
 
   const dataQuantity = counterEarning ? 'buyQuantity' : 'buyCounterQuantity';
   const dataFilledCounterQuantity = 'buyFilledCounterQuantity';
@@ -73,7 +76,7 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
 
   const resultSumTakeProfitStopLossQuantity = counterEarning ? sumTakeProfitStopLossQuantity : sumTakeProfitStopLossCounterQuantity;
   const resultSumFilledTakeProfitStopLossQuantity = counterEarning ? sumFilledTakeProfitStopLossQuantity : sumFilledTakeProfitStopLossCounterQuantity;
-  const averageTakeProfitStopLossQuantity = +resultSumFilledTakeProfitStopLossQuantity.getValue() === 0 ? 0: takeAverage(resultSumFilledTakeProfitStopLossQuantity, resultSumTakeProfitStopLossQuantity);
+  const averageTakeProfitStopLossQuantity = Number(resultSumFilledTakeProfitStopLossQuantity.getValue()) === 0 ? 0: takeAverage(resultSumFilledTakeProfitStopLossQuantity, resultSumTakeProfitStopLossQuantity);
   const profitTakeProfitStopLossCounterQuantityCalculate = sumFilledTakeProfitStopLossQuantity.multiply(marketPriceDecimal).subtract(sumFilledTakeProfitStopLossCounterQuantity).round(data[0].counterRound, bigDecimal.RoundingModes.FLOOR);
   const profitTakeProfitStopLossCounterQuantity = profitTakeProfitStopLossCounterQuantityCalculate.getValue();
   const profitTakeProfitStopLossQuantity = marketPrice === 0 ? new bigDecimal('0') : profitTakeProfitStopLossCounterQuantityCalculate.divide(marketPriceDecimal).round(data[0].baseRound, bigDecimal.RoundingModes.DOWN).getValue();
@@ -86,12 +89,14 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
       setDataTakeProfitStopLossQuantity(() => 'sellTakeProfitQuantity');
       setDataFilledTakeProfitStopLossCounterQuantity(() => 'sellFilledTakeProfitCounterQuantity');
       setDataFilledTakeProfitStopLossQuantity(() => 'sellFilledTakeProfitQuantity');
+      // setDataFilledTakeProfitStopLossPrice(() => 'sellFilledTakeProfitPrice');
     } else if (data[0].sellStopLossPrice > 0) {
       setIsTakeProfitStopLoss(TakeProfitStopLossType.stoploss);
       setDataTakeProfitStopLossCounterQuantity(() => 'sellStopLossCounterQuantity');
       setDataTakeProfitStopLossQuantity(() => 'sellStopLossQuantity');
       setDataFilledTakeProfitStopLossCounterQuantity(() => 'sellFilledStopLossCounterQuantity');
       setDataFilledTakeProfitStopLossQuantity(() => 'sellFilledStopLossQuantity');
+      // setDataFilledTakeProfitStopLossPrice(() => 'sellFilledStopLossPrice');
     }
   }, [counterEarning, data]);
 
@@ -99,32 +104,32 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
     <div className='mt-4' style={{ borderLeft: '1px solid #545d88' } }>
       {/* (averageQuantity === 100 || averageQuantity === 0) ? '1px solid transparent' : */}
       {averageQuantity === 100
-      ? <MarketsTableRow
-      data={data}
-      counterEarning={counterEarning}
-      tabType={tabType}
-      sumQuantity={sumQuantity.getValue()}
-      isRed
-    />
-      : <MarketsTableRow
-          data={data}
-          counterEarning={counterEarning}
-          tabType={tabType}
-          sumQuantity={sumQuantity.getValue()}
-        />
+        ? <MarketsTableRow
+            data={data}
+            counterEarning={counterEarning}
+            tabType={tabType}
+            sumQuantity={sumQuantity.getValue()}
+            isRed
+          />
+        : <MarketsTableRow
+            data={data}
+            counterEarning={counterEarning}
+            tabType={tabType}
+            sumQuantity={sumQuantity.getValue()}
+          />
       }
 
       {averageQuantity === 0
-      ? null
-      : <MarketsTableRowFilled
-          data={data}
-          counterEarning={counterEarning}
-          tabType={tabType}
-          sumFilledQuantity={sumFilledQuantity.getValue()}
-          averageQuantity={averageQuantity}
-          profitValue={profitValue}
-          marketPrice={marketPrice}
-        />
+        ? null
+        : <MarketsTableRowFilled
+            data={data}
+            counterEarning={counterEarning}
+            tabType={tabType}
+            sumFilledQuantity={sumFilledQuantity.getValue()}
+            averageQuantity={averageQuantity}
+            profitValue={profitValue}
+            marketPrice={marketPrice}
+          />
       }
 
       {isThirdState &&
@@ -132,35 +137,38 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
           data={data}
           counterEarning={counterEarning}
           tabType={tabType}
+          // sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantity.getValue()}
           sumFilledQuantity={resultSumTakeProfitStopLossQuantity.getValue()}
           // averageQuantity={averageTakeProfitStopLossQuantity}
-          // profitValue={profitTakeProfitStopLossValue}
-          // marketPrice={marketPrice}
+          profitValue={profitTakeProfitStopLossValue}
+          marketPrice={marketPrice}
         />
       }
 
       {averageTakeProfitStopLossQuantity > 0
-      ? <MarketsTableRowAdditional
-          data={data}
-          counterEarning={counterEarning}
-          tabType={tabType}
-          sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantity.getValue()}
-          averageQuantity={averageTakeProfitStopLossQuantity}
-          profitValue={profitTakeProfitStopLossValue}
-          marketPrice={marketPrice}
-          isFilled
-        />
-      : <MarketsTableRowAdditional
-          data={data}
-          counterEarning={counterEarning}
-          tabType={tabType}
-          sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantity.getValue()}
-          averageQuantity={averageTakeProfitStopLossQuantity}
-          profitValue={profitTakeProfitStopLossValue}
-          marketPrice={marketPrice}
-          isFilled
-          isRed
-        />
+        ? <MarketsTableRowAdditional
+            data={data}
+            counterEarning={counterEarning}
+            tabType={tabType}
+            sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantity.getValue()}
+            averageQuantity={averageTakeProfitStopLossQuantity}
+            profitValue={profitTakeProfitStopLossValue}
+            marketPrice={marketPrice}
+            // marketPrice={data[0][dataFilledTakeProfitStopLossPrice]}
+            isFilled
+          />
+        : null
+      // : <MarketsTableRowAdditional
+      //     data={data}
+      //     counterEarning={counterEarning}
+      //     tabType={tabType}
+      //     sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantity.getValue()}
+      //     averageQuantity={averageTakeProfitStopLossQuantity}
+      //     profitValue={profitTakeProfitStopLossValue}
+      //     marketPrice={marketPrice}
+      //     isFilled
+      //     isRed
+      //   />
       }
     </div>
   );
