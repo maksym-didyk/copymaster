@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import './AlertsTable.scss';
 import { Col, Container, Row, Stack } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -6,6 +6,7 @@ import { client } from '../../api/fetchClient';
 import { AlertsListType, AlertsListTypeContent } from '../../types/types';
 import FlipMove from 'react-flip-move';
 import { AlertsTableRow } from './AlertsTableRow/AlertsTableRow';
+import { ModalAddAlert } from '../Modals/ModalAddAlert/ModalAddAlert';
 
 interface Props {
   marketPrice: number,
@@ -18,6 +19,22 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
   const [tableData, setTableData] = useState<AlertsListType>();
   const [dataContent, setDataContent] = useState<AlertsListTypeContent[]>();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showModalAddAlert, setShowModalAddAlert] = useState(false);
+  const [value, setValue] = useState('');
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setValue(newValue);
+
+    if (newValue === '') {
+      setDataContent(tableData?.content);
+      return;
+    }
+    
+    setDataContent(() => dataContent?.filter((item: AlertsListTypeContent) =>
+      item.symbol.toLowerCase().includes(newValue.toLowerCase().trim()))
+    );
+  };
 
   const handleShowFavorite = () => {
     if (isFavorite) {
@@ -35,7 +52,6 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
       const loadedData = await client.delete('/api/alert/' + currentId);
 
       if (loadedData === 1) {
-
         setDataContent((data) => data?.filter(({ id }) => id !== currentId));
         toast.success('Deleted successfully');
       } else {
@@ -46,25 +62,25 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
     }
   };
 
-  useEffect(() => {
-    const getData = async (url: string) => {
-      try {
-        const loadedData = await client.get<AlertsListType>('/api/alert' + url);
+  const getData = useCallback(async () => {
+    try {
+      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}`);
 
-        if (loadedData.error !== undefined) {
-          return toast.error(loadedData.error);
-        }
-
-        setTableData(loadedData);
-        setDataContent(loadedData.content);
-
-      } catch (error) {
-        toast.error(`${error}`);
+      if (loadedData.error !== undefined) {
+        return toast.error(loadedData.error);
       }
-    };
 
-    getData(`/list?market=${currentMarket}`);
+      setTableData(loadedData);
+      setDataContent(loadedData.content);
+
+    } catch (error) {
+      toast.error(`${error}`);
+    }
   }, [currentMarket]);
+
+  useEffect(() => {
+    getData();
+  }, [currentMarket, getData]);
 
   return (
     <Container fluid className='markets-table my-4'>
@@ -76,9 +92,13 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
         <Col xs={11}>
           <Stack direction='horizontal' className='align-items-center justify-content-between'>
             <Stack direction='horizontal' gap={3}>
-              <input type='text' />
+              <input
+                type='text'
+                value={value}
+                onChange={handleInputChange}
+              />
 
-              <button className='header__button header__button--fill fw-bold'>Add alert</button>
+              <button className='header__button header__button--fill fw-bold' onClick={() => setShowModalAddAlert(true)}>Add alert</button>
             </Stack>
 
             <button style={{ backgroundColor: 'transparent', color: '#9C9FA4' }} onClick={handleShowFavorite}>
@@ -103,8 +123,7 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
         </Col>
       </Row>
 
-
-    <FlipMove>
+    <FlipMove enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
     {dataContent?.map((alert: AlertsListTypeContent) =>
       <div key={alert.id} className='mt-2' style={{ borderLeft: '1px solid transparent' } }>
         <AlertsTableRow
@@ -115,6 +134,16 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
       </div>
     )}
     </FlipMove>
+
+    {showModalAddAlert && 
+      <ModalAddAlert
+        show={showModalAddAlert}
+        onClose={() => setShowModalAddAlert(false)}
+        markets={['BINANCE', 'BYBIT', 'COINBASE']}
+        currentMarket={'BINANCE'}
+        onUpdate={getData}
+      />
+    }
     </Container>
   );
 };

@@ -73,4 +73,5 @@ export interface AlertsListTypeContent {
   favorite: boolean;
   executed: boolean;
   sendToTelegram: boolean;
+  error: string;
 }

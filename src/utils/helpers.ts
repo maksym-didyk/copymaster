@@ -25,3 +25,9 @@ export const takeAverage = (partNumber: number | bigDecimal, number: number | bi
 
   return Number(numPart.divide(numAll).multiply(new bigDecimal('100')).round().getValue());
 }
+
+export const searchByName = (array: any, searchTerm: any) => {
+  return array.filter((item: { name: string; }) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+}
