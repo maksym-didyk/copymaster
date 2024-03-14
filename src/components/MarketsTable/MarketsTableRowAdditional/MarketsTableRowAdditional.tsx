@@ -1,6 +1,6 @@
 import React, { FC, useId, useState } from 'react';
 import classNames from 'classnames';
-import { Col, Collapse, ProgressBar, Row, Stack } from 'react-bootstrap';
+import { Button, Col, Collapse, Modal, ProgressBar, Row, Stack } from 'react-bootstrap';
 import { milisecondsToDate, showProgress } from '../../../utils/helpers';
 import { MarketsTabsType } from '../../../types/enums';
 import { toast } from 'react-toastify';
@@ -32,7 +32,11 @@ export const MarketsTableRowAdditional: FC<Props> = ({
   isRed = false
 }) => {
   const [open, setOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const collapseId = useId();
+
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
 
   const dataRow = data[0];
   const isTakeProfit = dataRow.sellTakeProfitPrice > 0 ? true : false;
@@ -115,7 +119,7 @@ export const MarketsTableRowAdditional: FC<Props> = ({
                 <MarketsTableInput placeHolder={'S.L.'} inputValue={isTakeProfit ? '' : bigDecimal.round(dataRow.sellStopLossPrice, 2)} />
                 <span style={{color: '#7783c0'}}>/</span>
                 <MarketsTableInput placeHolder={'T.P.'} inputValue={isTakeProfit? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : ''} />
-                <button className='markets-table__button'>
+                <button className='markets-table__button' onClick={handleShowModal}>
                   More
                 </button>
               </Stack>
@@ -130,6 +134,65 @@ export const MarketsTableRowAdditional: FC<Props> = ({
           ))}
         </div>
       </Collapse>
+
+      <Modal show={showModal} onHide={handleCloseModal} data-bs-theme='dark' size='lg' fullscreen='sm-down' centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Stop Limit / Take Profit</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Stack direction='horizontal' gap={3}>
+            <Stack direction='vertical' className='calculator'>
+              <Row className='align-items-center'>
+                <Col>Position</Col>
+                <Col className='text-success fw-bold justify-content-end'>Buy</Col>
+              </Row>
+
+              <Row className='align-items-center'>
+                <Col>Coin pair</Col>
+                <Col className='text-white fw-bold'>XRP/USDT</Col>
+              </Row>
+
+              <Row className='align-items-center'>
+                <Col>Stop Limit</Col>
+                <Col>Test</Col>
+              </Row>
+
+              <Row className='align-items-center'>
+                <Col>PNL</Col>
+                <Col>Test</Col>
+              </Row>
+            </Stack>
+
+            <Stack className='calculator'>
+              <Row className='align-items-center justify-content-between'>
+                <Col>Market price</Col>
+                <Col className='text-primary fw-bold'>0.55 USDT</Col>
+              </Row>
+
+              <Row className='align-items-center justify-content-between'>
+                <Col>Entry price</Col>
+                <Col>Test</Col>
+              </Row>
+
+              <Row className='align-items-center'>
+                <Col>Stop Limit</Col>
+                <Col>Test</Col>
+              </Row>
+
+              <Row className='align-items-center'>
+                <Col>PNL</Col>
+                <Col>Test</Col>
+              </Row>
+            </Stack>
+
+      </Stack>
+        </Modal.Body>
+        <Modal.Footer className='justify-content-center'>
+          <Button variant='primary' onClick={handleCloseModal} className='px-5'>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

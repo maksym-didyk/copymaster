@@ -47,3 +47,30 @@ export interface BalanceTypeData {
     scale: number;
     currency: string;
 }
+
+export interface AlertsListType {
+  content: AlertsListTypeContent[];
+  pageable: {};
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+  numberOfElements: number;
+  size: number;
+  number: number;
+  sort: {};
+  first: boolean;
+  empty: boolean;
+  error: string;
+}
+
+export interface AlertsListTypeContent {
+  id: number;
+  market: string;
+  symbol: string;
+  price: number;
+  type: string;
+  comment: string;
+  favorite: boolean;
+  executed: boolean;
+  sendToTelegram: boolean;
+}

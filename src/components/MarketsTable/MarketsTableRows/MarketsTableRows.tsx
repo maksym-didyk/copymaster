@@ -19,7 +19,7 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
   const [dataTakeProfitStopLossQuantity, setDataTakeProfitStopLossQuantity] = useState('');
   const [dataFilledTakeProfitStopLossCounterQuantity, setDataFilledTakeProfitStopLossCounterQuantity] = useState('');
   const [dataFilledTakeProfitStopLossQuantity, setDataFilledTakeProfitStopLossQuantity] = useState('');
-  // const [dataFilledTakeProfitStopLossPrice, setDataFilledTakeProfitStopLossPrice] = useState('');
+  const [dataFilledTakeProfitStopLossPrice, setDataFilledTakeProfitStopLossPrice] = useState('');
 
   // console.log(data[0][dataFilledTakeProfitStopLossPrice]);
 
@@ -89,14 +89,14 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
       setDataTakeProfitStopLossQuantity(() => 'sellTakeProfitQuantity');
       setDataFilledTakeProfitStopLossCounterQuantity(() => 'sellFilledTakeProfitCounterQuantity');
       setDataFilledTakeProfitStopLossQuantity(() => 'sellFilledTakeProfitQuantity');
-      // setDataFilledTakeProfitStopLossPrice(() => 'sellFilledTakeProfitPrice');
+      setDataFilledTakeProfitStopLossPrice(() => 'sellFilledTakeProfitPrice');
     } else if (data[0].sellStopLossPrice > 0) {
       setIsTakeProfitStopLoss(TakeProfitStopLossType.stoploss);
       setDataTakeProfitStopLossCounterQuantity(() => 'sellStopLossCounterQuantity');
       setDataTakeProfitStopLossQuantity(() => 'sellStopLossQuantity');
       setDataFilledTakeProfitStopLossCounterQuantity(() => 'sellFilledStopLossCounterQuantity');
       setDataFilledTakeProfitStopLossQuantity(() => 'sellFilledStopLossQuantity');
-      // setDataFilledTakeProfitStopLossPrice(() => 'sellFilledStopLossPrice');
+      setDataFilledTakeProfitStopLossPrice(() => 'sellFilledStopLossPrice');
     }
   }, [counterEarning, data]);
 
@@ -153,8 +153,8 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
             sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantity.getValue()}
             averageQuantity={averageTakeProfitStopLossQuantity}
             profitValue={profitTakeProfitStopLossValue}
-            marketPrice={marketPrice}
-            // marketPrice={data[0][dataFilledTakeProfitStopLossPrice]}
+            // marketPrice={marketPrice}
+            marketPrice={data[0][dataFilledTakeProfitStopLossPrice]}
             isFilled
           />
         : null

@@ -15,6 +15,7 @@ import { useLocalStorage } from '../../utils/useLocalStorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MarketsTable } from '../MarketsTable/MarketsTable';
 import { MarketsTabs } from './MarketsTabs/MarketsTabs';
+import { AlertsTable } from '../AlertsTable/AlertsTable';
 
 export const Markets = () => {
   const [markets, setMarkets] = useState<string[]>([]);
@@ -214,7 +215,13 @@ export const Markets = () => {
 
       <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} />
 
-      <MarketsTable tabType={currentTab} counterEarning={counterEarning} marketPrice={symbolPrice} tradeType={tradeType} currentMarket={currentMarket} currentSymbol={currentSymbol} />
+      {(currentTab === MarketsTabsType.buy || currentTab === MarketsTabsType.sell || currentTab === MarketsTabsType.all) &&
+        <MarketsTable tabType={currentTab} counterEarning={counterEarning} marketPrice={symbolPrice} tradeType={tradeType} currentMarket={currentMarket} currentSymbol={currentSymbol} />
+      }
+
+      {currentTab === MarketsTabsType.alert &&
+        <AlertsTable marketPrice={symbolPrice} currentMarket={currentMarket} currentSymbol={currentSymbol} counterEarning={counterEarning} />
+      }
     </main>
   );
 };

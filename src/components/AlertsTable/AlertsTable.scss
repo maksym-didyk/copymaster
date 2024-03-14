@@ -1,0 +1,18 @@
+.alerts-table {
+  font-family: Roboto;
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-align: center;
+
+  &__icon {
+    background: transparent;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.55rem;
+
+    &:hover {
+      background: #2A2E41;
+
+    }
+  }
+}

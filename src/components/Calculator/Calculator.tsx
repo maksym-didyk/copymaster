@@ -62,7 +62,7 @@ export const Calculator: FC<Props> = ({ currency, type, marketPrice, balance }) 
     {/* <div className='calculator'> */}
       <Stack gap={2} className='calculator'>
         <Row>
-          <Col className='mb-3'>
+          <Col className='mb-2'>
             Balance
             <span className='calculator__balance'>
               {balance && `${balance?.quantity} ${balance?.currency}`}
@@ -71,19 +71,19 @@ export const Calculator: FC<Props> = ({ currency, type, marketPrice, balance }) 
           </Col>
         </Row>
 
-        <Row>
+        <Row className='align-items-center'>
           <Col xs={3}>
             Price
           </Col>
           <Col>
-          <CalculatorInput inputValue={inputPrice} setInputValue={handleSetInputPrice} />
+            <CalculatorInput inputValue={inputPrice} setInputValue={handleSetInputPrice} />
           </Col>
           <Col xs={2}>
             {currency[1]}
           </Col>
         </Row>
 
-        <Row>
+        <Row className='align-items-center'>
           <Col xs={3}>
             Quantity
           </Col>
@@ -95,7 +95,7 @@ export const Calculator: FC<Props> = ({ currency, type, marketPrice, balance }) 
           </Col>
         </Row>
 
-        <Row>
+        <Row className='align-items-center'>
           <Col xs={3}>
             All
           </Col>

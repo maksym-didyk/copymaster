@@ -96,7 +96,7 @@ export const MarketsTableRowFilled: FC<Props> = ({
           </Row>
         </Col>
         <Col xs={2}>
-        <Stack direction="horizontal" className='markets-table__inputwrapper'>
+        <Stack direction='horizontal' className='markets-table__inputwrapper'>
             <MarketsTableInput placeHolder={'S.L.'} />
             <span style={{color: '#7783c0'}}>/</span>
             <MarketsTableInput placeHolder={'T.P.'} />
