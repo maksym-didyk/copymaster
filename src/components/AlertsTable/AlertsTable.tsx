@@ -19,6 +19,7 @@ interface Props {
 export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
   const [alertsData, setAlertsData] = useState<AlertsListType>();
   const [dataContent, setDataContent] = useState<AlertsListTypeContent[]>([]);
+  const [pairsData, setPairsData] = useState<string[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showModalAddAlert, setShowModalAddAlert] = useState(false);
   const [value, setValue] = useState('');
@@ -43,10 +44,26 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
     }
   }, [currentMarket]);
 
+  const getPairsData = useCallback(async () => {
+    try {
+      const loadedData = await client.get<any>(`/api/alert/symbols?market=${currentMarket}`);
+
+      if (loadedData.error === 'undefined') {
+        return toast.error(loadedData.error);
+      }
+
+      // const loadedDataKeys = Object.keys(loadedData[currentMarket]);
+
+      setPairsData(loadedData[currentMarket]);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  }, [currentMarket]);
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
-    const newValue = event.target.value.toUpperCase();
+    const newValue = event.target.value;
     setValue(newValue);
 
     if (newValue === '') {
@@ -137,6 +154,7 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
 
   useEffect(() => {
     getData();
+    getPairsData();
   }, [currentMarket]);
 
   return (
@@ -163,6 +181,7 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
                   value={value}
                   onChange={handleInputChange}
                   className='alerts-table__input'
+                  style={{textTransform: 'uppercase'}}
                 />
 
               </Stack>
@@ -216,10 +235,11 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
     {showModalAddAlert && 
       <ModalAddAlert
         show={showModalAddAlert}
-        onClose={() => setShowModalAddAlert(false)}
         markets={['BINANCE', 'BYBIT', 'COINBASE']}
-        currentMarket={'BINANCE'}
+        currentMarket={currentMarket}
+        pairsData={pairsData}
         onUpdate={getData}
+        onClose={() => setShowModalAddAlert(false)}
       />
     }
     </Container>

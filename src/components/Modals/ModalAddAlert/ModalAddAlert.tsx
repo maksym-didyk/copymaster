@@ -9,14 +9,15 @@ import { AlertsListTypeContent } from '../../../types/types';
 
 interface Props {
   show: boolean,
-  onClose: () => void,
   markets: string[],
   currentMarket: string,
-  onUpdate: () => Promise<any>,
+  pairsData: string[],
+  onClose: () => void,
+  onUpdate: () => Promise<any>
 }
 
-export const ModalAddAlert: FC<Props> = ({show, onClose, markets, currentMarket, onUpdate}) => {
-  const [valueCoinPair, setValueCoinPair] = useState('XRP_USDT');
+export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsData, onClose, onUpdate}) => {
+  const [valueCoinPair, setValueCoinPair] = useState('');
   const [value, setValue] = useState(0.56);
   const [valueAlertType, setAlertType] = useState('PRICE_REACHES');
   const [valueFrequency, setValueFrequency] = useState('ONLY_ONCE');
@@ -38,6 +39,7 @@ export const ModalAddAlert: FC<Props> = ({show, onClose, markets, currentMarket,
       symbol: valueCoinPair,
       price: value,
       type: valueAlertType,
+      informing: valueFrequency,
       comment: valueComment,
       favorite: false,
       sendToTelegram: checkedTelegram
@@ -79,10 +81,17 @@ export const ModalAddAlert: FC<Props> = ({show, onClose, markets, currentMarket,
               <Col>
                 <input
                   type='text'
+                  list="coinpairs"
                   value={valueCoinPair}
                   onChange={(event) => setValueCoinPair(event.target.value)}
                   size={8}
                 />
+                {/* <input type='text' list="coinpairs" style={{textTransform: 'uppercase'}} onChange={} /> */}
+                <datalist id="coinpairs">
+                {pairsData.map((pair) =>
+                  <option key={pair} value={pair}></option>
+                )}
+                </datalist>
               </Col>
             </Row>
 

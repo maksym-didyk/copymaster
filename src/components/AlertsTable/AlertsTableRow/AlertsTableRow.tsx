@@ -25,8 +25,7 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
   
       onChange(editedData);
     }
-
-  }
+  };
 
   const handleEditBooleanData = (editKey: string) => {
     const propertyValue = data[editKey as keyof AlertsListTypeContent];

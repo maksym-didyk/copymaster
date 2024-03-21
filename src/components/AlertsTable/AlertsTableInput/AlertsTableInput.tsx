@@ -1,7 +1,7 @@
-import React, { ChangeEvent, FC, useId, useState } from 'react';
+import React, { FC, FormEvent, useId, useState } from 'react';
 
 interface Props {
-  inputValue?: number | string,
+  inputValue?: string,
   placeHolder?: string,
   handler: (newValue: string) => void
 }
@@ -21,19 +21,22 @@ export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '',
   //   }
   // };
 
-  const handleInputBlur = (event: ChangeEvent<HTMLInputElement>) => {
-    handler(event.target.value);
+  const handleInputBlur = (event: FormEvent) => {
+    event.preventDefault();
+    handler(value);
   };
 
   return (
-    <input
-      id={id}
-      type='text'
-      value={value}
-      onChange={(event) => setValue(event.target.value)}
-      onBlur={handleInputBlur}
-      placeholder={value ? '' : placeHolder}
-      className='alerts-table__input-comment'
-    />
+    <form onSubmit={handleInputBlur}>
+      <input
+        id={id}
+        type='text'
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        onBlur={handleInputBlur}
+        placeholder={value ? '' : placeHolder}
+        className='alerts-table__input-comment'
+      />
+    </form>
   );
 };
