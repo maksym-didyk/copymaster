@@ -7,6 +7,7 @@ import { AlertsListType, AlertsListTypeContent } from '../../types/types';
 import FlipMove from 'react-flip-move';
 import { AlertsTableRow } from './AlertsTableRow/AlertsTableRow';
 import { ModalAddAlert } from '../Modals/ModalAddAlert/ModalAddAlert';
+import { Pagination } from '../Pagination/Pagination';
 
 interface Props {
   marketPrice: number,
@@ -16,18 +17,42 @@ interface Props {
 }
 
 export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
-  const [tableData, setTableData] = useState<AlertsListType>();
-  const [dataContent, setDataContent] = useState<AlertsListTypeContent[]>();
+  const [alertsData, setAlertsData] = useState<AlertsListType>();
+  const [dataContent, setDataContent] = useState<AlertsListTypeContent[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showModalAddAlert, setShowModalAddAlert] = useState(false);
   const [value, setValue] = useState('');
 
+  const getData = useCallback(async (page = 0) => {
+    try {
+      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}`);
+
+      if (loadedData.error === 'undefined') {
+        return toast.error(loadedData.error);
+      }
+
+      const loadedDataContent: AlertsListTypeContent[] = loadedData.content;
+      const splittedDataContent = page > 0 ? [...dataContent, ...loadedDataContent] : loadedDataContent;
+      
+      setDataContent(splittedDataContent);
+      setAlertsData(loadedData);
+      toast.done('loadedData');
+
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  }, [currentMarket]);
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
+    event.preventDefault();
+
+    const newValue = event.target.value.toUpperCase();
     setValue(newValue);
 
     if (newValue === '') {
-      setDataContent(tableData?.content);
+      if (alertsData) {
+        setDataContent(alertsData.content);
+      }
       return;
     }
     
@@ -38,14 +63,16 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
 
   const handleShowFavorite = () => {
     if (isFavorite) {
-      setDataContent(tableData?.content);
+      if (alertsData) {
+        setDataContent(alertsData.content);
+      };
       setIsFavorite(() => false);
       return;
     }
 
-    setDataContent((data) => data?.filter(({ favorite }) => favorite === true));
+    setDataContent((data) => data?.filter(({ favorite }) => favorite));
     setIsFavorite(() => true);
-  }
+  };
 
   const handleAlertDelete = async (currentId: number) => {
     try {
@@ -62,25 +89,55 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
     }
   };
 
-  const getData = useCallback(async () => {
+  const handleEditData = async (editedData: any) => {
     try {
-      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}`);
+      const updatedData = await client.patch<any>('/api/alert/', editedData);
 
-      if (loadedData.error !== undefined) {
+      if (updatedData.error === 'undefined') {
+        toast.error('Something went wrong');
+        return;
+      }
+        // getData();
+        // setDataContent(() => [...dataContent, editedData]);
+
+      const targetIndex = dataContent.findIndex(item => item.id === updatedData.id);
+      const updatedDataArray = dataContent.slice();
+
+      if (targetIndex !== -1) {
+        updatedDataArray[targetIndex] = updatedData;
+        setDataContent(updatedDataArray);
+        toast.success('Updated successfully');
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  };
+
+  const handlePageChange = async(page: number) => {
+    toast.info(page);
+    // getData(page);
+    try {
+      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}`);
+
+      if (loadedData.error === 'undefined') {
         return toast.error(loadedData.error);
       }
 
-      setTableData(loadedData);
-      setDataContent(loadedData.content);
+      const loadedDataContent: AlertsListTypeContent[] = loadedData.content;
+      const splittedDataContent = page > 0 ? [...dataContent, ...loadedDataContent] : loadedDataContent;
+      
+      setDataContent(splittedDataContent);
+      setAlertsData(loadedData);
+      toast.done('loadedData');
 
     } catch (error) {
       toast.error(`${error}`);
     }
-  }, [currentMarket]);
+  };
 
   useEffect(() => {
     getData();
-  }, [currentMarket, getData]);
+  }, [currentMarket]);
 
   return (
     <Container fluid className='markets-table my-4'>
@@ -92,11 +149,23 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
         <Col xs={11}>
           <Stack direction='horizontal' className='align-items-center justify-content-between'>
             <Stack direction='horizontal' gap={3}>
-              <input
-                type='text'
-                value={value}
-                onChange={handleInputChange}
-              />
+              <Stack direction='horizontal' gap={3} className='alerts-table__inputwrapper'>
+                <div />
+                <label htmlFor="inputField">
+                  <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="6" cy="6" r="5.5" stroke="white"/>
+                    <path d="M9 10L13 14" stroke="white"/>
+                  </svg>
+                </label>
+                <input
+                  type='text'
+                  id="inputField"
+                  value={value}
+                  onChange={handleInputChange}
+                  className='alerts-table__input'
+                />
+
+              </Stack>
 
               <button className='header__button header__button--fill fw-bold' onClick={() => setShowModalAddAlert(true)}>Add alert</button>
             </Stack>
@@ -130,11 +199,20 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
           data={alert}
           marketPrice={marketPrice}
           onDelete={handleAlertDelete}
+          onChange={handleEditData}
         />
       </div>
     )}
     </FlipMove>
 
+    <Pagination
+      pageSize={alertsData?.pageSize || 0}
+      totalRecords={alertsData?.totalRecords || 0}
+      lastPageNumber={alertsData?.lastPageNumber || 0}
+      pageNumber={alertsData?.pageNumber || 0}
+      onPageChange={handlePageChange}
+    />
+    
     {showModalAddAlert && 
       <ModalAddAlert
         show={showModalAddAlert}

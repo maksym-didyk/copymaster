@@ -15,4 +15,40 @@
 
     }
   }
+
+  &__inputwrapper {
+    border-radius: 1.45rem;
+    background: #151620;
+    // height: 1.6rem;
+  }
+
+  &__input {
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: #7b7c85;
+
+    &-comment {
+    border-radius: 0.6rem;
+    border: 1px solid transparent;
+    background: #13141d;
+    outline: none;
+    width: 100%;
+    color: #7b7c85;
+    padding: 0.2rem 0.9rem;
+
+    &:focus {
+      border: 1px solid #3548fe;
+      color: #fff;
+    }
+
+    &::placeholder {
+      color: #7b7c85;
+      transition: opacity 0.3s ease;
+    }
+
+    &:focus::placeholder {
+      opacity: 0;
+    }}
+  }
 }

@@ -18,6 +18,8 @@ interface Props {
 export const ModalAddAlert: FC<Props> = ({show, onClose, markets, currentMarket, onUpdate}) => {
   const [valueCoinPair, setValueCoinPair] = useState('XRP_USDT');
   const [value, setValue] = useState(0.56);
+  const [valueAlertType, setAlertType] = useState('PRICE_REACHES');
+  const [valueFrequency, setValueFrequency] = useState('ONLY_ONCE');
   const [valueComment, setValueComment] = useState('');
   const [checkedTelegram, setCheckedTelegram] = useState(false);
 
@@ -26,16 +28,21 @@ export const ModalAddAlert: FC<Props> = ({show, onClose, markets, currentMarket,
     setValue(+newValue);
   };
 
+  const handleAlertTypeChange = (alertType: string) => {
+    setAlertType(() => alertType);
+  }
+
   const handleAddAlert = async () => {
     const newAlert = {
       market: currentMarket,
       symbol: valueCoinPair,
       price: value,
-      type: 'PRICE_REACHES',
+      type: valueAlertType,
       comment: valueComment,
       favorite: false,
       sendToTelegram: checkedTelegram
     }
+
     try {
       const loadedData: AlertsListTypeContent = await client.post('/api/alert/', newAlert);
 
@@ -66,7 +73,7 @@ export const ModalAddAlert: FC<Props> = ({show, onClose, markets, currentMarket,
               })}>{capitalizeFirstLetter(market)}</span>
             )}
           </div>
-          <Stack direction='vertical' className='calculator'>
+          <Stack direction='vertical' className='calculator gap-2'>
             <Row className='align-items-center'>
               <Col>Coin pair:</Col>
               <Col>
@@ -85,8 +92,22 @@ export const ModalAddAlert: FC<Props> = ({show, onClose, markets, currentMarket,
             </Row>
 
             <Row className='align-items-center'>
-              <Col><CustomSelect data={['Price reaches','Price rises above','Price drops to']} title={'Alert type '} /></Col>
-              <Col><CustomSelect data={['Only once','Always']} title={'Frequency '} /></Col>
+              <Col>
+                <CustomSelect
+                  data={['PRICE_REACHES', 'PRICE_RISES_ABOVE', 'PRICE_DROPS_TO']}
+                  title={'Alert type '}
+                  value={valueAlertType}
+                  handler={handleAlertTypeChange} 
+                />
+              </Col>
+              <Col>
+                <CustomSelect
+                  data={['ONLY_ONCE', 'ALWAYS']}
+                  title={'Frequency '}
+                  value={valueFrequency}
+                  handler={setValueFrequency}
+                />
+              </Col>
             </Row>
 
             <Row className='align-items-center'>
@@ -114,11 +135,11 @@ export const ModalAddAlert: FC<Props> = ({show, onClose, markets, currentMarket,
             </Row>
 
             <Row>
-              <Col></Col>
               <Col>
                 <Form.Switch
                   label="Send also to Telegram"
-                  onChange={event => setCheckedTelegram(event.target.checked)} checked={checkedTelegram}
+                  onChange={event => setCheckedTelegram(event.target.checked)}
+                  checked={checkedTelegram}
                 />
               </Col>
             </Row>

@@ -50,16 +50,10 @@ export interface BalanceTypeData {
 
 export interface AlertsListType {
   content: AlertsListTypeContent[];
-  pageable: {};
-  totalElements: number;
-  totalPages: number;
-  last: boolean;
-  numberOfElements: number;
-  size: number;
-  number: number;
-  sort: {};
-  first: boolean;
-  empty: boolean;
+  pageSize: number;
+  totalRecords: number;
+  lastPageNumber: number;
+  pageNumber: number;
   error: string;
 }
 
@@ -72,6 +66,7 @@ export interface AlertsListTypeContent {
   comment: string;
   favorite: boolean;
   executed: boolean;
+  active: boolean;
   sendToTelegram: boolean;
   error: string;
 }

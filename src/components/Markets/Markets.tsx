@@ -219,7 +219,7 @@ export const Markets = () => {
         <MarketsTable tabType={currentTab} counterEarning={counterEarning} marketPrice={symbolPrice} tradeType={tradeType} currentMarket={currentMarket} currentSymbol={currentSymbol} />
       }
 
-      {currentTab === MarketsTabsType.alert &&
+      {currentTab === MarketsTabsType.alerts &&
         <AlertsTable marketPrice={symbolPrice} currentMarket={currentMarket} currentSymbol={currentSymbol} counterEarning={counterEarning} />
       }
     </main>

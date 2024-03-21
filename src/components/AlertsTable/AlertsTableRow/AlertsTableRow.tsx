@@ -1,33 +1,54 @@
-import React, { FC, useId, useState } from 'react';
+import React, { FC, useState } from 'react';
 import classNames from 'classnames';
 import { Button, Col, Modal, Row, Stack } from 'react-bootstrap';
 import { AlertsTableInput } from '../AlertsTableInput/AlertsTableInput';
 import { AlertsListTypeContent } from '../../../types/types';
-
 
 interface Props {
   data: AlertsListTypeContent,
   marketPrice: number,
   isRed?: boolean,
   onDelete: (id: number) => void,
+  onChange: (editedData: any) => void
 }
 
-export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, onDelete }) => {
-  const [open, setOpen] = useState(false);
+export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, onDelete, onChange }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const collapseId = useId();
+  // const [valueComment, setValueComment] = useState(data.comment);
+
+  const handleEditCommentData = (value: string) => {
+    if (data.comment !== value) {
+      const editedData = {
+        id: data.id,
+        comment: value
+      }
+  
+      onChange(editedData);
+    }
+
+  }
+
+  const handleEditBooleanData = (editKey: string) => {
+    const propertyValue = data[editKey as keyof AlertsListTypeContent];
+
+    const editedData = {
+      id: data.id,
+      [editKey]: !propertyValue
+    }
+
+    onChange(editedData);
+  };
 
   return (
     <div style={{border: isRed ? '1px solid red': ''}}>
       <Row className='align-items-center mt-2'>
         <Col
-          onClick={() => setOpen(!open)}
-          aria-controls={collapseId}
-          aria-expanded={open}
+          onClick={() => handleEditBooleanData('favorite')}
           style={{ cursor: 'pointer' }}
           className='ms-2'
         >
-          <div className={classNames('markets-table__row-main', { open })}>
+          {/* <div className={classNames('markets-table__row-main', { open })}> */}
+          <div className={classNames('markets-table__row-main')}>
             <div className={classNames('markets-table__status', { 
               favorite: true, // need to add logic of state
               'markets-table__status--deep-blue': data.favorite === true,
@@ -52,7 +73,7 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
               </button>
             </Col>
             <Col xs={3}>
-              <AlertsTableInput inputValue={data.comment} />
+              <AlertsTableInput inputValue={data.comment} placeHolder='Type comment' handler={handleEditCommentData} />
             </Col>
             <Col xs={3}>
               <Stack direction='horizontal'>
@@ -73,18 +94,32 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
                   </svg>
                 </button>
 
-                <button className='alerts-table__icon'>
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clipPath="url(#clip0_3315_2700)">
-                    <path d="M9.00701 18.014C13.9815 18.014 18.014 13.9815 18.014 9.00701C18.014 4.03258 13.9815 0 9.00701 0C4.03258 0 0 4.03258 0 9.00701C0 13.9815 4.03258 18.014 9.00701 18.014Z" fill="#323750"/>
-                    <path fillRule="evenodd" clipRule="evenodd" d="M4.06874 8.90939C6.69227 7.75896 8.44598 7.01539 9.32984 6.65062C11.8271 5.61243 12.3462 5.43005 12.6829 5.41602C12.7531 5.41602 12.9214 5.43005 13.0337 5.51422C13.1178 5.58437 13.1459 5.68258 13.1599 5.75273C13.174 5.82287 13.188 5.9772 13.174 6.10347C13.0337 7.52046 12.4584 10.9858 12.1498 12.5711C12.0235 13.2445 11.771 13.469 11.5325 13.4971C11.0134 13.5392 10.6065 13.1463 10.1015 12.8237C9.31581 12.3046 8.86687 11.9819 8.09524 11.4768C7.21137 10.8876 7.78658 10.5649 8.29165 10.0458C8.41792 9.90549 10.7328 7.81508 10.7749 7.61867C10.7749 7.59061 10.7889 7.50643 10.7328 7.46434C10.6767 7.42225 10.6065 7.43628 10.5504 7.45031C10.4662 7.46434 9.20358 8.30612 6.74839 9.96161C6.38362 10.2141 6.06094 10.3264 5.76632 10.3264C5.44364 10.3264 4.82634 10.144 4.36336 9.98967C3.80217 9.80729 3.35323 9.70908 3.39531 9.40043C3.42337 9.2461 3.64785 9.07775 4.06874 8.90939Z" fill="#8997DC"/>
-                    </g>
-                    <defs>
-                    <clipPath id="clip0_3315_2700">
-                    <rect width="18" height="18" fill="white"/>
-                    </clipPath>
-                    </defs>
-                  </svg>
+                <button className='alerts-table__icon' onClick={() => handleEditBooleanData('sendToTelegram')}>
+                  {data.sendToTelegram
+                    ? <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clipPath="url(#clip0_3315_2663)">
+                        <path d="M9.00701 18.014C13.9815 18.014 18.014 13.9815 18.014 9.00701C18.014 4.03258 13.9815 0 9.00701 0C4.03258 0 0 4.03258 0 9.00701C0 13.9815 4.03258 18.014 9.00701 18.014Z" fill="#27A5E5"/>
+                        <path fillRule="evenodd" clipRule="evenodd" d="M4.06874 8.90939C6.69227 7.75896 8.44598 7.01539 9.32984 6.65062C11.8271 5.61243 12.3462 5.43005 12.6829 5.41602C12.7531 5.41602 12.9214 5.43005 13.0337 5.51422C13.1178 5.58437 13.1459 5.68258 13.1599 5.75273C13.174 5.82287 13.188 5.9772 13.174 6.10347C13.0337 7.52046 12.4584 10.9858 12.1498 12.5711C12.0235 13.2445 11.771 13.469 11.5325 13.4971C11.0134 13.5392 10.6065 13.1463 10.1015 12.8237C9.31581 12.3046 8.86687 11.9819 8.09524 11.4768C7.21137 10.8876 7.78658 10.5649 8.29165 10.0458C8.41792 9.90549 10.7328 7.81508 10.7749 7.61867C10.7749 7.59061 10.7889 7.50643 10.7328 7.46434C10.6767 7.42225 10.6065 7.43628 10.5504 7.45031C10.4662 7.46434 9.20358 8.30612 6.74839 9.96161C6.38362 10.2141 6.06094 10.3264 5.76632 10.3264C5.44364 10.3264 4.82634 10.144 4.36336 9.98967C3.80217 9.80729 3.35323 9.70908 3.39531 9.40043C3.42337 9.2461 3.64785 9.07775 4.06874 8.90939Z" fill="white"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_3315_2663">
+                        <rect width="18" height="18" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                    
+                    : <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clipPath="url(#clip0_3315_2700)">
+                        <path d="M9.00701 18.014C13.9815 18.014 18.014 13.9815 18.014 9.00701C18.014 4.03258 13.9815 0 9.00701 0C4.03258 0 0 4.03258 0 9.00701C0 13.9815 4.03258 18.014 9.00701 18.014Z" fill="#323750"/>
+                        <path fillRule="evenodd" clipRule="evenodd" d="M4.06874 8.90939C6.69227 7.75896 8.44598 7.01539 9.32984 6.65062C11.8271 5.61243 12.3462 5.43005 12.6829 5.41602C12.7531 5.41602 12.9214 5.43005 13.0337 5.51422C13.1178 5.58437 13.1459 5.68258 13.1599 5.75273C13.174 5.82287 13.188 5.9772 13.174 6.10347C13.0337 7.52046 12.4584 10.9858 12.1498 12.5711C12.0235 13.2445 11.771 13.469 11.5325 13.4971C11.0134 13.5392 10.6065 13.1463 10.1015 12.8237C9.31581 12.3046 8.86687 11.9819 8.09524 11.4768C7.21137 10.8876 7.78658 10.5649 8.29165 10.0458C8.41792 9.90549 10.7328 7.81508 10.7749 7.61867C10.7749 7.59061 10.7889 7.50643 10.7328 7.46434C10.6767 7.42225 10.6065 7.43628 10.5504 7.45031C10.4662 7.46434 9.20358 8.30612 6.74839 9.96161C6.38362 10.2141 6.06094 10.3264 5.76632 10.3264C5.44364 10.3264 4.82634 10.144 4.36336 9.98967C3.80217 9.80729 3.35323 9.70908 3.39531 9.40043C3.42337 9.2461 3.64785 9.07775 4.06874 8.90939Z" fill="#8997DC"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_3315_2700">
+                        <rect width="18" height="18" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                  }
                 </button>
 
                 <button className='alerts-table__icon' onClick={() => setShowConfirmModal(true)}>
@@ -94,8 +129,8 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
                   </svg>
                 </button>
 
-                <button className='alerts-table__icon text-success'>
-                  ON
+                <button className={`alerts-table__icon ${data.active ? 'text-success' : 'text-danger'}`} onClick={() => handleEditBooleanData('active')}>
+                  {data.active ? 'ON' : 'OFF'}
                 </button>
               </Stack>
             </Col>
@@ -112,28 +147,17 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
       </Row>
 
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} data-bs-theme='dark' fullscreen='sm-down' centered>
-      <Modal.Header closeButton>
+        <Modal.Header closeButton>
           <Modal.Title>Delete Alert</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           Are you sure to delete this alert?
         </Modal.Body>
         <Modal.Footer className='justify-content-center'>
-          <Button variant='secondary' className='px-5' onClick={() => setShowConfirmModal(false)}>
-            No
-          </Button>
+          <Button variant='secondary' className='px-5' onClick={() => setShowConfirmModal(false)}>No</Button>
           <Button variant='primary' className='px-5' onClick={() => onDelete(data.id)}>Yes</Button>
         </Modal.Footer>
-
       </Modal>
-
-      {/* <Collapse in={open}>
-        <div id={collapseId}>
-          {data.map((subRow: any, index: number) => (
-            <AlertsTableSubRow key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} />
-          ))}
-        </div>
-      </Collapse> */}
     </div>
   );
 };

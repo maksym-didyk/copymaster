@@ -23,7 +23,7 @@ export enum MarketsTabsType {
   buy = 'buy',
   sell = 'sell',
   all = 'all',
-  alert = 'alerts',
+  alerts = 'alerts',
   history = 'history',
 };
 

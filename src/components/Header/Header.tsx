@@ -68,6 +68,7 @@ export const Header = () => {
             <NavLink to='/bots' className='header__links'>Bots</NavLink>
             <NavLink to='/markets' className='header__links'>Markets</NavLink>
             <NavLink to='/alerts' className='header__links'>Alerts</NavLink>
+            <NavLink to='/api' className='header__links'>API</NavLink>
           </nav>
         </div>
 

@@ -1,56 +1,28 @@
-import React, { ChangeEvent, ClipboardEvent, FC, useId, useState } from 'react';
+import React, { ChangeEvent, FC, useId, useState } from 'react';
 
 interface Props {
   inputValue?: number | string,
-  placeHolder?: string
+  placeHolder?: string,
+  handler: (newValue: string) => void
 }
 
-export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '' }) => {
+export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '', handler }) => {
   const [value, setValue] = useState(inputValue);
-
   const id = useId();
+  // const customValue = handler ? inputValue : value;
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    let newValue = event.target.value;
+  // const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   const newValue = event.target.value;
 
-    // Заміна коми на крапку
-    newValue = newValue.replace(/,/g, '.');
+  //   if (handler) {
+  //     handler(newValue);
+  //   } else {
+  //     setValue(newValue);
+  //   }
+  // };
 
-    // Обмеження 2 цифр після крапки
-    const [integerPart, decimalPart] = newValue.split('.');
-    if (decimalPart && decimalPart.length > 2) {
-      newValue = `${integerPart}.${decimalPart.slice(0, 2)}`;
-    }
-
-    // Дозволяємо вводити тільки цифри та один раз крапку
-    newValue = newValue.replace(/[^\d.]/g, '');
-
-    // Додаємо додаткову перевірку для запобігання більше ніж одній крапці
-    const dotCount = newValue.split('.').length - 1;
-    if (dotCount > 1) {
-      const lastDotIndex = newValue.lastIndexOf('.');
-      newValue = newValue.slice(0, lastDotIndex) + newValue.slice(lastDotIndex + 1);
-    }
-
-    setValue(newValue);
-  };
-
-  const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
-    const pastedValue = event.clipboardData.getData('text/plain');
-    // Виконуємо ті ж перевірки для вставленого значення
-    let newValue = pastedValue.replace(/,/g, '.');
-    const [integerPart, decimalPart] = newValue.split('.');
-    if (decimalPart && decimalPart.length > 2) {
-      newValue = `${integerPart}.${decimalPart.slice(0, 2)}`;
-    }
-    newValue = newValue.replace(/[^\d.]/g, '');
-    const dotCount = newValue.split('.').length - 1;
-    if (dotCount > 1) {
-      const lastDotIndex = newValue.lastIndexOf('.');
-      newValue = newValue.slice(0, lastDotIndex) + newValue.slice(lastDotIndex + 1);
-    }
-
-    setValue(newValue);
+  const handleInputBlur = (event: ChangeEvent<HTMLInputElement>) => {
+    handler(event.target.value);
   };
 
   return (
@@ -58,11 +30,10 @@ export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '' 
       id={id}
       type='text'
       value={value}
-      onChange={handleInputChange}
-      onPaste={handlePaste}
-      placeholder={placeHolder}
-      pattern='[0-9]*\.{0,1}[0-9]{0,8}'
-      className='markets-table__input'
+      onChange={(event) => setValue(event.target.value)}
+      onBlur={handleInputBlur}
+      placeholder={value ? '' : placeHolder}
+      className='alerts-table__input-comment'
     />
   );
 };
