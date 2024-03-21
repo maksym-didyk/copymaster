@@ -59,7 +59,7 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
             <Col>
               <Stack direction='horizontal' gap={3}>
                 <div style={{ width: '0.3rem', height: '0.3rem', borderRadius: '50%', backgroundColor: data.executed ? '#ff363a' : 'transparent' }} />
-                {data.symbol}
+                {data.symbol.replace('_', '/')}
               </Stack>
             </Col>
             <Col xs={2}><span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Market Price:</span> <span className='fw-bold'>{marketPrice}</span></Col>

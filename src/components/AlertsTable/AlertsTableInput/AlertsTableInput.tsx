@@ -9,6 +9,7 @@ interface Props {
 export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '', handler }) => {
   const [value, setValue] = useState(inputValue);
   const id = useId();
+  const formId = useId();
   // const customValue = handler ? inputValue : value;
 
   // const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -21,19 +22,19 @@ export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '',
   //   }
   // };
 
-  const handleInputBlur = (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     handler(value);
   };
 
   return (
-    <form onSubmit={handleInputBlur}>
+    <form id={formId} onSubmit={handleSubmit}>
       <input
         id={id}
         type='text'
         value={value}
         onChange={(event) => setValue(event.target.value)}
-        onBlur={handleInputBlur}
+        onBlur={handleSubmit}
         placeholder={value ? '' : placeHolder}
         className='alerts-table__input-comment'
       />
