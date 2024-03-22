@@ -37,7 +37,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
     const isCoinPairOk = pairsData.indexOf(valueCoinPair);
 
     if (isCoinPairOk === -1) {
-      return toast.error('Coin pair incorrect. Choose one more');
+      return toast.error('Coin pair incorrect. Choose again');
     }
 
     const newAlert = {
@@ -153,7 +153,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
                     onChange={event => setValueComment(event.target.value)}
                     rows={3}
                     className='alerts-table__input-comment'
-                    style={{border: '1px solid #3E435D'}}
+                    style={{border: '1px solid #3E435D', resize: 'none'}}
                   >
                   </textarea>
                 </div>

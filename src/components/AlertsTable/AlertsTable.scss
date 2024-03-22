@@ -57,6 +57,23 @@
       }
     }
 
+    &-alertprice {
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid transparent;
+      outline: none;
+      color: #377bff;
+      font-weight: bold;
+      // pointer-events: none;
+      padding: 0;
+      margin: 0;
+
+      &.active {
+        border-bottom: 1px solid #9c9fa4;
+        // pointer-events: all;
+      }
+    }
+
     &-modal-coinpair {
       border-radius: 0.5rem;
       background: #2a2e41;

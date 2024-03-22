@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
-import classNames from 'classnames';
 import { Button, Col, Modal, Row, Stack } from 'react-bootstrap';
 import { AlertsTableInput } from '../AlertsTableInput/AlertsTableInput';
 import { AlertsListTypeContent } from '../../../types/types';
+import { AlertsTableInputAlertPrice } from '../AlertsTableInputAlertPrice/AlertsTableInputAlertPrice';
+import classNames from 'classnames';
 
 interface Props {
   data: AlertsListTypeContent,
@@ -22,7 +23,18 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
         id: data.id,
         comment: value
       }
-  
+
+      onChange(editedData);
+    }
+  };
+
+  const handleEditAlertsPriceData = (value: number) => {
+    if (data.price !== value) {
+      const editedData = {
+        id: data.id,
+        price: value
+      }
+
       onChange(editedData);
     }
   };
@@ -40,7 +52,7 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
 
   return (
     <div style={{border: isRed ? '1px solid red': ''}}>
-      <Row className='align-items-center mt-2'>
+      <Row className='align-items-center'>
         <Col
           onClick={() => handleEditBooleanData('favorite')}
           style={{ cursor: 'pointer' }}
@@ -59,17 +71,15 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
             <Col>
               <Stack direction='horizontal' gap={3}>
                 <div style={{ width: '0.3rem', height: '0.3rem', borderRadius: '50%', backgroundColor: data.executed ? '#ff363a' : 'transparent' }} />
-                {data.symbol.replace('_', '/')}
+                <div style={{ width: '5rem' }}>{data.symbol}</div>
               </Stack>
             </Col>
             <Col xs={2}><span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Market Price:</span> <span className='fw-bold'>{marketPrice}</span></Col>
-            <Col xs={2}><span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Alert Price:</span> <span style={{color: '#377bff'}} className='fw-bold'>{data.price}</span>
-              <button style={{ backgroundColor: 'transparent', paddingLeft: '0.5rem' }}>
-                <svg width="16" height="16" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5.06953 11.8129H2.625C2.50897 11.8129 2.39769 11.7668 2.31564 11.6848C2.2336 11.6028 2.1875 11.4915 2.1875 11.3754V8.93091C2.1873 8.8741 2.19831 8.81781 2.21989 8.76526C2.24148 8.71271 2.27321 8.66493 2.31328 8.62466L8.87578 2.06216C8.91649 2.02082 8.96502 1.98799 9.01853 1.96559C9.07205 1.94318 9.12949 1.93164 9.1875 1.93164C9.24552 1.93164 9.30296 1.94318 9.35647 1.96559C9.40999 1.98799 9.45851 2.02082 9.49922 2.06216L11.9383 4.50122C11.9796 4.54193 12.0124 4.59045 12.0349 4.64397C12.0573 4.69749 12.0688 4.75492 12.0688 4.81294C12.0688 4.87096 12.0573 4.92839 12.0349 4.98191C12.0124 5.03543 11.9796 5.08395 11.9383 5.12466L5.37578 11.6872C5.33551 11.7272 5.28774 11.759 5.23519 11.7805C5.18264 11.8021 5.12634 11.8131 5.06953 11.8129V11.8129Z" stroke="#8997DC" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M7.4375 3.5L10.5 6.5625" stroke="#8997DC" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
+            <Col xs={2} >
+              <Stack direction='horizontal' gap={1} className='align-items-center'>
+                <span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Alert Price:</span>
+                <AlertsTableInputAlertPrice inputValue={data.price} handler={handleEditAlertsPriceData} />
+              </Stack>
             </Col>
             <Col xs={3}>
               <AlertsTableInput inputValue={data.comment} placeHolder='Type comment' handler={handleEditCommentData} />
@@ -106,7 +116,6 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
                         </clipPath>
                         </defs>
                       </svg>
-                    
                     : <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_3315_2700)">
                         <path d="M9.00701 18.014C13.9815 18.014 18.014 13.9815 18.014 9.00701C18.014 4.03258 13.9815 0 9.00701 0C4.03258 0 0 4.03258 0 9.00701C0 13.9815 4.03258 18.014 9.00701 18.014Z" fill="#323750"/>

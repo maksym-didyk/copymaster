@@ -4,10 +4,10 @@ import { Col, Container, Row, Stack } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { client } from '../../api/fetchClient';
 import { AlertsListType, AlertsListTypeContent } from '../../types/types';
-import FlipMove from 'react-flip-move';
 import { AlertsTableRow } from './AlertsTableRow/AlertsTableRow';
 import { ModalAddAlert } from '../Modals/ModalAddAlert/ModalAddAlert';
 import { Pagination } from '../Pagination/Pagination';
+import FlipMove from 'react-flip-move';
 
 interface Props {
   marketPrice: number,
@@ -34,11 +34,10 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
 
       const loadedDataContent: AlertsListTypeContent[] = loadedData.content;
       const splittedDataContent = page > 0 ? [...dataContent, ...loadedDataContent] : loadedDataContent;
-      
+
       setDataContent(splittedDataContent);
       setAlertsData(loadedData);
       toast.done('loadedData');
-
     } catch (error) {
       toast.error(`${error}`);
     }
@@ -111,8 +110,7 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
       const updatedData = await client.patch<any>('/api/alert/', editedData);
 
       if (updatedData.error === 'undefined') {
-        toast.error('Something went wrong');
-        return;
+        return toast.error('Something went wrong');
       }
         // getData();
         // setDataContent(() => [...dataContent, editedData]);
@@ -142,7 +140,7 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
 
       const loadedDataContent: AlertsListTypeContent[] = loadedData.content;
       const splittedDataContent = page > 0 ? [...dataContent, ...loadedDataContent] : loadedDataContent;
-      
+
       setDataContent(splittedDataContent);
       setAlertsData(loadedData);
       toast.done('loadedData');
@@ -183,7 +181,6 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
                   className='alerts-table__input'
                   style={{textTransform: 'uppercase'}}
                 />
-
               </Stack>
 
               <button className='header__button header__button--fill fw-bold' onClick={() => setShowModalAddAlert(true)}>Add alert</button>
@@ -211,37 +208,37 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
         </Col>
       </Row>
 
-    <FlipMove enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
-    {dataContent?.map((alert: AlertsListTypeContent) =>
-      <div key={alert.id} className='mt-2' style={{ borderLeft: '1px solid transparent' } }>
-        <AlertsTableRow
-          data={alert}
-          marketPrice={marketPrice}
-          onDelete={handleAlertDelete}
-          onChange={handleEditData}
-        />
-      </div>
-    )}
-    </FlipMove>
+      <FlipMove enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
+        {dataContent?.map((alert: AlertsListTypeContent) =>
+          <div key={alert.id} className='mt-2' style={{ borderLeft: '1px solid transparent' } }>
+            <AlertsTableRow
+              data={alert}
+              marketPrice={marketPrice}
+              onDelete={handleAlertDelete}
+              onChange={handleEditData}
+            />
+          </div>
+        )}
+      </FlipMove>
 
-    <Pagination
-      pageSize={alertsData?.pageSize || 0}
-      totalRecords={alertsData?.totalRecords || 0}
-      lastPageNumber={alertsData?.lastPageNumber || 0}
-      pageNumber={alertsData?.pageNumber || 0}
-      onPageChange={handlePageChange}
-    />
-    
-    {showModalAddAlert && 
-      <ModalAddAlert
-        show={showModalAddAlert}
-        markets={['BINANCE', 'BYBIT', 'COINBASE']}
-        currentMarket={currentMarket}
-        pairsData={pairsData}
-        onUpdate={getData}
-        onClose={() => setShowModalAddAlert(false)}
+      <Pagination
+        pageSize={alertsData?.pageSize || 0}
+        totalRecords={alertsData?.totalRecords || 0}
+        lastPageNumber={alertsData?.lastPageNumber || 0}
+        pageNumber={alertsData?.pageNumber || 0}
+        onPageChange={handlePageChange}
       />
-    }
+
+      {showModalAddAlert && 
+        <ModalAddAlert
+          show={showModalAddAlert}
+          markets={['BINANCE', 'BYBIT', 'COINBASE']}
+          currentMarket={currentMarket}
+          pairsData={pairsData}
+          onUpdate={getData}
+          onClose={() => setShowModalAddAlert(false)}
+        />
+      }
     </Container>
   );
 };
