@@ -10,13 +10,13 @@ import { Pagination } from '../Pagination/Pagination';
 import FlipMove from 'react-flip-move';
 
 interface Props {
-  marketPrice: number,
+  alertsPrice: any,
   currentMarket: string,
   currentSymbol?: string,
   counterEarning?: boolean
 }
 
-export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
+export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
   const [alertsData, setAlertsData] = useState<AlertsListType>();
   const [dataContent, setDataContent] = useState<AlertsListTypeContent[]>([]);
   const [pairsData, setPairsData] = useState<string[]>([]);
@@ -213,7 +213,7 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
           <div key={alert.id} className='mt-2' style={{ borderLeft: '1px solid transparent' } }>
             <AlertsTableRow
               data={alert}
-              marketPrice={marketPrice}
+              alertsPrice={alertsPrice}
               onDelete={handleAlertDelete}
               onChange={handleEditData}
             />
@@ -235,6 +235,7 @@ export const AlertsTable: FC<Props> = ({ marketPrice, currentMarket }) => {
           markets={['BINANCE', 'BYBIT', 'COINBASE']}
           currentMarket={currentMarket}
           pairsData={pairsData}
+          alertsPrice={alertsPrice}
           onUpdate={getData}
           onClose={() => setShowModalAddAlert(false)}
         />

@@ -23,6 +23,7 @@ export const Markets = () => {
   const [symbols, setSymbols] = useState<string[]>([]);
   const [currentSymbol, setCurrentSymbol] = useState('XRP_USDT');
   const [symbolPrice, setSymbolPrice] = useState(0);
+  const [alertsPrice, setAlertsPrice] = useState(0);
   const [counterEarning, setCounterEarning] = useLocalStorage('counterEarning', true);
   const [tradeType, setTradeType] = useState('SPOT');
   const [tradeTypes, setTradeTypes] = useState<string[]>([]);
@@ -112,16 +113,16 @@ export const Markets = () => {
     let isConnected = false;
 
     const connectMarketPriceWebsocket = (stompClient: any, sessionId: string) => {
-      stompClient.subscribe(`/user/${sessionId}/market-price`, (message:any) => {
+      stompClient.subscribe(`/user/${sessionId}/market-price`, (message: any) => {
           const marketMessage = JSON.parse(message.body);
           setSymbolPrice(() => marketMessage.price);
       });
     };
 
     const connectAlertsPriceWebsocket = (stompClient: any, sessionId: string) => {
-      stompClient.subscribe(`/user/${sessionId}/BINANCE/alert-prices`, (message:any) => {
-          // const marketMessage = JSON.parse(message.body);
-          console.log(message);
+      stompClient.subscribe(`/user/${sessionId}/BINANCE/alert-prices`, (message: any) => {
+          const marketMessage = JSON.parse(message.body);
+          setAlertsPrice(() => marketMessage)
       });
     };
 
@@ -228,7 +229,7 @@ export const Markets = () => {
       }
 
       {currentTab === MarketsTabsType.alerts &&
-        <AlertsTable marketPrice={symbolPrice} currentMarket={currentMarket} currentSymbol={currentSymbol} counterEarning={counterEarning} />
+        <AlertsTable alertsPrice={alertsPrice} currentMarket={currentMarket} currentSymbol={currentSymbol} counterEarning={counterEarning} />
       }
     </main>
   );

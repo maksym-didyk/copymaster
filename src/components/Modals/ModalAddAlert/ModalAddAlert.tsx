@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Stack } from 'react-bootstrap';
 import { capitalizeFirstLetter } from '../../../utils/helpers';
 import classNames from 'classnames';
@@ -12,17 +12,21 @@ interface Props {
   markets: string[],
   currentMarket: string,
   pairsData: string[],
+  alertsPrice: any,
   onClose: () => void,
   onUpdate: () => Promise<any>
 }
 
-export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsData, onClose, onUpdate}) => {
+export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsData, alertsPrice, onClose, onUpdate}) => {
   const [valueCoinPair, setValueCoinPair] = useState('');
-  const [value, setValue] = useState(0.56);
+  const [valueMarketPrice, setValueMarketPrice] = useState(0);
+  const [value, setValue] = useState(0.00);
   const [valueAlertType, setAlertType] = useState('PRICE_REACHES');
   const [valueFrequency, setValueFrequency] = useState('ONLY_ONCE');
   const [valueComment, setValueComment] = useState('');
   const [checkedTelegram, setCheckedTelegram] = useState(false);
+
+  const currency = valueCoinPair.split('_')[1];
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -59,13 +63,20 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
       } else {
         onUpdate();
         toast.success('Alert added');
+        onClose();
       }
     } catch (error) {
       toast.error(`${error}`);
-    } finally {
-      onClose();
     }
   };
+
+  useEffect(()=> {
+    if (valueCoinPair) {
+      if (alertsPrice.hasOwnProperty(valueCoinPair)) {
+        setValueMarketPrice(alertsPrice[valueCoinPair]);
+      }
+    }
+  }, [alertsPrice, valueCoinPair]);
 
   return (
     <Modal show={show} onHide={onClose} data-bs-theme='dark' fullscreen='sm-down' centered>
@@ -91,10 +102,8 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
                   value={valueCoinPair}
                   placeholder='Choose pair'
                   onChange={(event) => setValueCoinPair(event.target.value)}
-                  // size={9}
                   className='alerts-table__input-modal-coinpair'
                 />
-                {/* <input type='text' list="coinpairs" style={{textTransform: 'uppercase'}} onChange={} /> */}
                 <datalist id="coinpairs">
                 {pairsData.map((pair) =>
                   <option key={pair} value={pair} />
@@ -105,13 +114,13 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
 
             <Row className='align-items-center'>
               <Col>Market price</Col>
-              <Col className='text-white fw-bold'>0.57 USDT</Col>
+              <Col className='text-white fw-bold'>{valueMarketPrice} {currency}</Col>
             </Row>
 
             <Row className='align-items-center'>
               <Col>
                 <CustomSelect
-                  data={['PRICE_REACHES', 'PRICE_RISES_ABOVE', 'PRICE_DROPS_TO']}
+                  data={['PRICE_REACHES', 'PRICE_RISES_ABOVE', 'PRICE_DROPS_BELOW']}
                   title={'Alert type '}
                   value={valueAlertType}
                   handler={handleAlertTypeChange} 
@@ -138,7 +147,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
                     size={3}
                     style={{background: 'transparent', outline: 'none', border: '0'}}
                   />
-                  USDT
+                  {currency}
                 </div>
               </Col>
             </Row>

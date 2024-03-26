@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button, Col, Modal, Row, Stack } from 'react-bootstrap';
 import { AlertsTableInput } from '../AlertsTableInput/AlertsTableInput';
 import { AlertsListTypeContent } from '../../../types/types';
@@ -7,15 +7,15 @@ import classNames from 'classnames';
 
 interface Props {
   data: AlertsListTypeContent,
-  marketPrice: number,
+  alertsPrice: any,
   isRed?: boolean,
   onDelete: (id: number) => void,
   onChange: (editedData: any) => void
 }
 
-export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, onDelete, onChange }) => {
+export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, isRed = false, onDelete, onChange }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  // const [valueComment, setValueComment] = useState(data.comment);
+  const [marketPriceValue, setMarketPriceValue] = useState(0);
 
   const handleEditCommentData = (value: string) => {
     if (data.comment !== value) {
@@ -49,6 +49,12 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
 
     onChange(editedData);
   };
+  
+  useEffect(() => {
+    if (alertsPrice.hasOwnProperty(data.symbol)) {
+      setMarketPriceValue(alertsPrice[data.symbol]);
+    }
+  }, [alertsPrice, data.symbol]);
 
   return (
     <div style={{border: isRed ? '1px solid red': ''}}>
@@ -71,10 +77,10 @@ export const AlertsTableRow: FC<Props> = ({ data, marketPrice, isRed = false, on
             <Col>
               <Stack direction='horizontal' gap={3}>
                 <div style={{ width: '0.3rem', height: '0.3rem', borderRadius: '50%', backgroundColor: data.executed ? '#ff363a' : 'transparent' }} />
-                <div style={{ width: '5rem' }}>{data.symbol}</div>
+                <div style={{ width: '5rem' }}>{data.symbol.replace('_', '/')}</div>
               </Stack>
             </Col>
-            <Col xs={2}><span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Market Price:</span> <span className='fw-bold'>{marketPrice}</span></Col>
+            <Col xs={2}><span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Market Price:</span> <span className='fw-bold'>{marketPriceValue}</span></Col>
             <Col xs={2} >
               <Stack direction='horizontal' gap={1} className='align-items-center'>
                 <span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Alert Price:</span>
