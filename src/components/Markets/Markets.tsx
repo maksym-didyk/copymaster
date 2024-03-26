@@ -118,6 +118,13 @@ export const Markets = () => {
       });
     };
 
+    const connectAlertsPriceWebsocket = (stompClient: any, sessionId: string) => {
+      stompClient.subscribe(`/user/${sessionId}/BINANCE/alert-prices`, (message:any) => {
+          // const marketMessage = JSON.parse(message.body);
+          console.log(message);
+      });
+    };
+
     const handleSocketClose = () => {
       if (isConnected) {
         stompClient.disconnect(() => {
@@ -138,6 +145,7 @@ export const Markets = () => {
         const subscription = stompClient.subscribe(`/user/${userName}/web-id`, (message: any) => {
           subscription.unsubscribe();
           connectMarketPriceWebsocket(stompClient, message.body);
+          connectAlertsPriceWebsocket(stompClient, message.body);
         });
 
         stompClient.send('/app/init-web-id', {}, JSON.stringify({ userName, symbol: currentSymbol }));
