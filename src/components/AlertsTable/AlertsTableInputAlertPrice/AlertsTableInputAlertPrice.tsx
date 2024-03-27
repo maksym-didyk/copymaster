@@ -33,7 +33,7 @@ export const AlertsTableInputAlertPrice: FC<Props> = ({ inputValue, handler }) =
       newValue = newValue.slice(0, lastDotIndex) + newValue.slice(lastDotIndex + 1);
     }
 
-    setValue(+newValue);
+    setValue(newValue);
   };
 
   const handleSubmit = (event: FormEvent) => {

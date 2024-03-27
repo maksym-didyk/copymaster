@@ -20,7 +20,7 @@ interface Props {
 export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsData, alertsPrice, onClose, onUpdate}) => {
   const [valueCoinPair, setValueCoinPair] = useState('');
   const [valueMarketPrice, setValueMarketPrice] = useState(0);
-  const [value, setValue] = useState(0.00);
+  const [value, setValue] = useState<string | number>(0);
   const [valueAlertType, setAlertType] = useState('PRICE_REACHES');
   const [valueFrequency, setValueFrequency] = useState('ONLY_ONCE');
   const [valueComment, setValueComment] = useState('');
@@ -29,8 +29,28 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
   const currency = valueCoinPair.split('_')[1];
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    setValue(+newValue);
+    let newValue = event.target.value;
+
+    // Заміна коми на крапку
+    newValue = newValue.replace(/,/g, '.');
+
+    // Обмеження 8 цифр після крапки
+    const [integerPart, decimalPart] = newValue.split('.');
+    if (decimalPart && decimalPart.length > 8) {
+      newValue = `${integerPart}.${decimalPart.slice(0, 8)}`;
+    }
+
+    // Дозволяємо вводити тільки цифри та один раз крапку
+    newValue = newValue.replace(/[^\d.]/g, '');
+
+    // Додаємо додаткову перевірку для запобігання більше ніж одній крапці
+    const dotCount = newValue.split('.').length - 1;
+    if (dotCount > 1) {
+      const lastDotIndex = newValue.lastIndexOf('.');
+      newValue = newValue.slice(0, lastDotIndex) + newValue.slice(lastDotIndex + 1);
+    }
+
+    setValue(newValue);
   };
 
   const handleAlertTypeChange = (alertType: string) => {
@@ -144,7 +164,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
                     type='text'
                     value={value}
                     onChange={handleInputChange}
-                    size={3}
+                    size={5}
                     style={{background: 'transparent', outline: 'none', border: '0'}}
                   />
                   {currency}

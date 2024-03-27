@@ -149,7 +149,6 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, isRed = false, on
               </Stack>
             </Col>
             <Col>
-              {data.id}
               <button style={{ backgroundColor: 'transparent' }}>
                 <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6.21913 9.02391L0.299756 1.62469C-0.224054 0.969931 0.242119 -8.9938e-07 1.08063 -8.62727e-07L12.9194 -3.45239e-07C13.7579 -3.08587e-07 14.2241 0.969932 13.7002 1.6247L7.78087 9.02391C7.38054 9.52432 6.61946 9.52432 6.21913 9.02391Z" fill="#9C9FA4"/>

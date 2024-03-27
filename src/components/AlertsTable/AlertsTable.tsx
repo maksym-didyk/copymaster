@@ -24,9 +24,11 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
   const [showModalAddAlert, setShowModalAddAlert] = useState(false);
   const [value, setValue] = useState('');
 
-  const getData = useCallback(async (page = 0) => {
+  const favoriteUrl = isFavorite ? '&favorite=true' : '';
+
+  const getData = useCallback(async (page = 0, favorite = '') => {
     try {
-      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}`);
+      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}&favorite=${favorite}`);
 
       if (loadedData.error === 'undefined') {
         return toast.error(loadedData.error);
@@ -37,7 +39,6 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
 
       setDataContent(splittedDataContent);
       setAlertsData(loadedData);
-      toast.done('loadedData');
     } catch (error) {
       toast.error(`${error}`);
     }
@@ -79,14 +80,16 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
 
   const handleShowFavorite = () => {
     if (isFavorite) {
-      if (alertsData) {
-        setDataContent(alertsData.content);
-      };
-      setIsFavorite(() => false);
-      return;
+      // if (alertsData) {
+      //   setDataContent(alertsData.content);
+      // };
+
+      getData();
+      return setIsFavorite(() => false);
     }
 
-    setDataContent((data) => data?.filter(({ favorite }) => favorite));
+    // setDataContent((data) => data?.filter(({ favorite }) => favorite));
+    getData(0, 'true');
     setIsFavorite(() => true);
   };
 
@@ -129,10 +132,11 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
   };
 
   const handlePageChange = async(page: number) => {
-    toast.info(page);
+    // toast.info(page);
     // getData(page);
+
     try {
-      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}`);
+      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}` + favoriteUrl);
 
       if (loadedData.error === 'undefined') {
         return toast.error(loadedData.error);
@@ -143,8 +147,6 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
 
       setDataContent(splittedDataContent);
       setAlertsData(loadedData);
-      toast.done('loadedData');
-
     } catch (error) {
       toast.error(`${error}`);
     }
@@ -187,22 +189,22 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
             </Stack>
 
             <button style={{ backgroundColor: 'transparent', color: '#9C9FA4' }} onClick={handleShowFavorite}>
-                {isFavorite ? 'All pairs' : 'Favorite pairs'}
+              {isFavorite ? 'All pairs' : 'Favorite pairs'}
 
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className='ms-2'>
-                  <g filter="url(#filter0_b_639_1839)">
-                  <circle cx="16" cy="16" r="16" fill="#3548FE"/>
-                  </g>
-                  <path d="M25 13.5002H18.1135L16 7L13.8865 13.5002H7L12.6329 17.4998L10.4391 24L16 19.9716L21.5609 24L19.363 17.4998L25 13.5002Z" fill="white"/>
-                  <defs>
-                  <filter id="filter0_b_639_1839" x="-4" y="-4" width="40" height="40" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                  <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-                  <feGaussianBlur in="BackgroundImageFix" stdDeviation="2"/>
-                  <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_639_1839"/>
-                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_639_1839" result="shape"/>
-                  </filter>
-                  </defs>
-                </svg>
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className='ms-2'>
+                <g filter="url(#filter0_b_639_1839)">
+                <circle cx="16" cy="16" r="16" fill="#3548FE"/>
+                </g>
+                <path d="M25 13.5002H18.1135L16 7L13.8865 13.5002H7L12.6329 17.4998L10.4391 24L16 19.9716L21.5609 24L19.363 17.4998L25 13.5002Z" fill="white"/>
+                <defs>
+                <filter id="filter0_b_639_1839" x="-4" y="-4" width="40" height="40" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                <feGaussianBlur in="BackgroundImageFix" stdDeviation="2"/>
+                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_639_1839"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_639_1839" result="shape"/>
+                </filter>
+                </defs>
+              </svg>
             </button>
           </Stack>
         </Col>
@@ -229,7 +231,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
         onPageChange={handlePageChange}
       />
 
-      {showModalAddAlert && 
+      {showModalAddAlert &&
         <ModalAddAlert
           show={showModalAddAlert}
           markets={['BINANCE', 'BYBIT', 'COINBASE']}
