@@ -59,7 +59,6 @@ export const AlertsTableInputAlertPrice: FC<Props> = ({ inputValue, handler }) =
         onFocus={handleButtonClick}
         size={8}
         className={`alerts-table__input-alertprice ${isEditing ? 'active' : ''}`}
-        // disabled={!isEditing}
         autoComplete='off' />
 
       <label htmlFor={id} className='btn bg-transparent cursor-pointer' onClick={handleButtonClick}>

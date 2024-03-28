@@ -91,10 +91,8 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
   };
 
   useEffect(()=> {
-    if (valueCoinPair) {
-      if (alertsPrice.hasOwnProperty(valueCoinPair)) {
+    if (valueCoinPair && alertsPrice.hasOwnProperty(valueCoinPair)) {
         setValueMarketPrice(alertsPrice[valueCoinPair]);
-      }
     }
   }, [alertsPrice, valueCoinPair]);
 

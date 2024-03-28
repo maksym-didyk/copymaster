@@ -22,22 +22,25 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
   const [pairsData, setPairsData] = useState<string[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showModalAddAlert, setShowModalAddAlert] = useState(false);
-  const [value, setValue] = useState('');
+  const [valueCoinPair, setValueCoinPair] = useState('');
 
   const favoriteUrl = isFavorite ? '&favorite=true' : '';
+  const coinPairUrl = valueCoinPair !== '' ? `&symbol=${valueCoinPair.replace('/', '_')}`: '';
 
-  const getData = useCallback(async (page = 0, favorite = '') => {
+  const getData = useCallback(async (favorite = false, coinPair = '') => {
+    const coinPairUrlAdditional = coinPair !== '' ? coinPair : coinPairUrl;
+    const favoriteUrlAdditional = favorite ? '&favorite=true' : favoriteUrl;
+
     try {
-      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}&favorite=${favorite}`);
+      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}` + favoriteUrlAdditional + coinPairUrlAdditional);
 
       if (loadedData.error === 'undefined') {
         return toast.error(loadedData.error);
       }
 
       const loadedDataContent: AlertsListTypeContent[] = loadedData.content;
-      const splittedDataContent = page > 0 ? [...dataContent, ...loadedDataContent] : loadedDataContent;
 
-      setDataContent(splittedDataContent);
+      setDataContent(loadedDataContent);
       setAlertsData(loadedData);
     } catch (error) {
       toast.error(`${error}`);
@@ -52,44 +55,20 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
         return toast.error(loadedData.error);
       }
 
-      // const loadedDataKeys = Object.keys(loadedData[currentMarket]);
-
       setPairsData(loadedData[currentMarket]);
     } catch (error) {
       toast.error(`${error}`);
     }
   }, [currentMarket]);
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-
-    const newValue = event.target.value;
-    setValue(newValue);
-
-    if (newValue === '') {
-      if (alertsData) {
-        setDataContent(alertsData.content);
-      }
-      return;
-    }
-    
-    setDataContent(() => dataContent?.filter((item: AlertsListTypeContent) =>
-      item.symbol.toLowerCase().includes(newValue.toLowerCase().trim()))
-    );
-  };
-
   const handleShowFavorite = () => {
     if (isFavorite) {
-      // if (alertsData) {
-      //   setDataContent(alertsData.content);
-      // };
-
-      getData();
+      getData(false, coinPairUrl);
       return setIsFavorite(() => false);
     }
 
     // setDataContent((data) => data?.filter(({ favorite }) => favorite));
-    getData(0, 'true');
+    getData(true, coinPairUrl);
     setIsFavorite(() => true);
   };
 
@@ -115,8 +94,6 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
       if (updatedData.error === 'undefined') {
         return toast.error('Something went wrong');
       }
-        // getData();
-        // setDataContent(() => [...dataContent, editedData]);
 
       const targetIndex = dataContent.findIndex(item => item.id === updatedData.id);
       const updatedDataArray = dataContent.slice();
@@ -132,11 +109,8 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
   };
 
   const handlePageChange = async(page: number) => {
-    // toast.info(page);
-    // getData(page);
-
     try {
-      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}` + favoriteUrl);
+      const loadedData = await client.get<AlertsListType>(`/api/alert/list?market=${currentMarket}&page=${page}` + favoriteUrl + coinPairUrl);
 
       if (loadedData.error === 'undefined') {
         return toast.error(loadedData.error);
@@ -151,6 +125,12 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
       toast.error(`${error}`);
     }
   };
+
+  useEffect(() => {
+    const valueCoinPairUrlEffect = valueCoinPair ==='' ? '' : `&symbol=${valueCoinPair.replace('/', '_')}`;
+
+    getData(isFavorite, valueCoinPairUrlEffect);
+  }, [getData, isFavorite, valueCoinPair]);
 
   useEffect(() => {
     getData();
@@ -168,21 +148,30 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
           <Stack direction='horizontal' className='align-items-center justify-content-between'>
             <Stack direction='horizontal' gap={3}>
               <Stack direction='horizontal' gap={3} className='alerts-table__inputwrapper'>
-                <div />
                 <label htmlFor="inputField">
                   <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="6" cy="6" r="5.5" stroke="white"/>
                     <path d="M9 10L13 14" stroke="white"/>
                   </svg>
                 </label>
+
                 <input
-                  type='text'
+                  list="coinpairs-search"
                   id="inputField"
-                  value={value}
-                  onChange={handleInputChange}
+                  value={valueCoinPair}
+                  onChange={(event) => setValueCoinPair(event.target.value)}
                   className='alerts-table__input'
                   style={{textTransform: 'uppercase'}}
                 />
+
+                <datalist id="coinpairs-search">
+                  {pairsData.map((pair) =>
+                    <option key={pair} value={pair.replace('_', '/')} />
+                  )}
+                </datalist>
+
+                {valueCoinPair && <button className='bg-transparent text-white' onClick={() => setValueCoinPair('')}>x</button>}
+
               </Stack>
 
               <button className='header__button header__button--fill fw-bold' onClick={() => setShowModalAddAlert(true)}>Add alert</button>
@@ -212,7 +201,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
 
       <FlipMove enterAnimation="accordionVertical" leaveAnimation="accordionVertical">
         {dataContent?.map((alert: AlertsListTypeContent) =>
-          <div key={alert.id} className='mt-2' style={{ borderLeft: '1px solid transparent' } }>
+          <div key={alert.id} className='mt-2' style={{ borderLeft: '1px solid transparent' }}>
             <AlertsTableRow
               data={alert}
               alertsPrice={alertsPrice}
