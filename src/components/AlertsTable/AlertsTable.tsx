@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import './AlertsTable.scss';
 import { Col, Container, Row, Stack } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -10,19 +10,19 @@ import { Pagination } from '../Pagination/Pagination';
 import FlipMove from 'react-flip-move';
 
 interface Props {
-  alertsPrice: any,
-  currentMarket: string,
-  currentSymbol?: string,
-  counterEarning?: boolean
+  alertsPrice: number,
+  alertExecuted: AlertsListTypeContent | undefined,
+  currentMarket: string
 }
 
-export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
+export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMarket }) => {
   const [alertsData, setAlertsData] = useState<AlertsListType>();
   const [dataContent, setDataContent] = useState<AlertsListTypeContent[]>([]);
   const [pairsData, setPairsData] = useState<string[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showModalAddAlert, setShowModalAddAlert] = useState(false);
   const [valueCoinPair, setValueCoinPair] = useState('');
+  const [alertsExecuted, setAlertsExecuted] = useState<AlertsListTypeContent[]>([]);
 
   const favoriteUrl = isFavorite ? '&favorite=true' : '';
   const coinPairUrl = valueCoinPair !== '' ? `&symbol=${valueCoinPair.replace('/', '_')}`: '';
@@ -72,6 +72,10 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
     setIsFavorite(() => true);
   };
 
+  const handleAddAlert = (newAlert: AlertsListTypeContent) => {
+    setDataContent((currentDataContent) => [newAlert, ...currentDataContent]);
+  };
+
   const handleAlertDelete = async (currentId: number) => {
     try {
       const loadedData = await client.delete('/api/alert/' + currentId);
@@ -91,8 +95,8 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
     try {
       const updatedData = await client.patch<any>('/api/alert/', editedData);
 
-      if (updatedData.error === 'undefined') {
-        return toast.error('Something went wrong');
+      if (updatedData.error) {
+        return toast.error(updatedData.error);
       }
 
       const targetIndex = dataContent.findIndex(item => item.id === updatedData.id);
@@ -101,7 +105,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
       if (targetIndex !== -1) {
         updatedDataArray[targetIndex] = updatedData;
         setDataContent(updatedDataArray);
-        toast.success('Updated successfully');
+        // toast.success('Updated successfully');
       }
     } catch (error) {
       toast.error(`${error}`);
@@ -137,11 +141,17 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
     getPairsData();
   }, [currentMarket]);
 
+  useEffect(() => {
+    if (alertExecuted !== undefined) {
+      setAlertsExecuted((currentArray) => [...currentArray, alertExecuted]);
+    }
+  }, [alertExecuted]);
+
   return (
     <Container fluid className='markets-table my-4'>
       <Row className='align-items-center'>
         <Col className='ms-2 text-center'>
-          <div className='markets-table__row header text-center'>{dataContent?.length}</div>
+          <div className='markets-table__row header text-center'>{`${dataContent?.length} / ${alertsData?.totalRecords}`}</div>
         </Col>
 
         <Col xs={11}>
@@ -227,7 +237,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, currentMarket }) => {
           currentMarket={currentMarket}
           pairsData={pairsData}
           alertsPrice={alertsPrice}
-          onUpdate={getData}
+          onAdd={handleAddAlert}
           onClose={() => setShowModalAddAlert(false)}
         />
       }

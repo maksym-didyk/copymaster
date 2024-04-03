@@ -8,14 +8,15 @@ import classNames from 'classnames';
 interface Props {
   data: AlertsListTypeContent,
   alertsPrice: any,
-  isRed?: boolean,
   onDelete: (id: number) => void,
   onChange: (editedData: any) => void
 }
 
-export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, isRed = false, onDelete, onChange }) => {
+export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChange }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [marketPriceValue, setMarketPriceValue] = useState(0);
+
+  const isExecutedSeen = data.executed && !data.seen;
 
   const handleEditCommentData = (value: string) => {
     if (data.comment !== value) {
@@ -49,6 +50,17 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, isRed = false, on
 
     onChange(editedData);
   };
+
+  const onClickRow = () => {
+    if (isExecutedSeen) {
+      const editedData = {
+        id: data.id,
+        seen: true
+      }
+
+      onChange(editedData);
+    }
+  };
   
   useEffect(() => {
     if (alertsPrice.hasOwnProperty(data.symbol)) {
@@ -57,7 +69,7 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, isRed = false, on
   }, [alertsPrice, data.symbol]);
 
   return (
-    <div style={{border: isRed ? '1px solid red': ''}}>
+    <div>
       <Row className='align-items-center'>
         <Col
           onClick={() => handleEditBooleanData('favorite')}
@@ -73,10 +85,10 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, isRed = false, on
           </div>
         </Col>
         <Col xs={11}>
-          <Row className='markets-table__row'>
+          <Row className='markets-table__row' style={{cursor: isExecutedSeen ? 'pointer' : ''}} onClick={onClickRow}>
             <Col>
               <Stack direction='horizontal' gap={3}>
-                <div style={{ width: '0.3rem', height: '0.3rem', borderRadius: '50%', backgroundColor: data.executed ? '#ff363a' : 'transparent' }} />
+                <div style={{ width: '0.3rem', height: '0.3rem', borderRadius: '50%', backgroundColor: data.executed ? (data.seen ? 'green' : '#ff363a') : 'transparent' }} />
                 <div style={{ width: '5rem' }}>{data.symbol.replace('_', '/')}</div>
               </Stack>
             </Col>
@@ -149,11 +161,12 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, isRed = false, on
               </Stack>
             </Col>
             <Col>
-              <button style={{ backgroundColor: 'transparent' }}>
+              {data.id}
+              {/* <button style={{ backgroundColor: 'transparent' }}>
                 <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6.21913 9.02391L0.299756 1.62469C-0.224054 0.969931 0.242119 -8.9938e-07 1.08063 -8.62727e-07L12.9194 -3.45239e-07C13.7579 -3.08587e-07 14.2241 0.969932 13.7002 1.6247L7.78087 9.02391C7.38054 9.52432 6.61946 9.52432 6.21913 9.02391Z" fill="#9C9FA4"/>
                 </svg>
-              </button>
+              </button> */}
             </Col>
           </Row>
         </Col>

@@ -4,8 +4,6 @@ import HomePage from './pages/home';
 import SignPage from './pages/sign';
 import MarketsPage from './pages/markets';
 import { PrivateRoute } from './components/PrivateRoute';
-import TestPage from './pages/test';
-import WebsocketPage from './pages/websocket';
 import NotFoundPage from './pages/404';
 
 function App() {
@@ -15,8 +13,6 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignPage />} />
         <Route path="/signin" element={<SignPage />} />
-        <Route path="/test" element={<TestPage />} />
-        <Route path="/websocket" element={<WebsocketPage />} />
         <Route path="*" element={<NotFoundPage />} />
         {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
 

@@ -14,10 +14,11 @@ interface Props {
   pairsData: string[],
   alertsPrice: any,
   onClose: () => void,
-  onUpdate: () => Promise<any>
+  onAdd: (newAlert: AlertsListTypeContent) => void,
+  // onUpdate: () => Promise<any>
 }
 
-export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsData, alertsPrice, onClose, onUpdate}) => {
+export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsData, alertsPrice, onClose, onAdd}) => {
   const [valueCoinPair, setValueCoinPair] = useState('');
   const [valueMarketPrice, setValueMarketPrice] = useState(0);
   const [value, setValue] = useState<string | number>(0);
@@ -72,19 +73,20 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
       informing: valueFrequency,
       comment: valueComment,
       favorite: false,
-      sendToTelegram: checkedTelegram
+      sendToTelegram: checkedTelegram,
+      active: true
     }
 
     try {
       const loadedData: AlertsListTypeContent = await client.post('/api/alert/', newAlert);
 
-      if (loadedData.error !== undefined) {
+      if (loadedData.error) {
         return toast.error(loadedData.error);
-      } else {
-        onUpdate();
+      }
+
+        onAdd(loadedData);
         toast.success('Alert added');
         onClose();
-      }
     } catch (error) {
       toast.error(`${error}`);
     }

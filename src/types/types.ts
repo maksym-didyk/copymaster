@@ -63,11 +63,12 @@ export interface AlertsListTypeContent {
   symbol: string;
   price: number;
   type: string;
-  informing: string;
   comment: string;
   favorite: boolean;
   executed: boolean;
-  marketPricePosition: string;
+  seen: boolean;
+  // marketPricePosition: string;
+  // informing: string;
   active: boolean;
   sendToTelegram: boolean;
   error: string;

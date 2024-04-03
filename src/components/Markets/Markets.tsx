@@ -7,11 +7,11 @@ import classNames from 'classnames';
 import { toast } from 'react-toastify';
 import { client } from '../../api/fetchClient';
 import { Stack } from 'react-bootstrap';
-import { BalanceType, BalanceTypeBody, MarketsSpotType } from '../../types/types';
+import { AlertsListTypeContent, BalanceType, BalanceTypeBody, MarketsSpotType } from '../../types/types';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { capitalizeFirstLetter } from '../../utils/helpers';
-import { useLocalStorage } from '../../utils/useLocalStorage';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MarketsTable } from '../MarketsTable/MarketsTable';
 import { MarketsTabs } from './MarketsTabs/MarketsTabs';
@@ -24,6 +24,7 @@ export const Markets = () => {
   const [currentSymbol, setCurrentSymbol] = useState('XRP_USDT');
   const [symbolPrice, setSymbolPrice] = useState(0);
   const [alertsPrice, setAlertsPrice] = useState(0);
+  const [alertExecuted, setAlertExecuted] = useState<AlertsListTypeContent>();
   const [counterEarning, setCounterEarning] = useLocalStorage('counterEarning', true);
   const [tradeType, setTradeType] = useState('SPOT');
   const [tradeTypes, setTradeTypes] = useState<string[]>([]);
@@ -126,6 +127,14 @@ export const Markets = () => {
       });
     };
 
+    const connectAlertsExecutedWebsocket = (stompClient: any, sessionId: string) => {
+      stompClient.subscribe(`/user/${sessionId}/BINANCE/alert-price-executed`, (message: any) => {
+          const marketMessage = JSON.parse(message.body);
+          setAlertExecuted(marketMessage);
+          console.log(marketMessage);
+      });
+    };
+
     const handleSocketClose = () => {
       if (isConnected) {
         stompClient.disconnect(() => {
@@ -147,6 +156,7 @@ export const Markets = () => {
           subscription.unsubscribe();
           connectMarketPriceWebsocket(stompClient, message.body);
           connectAlertsPriceWebsocket(stompClient, message.body);
+          connectAlertsExecutedWebsocket(stompClient, message.body);
         });
 
         stompClient.send('/app/init-web-id', {}, JSON.stringify({ userName, symbol: currentSymbol }));
@@ -229,7 +239,7 @@ export const Markets = () => {
       }
 
       {currentTab === MarketsTabsType.alerts &&
-        <AlertsTable alertsPrice={alertsPrice} currentMarket={currentMarket} currentSymbol={currentSymbol} counterEarning={counterEarning} />
+        <AlertsTable alertsPrice={alertsPrice} currentMarket={currentMarket} alertExecuted={alertExecuted} />
       }
     </main>
   );
