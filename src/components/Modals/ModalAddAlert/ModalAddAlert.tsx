@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
-import { Button, Col, Form, Modal, Row, Stack } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row, Spinner, Stack } from 'react-bootstrap';
 import { capitalizeFirstLetter } from '../../../utils/helpers';
 import classNames from 'classnames';
 import { CustomSelect } from '../../CustomSelect';
@@ -134,7 +134,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
 
             <Row className='align-items-center'>
               <Col>Market price</Col>
-              <Col className='text-white fw-bold'>{valueMarketPrice} {currency}</Col>
+              <Col className='text-white fw-bold'>{(valueMarketPrice === 0 && valueCoinPair !== '') ? <Spinner animation='border' variant='secondary' size='sm' /> : valueMarketPrice} {currency}</Col>
             </Row>
 
             <Row className='align-items-center'>
@@ -164,7 +164,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
                     type='text'
                     value={value}
                     onChange={handleInputChange}
-                    size={5}
+                    size={7}
                     style={{background: 'transparent', outline: 'none', border: '0'}}
                   />
                   {currency}

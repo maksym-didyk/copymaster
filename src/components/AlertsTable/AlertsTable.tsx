@@ -17,6 +17,7 @@ interface Props {
 
 export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMarket }) => {
   const [alertsData, setAlertsData] = useState<AlertsListType>();
+  const [alertsTotalRecords, setAlertsTotalRecords] = useState(0);
   const [dataContent, setDataContent] = useState<AlertsListTypeContent[]>([]);
   const [pairsData, setPairsData] = useState<string[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -42,6 +43,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
 
       setDataContent(loadedDataContent);
       setAlertsData(loadedData);
+      setAlertsTotalRecords(loadedData.totalRecords);
     } catch (error) {
       toast.error(`${error}`);
     }
@@ -73,15 +75,17 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   };
 
   const handleAddAlert = (newAlert: AlertsListTypeContent) => {
-    setDataContent((currentDataContent) => [newAlert, ...currentDataContent]);
+    setDataContent((currentDataContent) => [newAlert, ...currentDataContent.slice(0, -1)]);
+    setAlertsTotalRecords((value) => value + 1);
   };
 
-  const handleAlertDelete = async (currentId: number) => {
+  const handleDeleteAlert = async (currentId: number) => {
     try {
       const loadedData = await client.delete('/api/alert/' + currentId);
 
       if (loadedData === 1) {
         setDataContent((data) => data?.filter(({ id }) => id !== currentId));
+        setAlertsTotalRecords((value) => value - 1);
         toast.success('Deleted successfully');
       } else {
         toast.error('Something went wrong');
@@ -151,7 +155,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
     <Container fluid className='markets-table my-4'>
       <Row className='align-items-center'>
         <Col className='ms-2 text-center'>
-          <div className='markets-table__row header text-center'>{`${dataContent?.length} / ${alertsData?.totalRecords}`}</div>
+          <div className='markets-table__row header text-center'>{`${dataContent?.length} / ${alertsTotalRecords}`}</div>
         </Col>
 
         <Col xs={11}>
@@ -181,7 +185,6 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
                 </datalist>
 
                 {valueCoinPair && <button className='bg-transparent text-white' onClick={() => setValueCoinPair('')}>x</button>}
-
               </Stack>
 
               <button className='header__button header__button--fill fw-bold' onClick={() => setShowModalAddAlert(true)}>Add alert</button>
@@ -215,7 +218,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
             <AlertsTableRow
               data={alert}
               alertsPrice={alertsPrice}
-              onDelete={handleAlertDelete}
+              onDelete={handleDeleteAlert}
               onChange={handleEditData}
             />
           </div>
