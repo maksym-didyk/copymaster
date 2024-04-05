@@ -128,13 +128,10 @@ export const Markets = () => {
     };
 
     const connectAlertsExecutedWebsocket = (stompClient: any, sessionId: string) => {
-      // stompClient.subscribe(`/user/${sessionId}/BINANCE/alert-price-executed`, (message: any) => {
-      stompClient.subscribe(`/user/${sessionId}/BINANCE/alert-executed`, (message: any) => {
-          console.log(message);
+      stompClient.subscribe(`/user/${sessionId}/BINANCE/alert-price-executed`, (message: any) => {
           const marketMessage = JSON.parse(message.body);
           setAlertExecuted(marketMessage);
           console.log(marketMessage);
-          toast.info(marketMessage);
       });
     };
 

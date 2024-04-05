@@ -23,7 +23,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   const [isFavorite, setIsFavorite] = useState(false);
   const [showModalAddAlert, setShowModalAddAlert] = useState(false);
   const [valueCoinPair, setValueCoinPair] = useState('');
-  const [alertsExecuted, setAlertsExecuted] = useState<AlertsListTypeContent[]>([]);
+  // const [alertsExecuted, setAlertsExecuted] = useState<AlertsListTypeContent[]>([]);
 
   const favoriteUrl = isFavorite ? '&favorite=true' : '';
   const coinPairUrl = valueCoinPair !== '' ? `&symbol=${valueCoinPair.replace('/', '_')}`: '';
@@ -69,7 +69,6 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
       return setIsFavorite(() => false);
     }
 
-    // setDataContent((data) => data?.filter(({ favorite }) => favorite));
     getData(true, coinPairUrl);
     setIsFavorite(() => true);
   };
@@ -104,7 +103,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
       }
 
       const targetIndex = dataContent.findIndex(item => item.id === updatedData.id);
-      const updatedDataArray = dataContent.slice();
+      const updatedDataArray = [...dataContent];
 
       if (targetIndex !== -1) {
         updatedDataArray[targetIndex] = updatedData;
@@ -146,15 +145,13 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   }, [currentMarket]);
 
   useEffect(() => {
-    if (alertExecuted !== undefined) {
-      setAlertsExecuted((currentArray) => [alertExecuted, ...currentArray]);
-    }
-
-    setDataContent((currentDataContent) => {
-      const alertsExecutedIds = alertsExecuted.map(element => element.id);
-      return [...alertsExecuted, ...currentDataContent.filter(element => !alertsExecutedIds.includes(element.id))];
-    })
-  }, [alertExecuted, alertsExecuted]);
+    if (alertExecuted) {
+      setDataContent((currentDataContent) => {
+      const newDataContent = [alertExecuted, ...currentDataContent.filter(({id})=> alertExecuted.id !== id)];
+      return newDataContent.length > dataContent.length ? newDataContent.slice(0, -1) : newDataContent;
+    });
+    };
+  }, [alertExecuted]);
 
   return (
     <Container fluid className='markets-table my-4'>
