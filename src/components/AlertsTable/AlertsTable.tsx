@@ -147,9 +147,14 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
 
   useEffect(() => {
     if (alertExecuted !== undefined) {
-      setAlertsExecuted((currentArray) => [...currentArray, alertExecuted]);
+      setAlertsExecuted((currentArray) => [alertExecuted, ...currentArray]);
     }
-  }, [alertExecuted]);
+
+    setDataContent((currentDataContent) => {
+      const alertsExecutedIds = alertsExecuted.map(element => element.id);
+      return [...alertsExecuted, ...currentDataContent.filter(element => !alertsExecutedIds.includes(element.id))];
+    })
+  }, [alertExecuted, alertsExecuted]);
 
   return (
     <Container fluid className='markets-table my-4'>
