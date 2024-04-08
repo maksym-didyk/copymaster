@@ -25,6 +25,7 @@ export const Markets = () => {
   const [symbolPrice, setSymbolPrice] = useState(0);
   const [alertsPrice, setAlertsPrice] = useState(0);
   const [alertExecuted, setAlertExecuted] = useState<AlertsListTypeContent>();
+  const [alertsNotSeenList, setAlertsNotSeenList] = useState<number[]>([]);
   const [counterEarning, setCounterEarning] = useLocalStorage('counterEarning', true);
   const [tradeType, setTradeType] = useState('SPOT');
   const [tradeTypes, setTradeTypes] = useState<string[]>([]);
@@ -181,6 +182,19 @@ export const Markets = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSymbol, currentMarket, tradeType]);
 
+  useEffect(() => {
+    const getAlertsCount = async () => {
+      try {
+        const loadedData = await client.get<number[]>('/api/alert/not-seen-id-list?market=BINANCE');
+        setAlertsNotSeenList(loadedData);
+      } catch (error) {
+        toast.error(`${error}`);
+      }
+    };
+
+    getAlertsCount();
+  }, []);
+
   return (
     <main className='markets px-3 px-md-5'>
       <Stack direction="horizontal" gap={3} className='justify-content-end justify-content-lg-between my-3 flex-wrap'>
@@ -232,7 +246,7 @@ export const Markets = () => {
         </Stack>
       </div>
 
-      <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} />
+      <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} aletsNotSeen={alertsNotSeenList.length} />
 
       {(currentTab === MarketsTabsType.buy || currentTab === MarketsTabsType.sell || currentTab === MarketsTabsType.all) &&
         <MarketsTable tabType={currentTab} counterEarning={counterEarning} marketPrice={symbolPrice} tradeType={tradeType} currentMarket={currentMarket} currentSymbol={currentSymbol} />

@@ -1,14 +1,12 @@
 import React from 'react';
 
 interface Props {
-  pageSize: number;
-  totalRecords: number;
   lastPageNumber: number;
   pageNumber: number;
   onPageChange: (page: number) => void;
 }
 
-export const Pagination: React.FC<Props> = ({pageSize, totalRecords, lastPageNumber, pageNumber, onPageChange}) => {
+export const Pagination: React.FC<Props> = ({lastPageNumber, pageNumber, onPageChange}) => {
   const isLoadMore = lastPageNumber - 1 > pageNumber;
 
   return (

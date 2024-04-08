@@ -7,26 +7,17 @@ import { toast } from 'react-toastify';
 interface Props {
   currentTab: MarketsTabsType,
   tabChange: (tab: MarketsTabsType) => void,
+  aletsNotSeen: number
 }
 
-export const MarketsTabs: FC<Props> = ({ currentTab, tabChange: handleCurrentTabChange }) => {
+export const MarketsTabs: FC<Props> = ({ currentTab, tabChange: handleCurrentTabChange, aletsNotSeen }) => {
   const [aletsStatus, setAlertsStatus] = useState(false);
 
   useEffect(() => {
-    const getAlertsCount = async () => {
-      try {
-        const loadedData = await client.get<number>('/api/alert/list-count?market=BINANCE');
-  
-        if (loadedData > 0) {
-          setAlertsStatus(true);
-        }
-      } catch (error) {
-        toast.error(`${error}`);
-      }
-    };
-
-    getAlertsCount();
-  }, []);
+    if (aletsNotSeen > 0) {
+      setAlertsStatus(true);
+    }
+  }, [aletsNotSeen]);
 
   return (
     <Stack direction="horizontal" gap={3} className='mt-5 ps-5 text-secondary' >

@@ -32,6 +32,7 @@ export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '',
       <input
         id={id}
         type='text'
+        maxLength={12}
         value={value}
         onChange={(event) => setValue(event.target.value)}
         onBlur={handleSubmit}

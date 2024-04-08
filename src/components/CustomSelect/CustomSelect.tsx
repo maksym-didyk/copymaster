@@ -35,8 +35,8 @@ export const CustomSelect: FC<Props> = ({ data, title, value = '', isSymbols = f
       data-bs-theme='dark'
     >
       {data.map((item, idx) => (
-        <Dropdown.Item 
-          key={idx} 
+        <Dropdown.Item
+          key={idx}
           eventKey={idx}
           onClick={() => handleChange(item)}
           active={isSymbols ? customTitle === item : dropdownItem === item}

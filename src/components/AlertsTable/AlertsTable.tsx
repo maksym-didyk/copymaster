@@ -28,6 +28,9 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   const favoriteUrl = isFavorite ? '&favorite=true' : '';
   const coinPairUrl = valueCoinPair !== '' ? `&symbol=${valueCoinPair.replace('/', '_')}`: '';
 
+  const pageNumber = alertsData?.pageNumber ? alertsData.pageNumber : 0;
+  const pageSize = alertsData?.pageSize ? alertsData.pageSize : 0;
+
   const getData = useCallback(async (favorite = false, coinPair = '') => {
     const coinPairUrlAdditional = coinPair !== '' ? coinPair : coinPairUrl;
     const favoriteUrlAdditional = favorite ? '&favorite=true' : favoriteUrl;
@@ -55,9 +58,12 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
 
       if (loadedData.error === 'undefined') {
         return toast.error(loadedData.error);
-      }
+      };
 
-      setPairsData(loadedData[currentMarket]);
+      const arrayLoadedData: string[] = loadedData[currentMarket];
+      const arrayLoadedDataSorted = arrayLoadedData.sort((a, b) => a.localeCompare(b));
+
+      setPairsData(arrayLoadedDataSorted);
     } catch (error) {
       toast.error(`${error}`);
     }
@@ -74,7 +80,11 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   };
 
   const handleAddAlert = (newAlert: AlertsListTypeContent) => {
-    setDataContent((currentDataContent) => [newAlert, ...currentDataContent.slice(0, -1)]);
+    setDataContent((currentDataContent) => {
+      const newDataContent = [newAlert, ...currentDataContent];
+      return newDataContent.length > ((pageNumber + 1) * pageSize) ? newDataContent.slice(0, -1) : newDataContent;
+    
+    });
     setAlertsTotalRecords((value) => value + 1);
   };
 
@@ -228,8 +238,6 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
       </FlipMove>
 
       <Pagination
-        pageSize={alertsData?.pageSize || 0}
-        totalRecords={alertsData?.totalRecords || 0}
         lastPageNumber={alertsData?.lastPageNumber || 0}
         pageNumber={alertsData?.pageNumber || 0}
         onPageChange={handlePageChange}
