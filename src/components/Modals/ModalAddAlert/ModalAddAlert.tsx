@@ -14,8 +14,7 @@ interface Props {
   pairsData: string[],
   alertsPrice: any,
   onClose: () => void,
-  onAdd: (newAlert: AlertsListTypeContent) => void,
-  // onUpdate: () => Promise<any>
+  onAdd: (newAlert: AlertsListTypeContent) => void
 }
 
 export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsData, alertsPrice, onClose, onAdd}) => {

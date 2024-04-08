@@ -28,9 +28,6 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   const favoriteUrl = isFavorite ? '&favorite=true' : '';
   const coinPairUrl = valueCoinPair !== '' ? `&symbol=${valueCoinPair.replace('/', '_')}`: '';
 
-  const pageNumber = alertsData?.pageNumber ? alertsData.pageNumber : 0;
-  const pageSize = alertsData?.pageSize ? alertsData.pageSize : 0;
-
   const getData = useCallback(async (favorite = false, coinPair = '') => {
     const coinPairUrlAdditional = coinPair !== '' ? coinPair : coinPairUrl;
     const favoriteUrlAdditional = favorite ? '&favorite=true' : favoriteUrl;
@@ -82,7 +79,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   const handleAddAlert = (newAlert: AlertsListTypeContent) => {
     setDataContent((currentDataContent) => {
       const newDataContent = [newAlert, ...currentDataContent];
-      return newDataContent.length > ((pageNumber + 1) * pageSize) ? newDataContent.slice(0, -1) : newDataContent;
+      return newDataContent.length % 10 === 0 ? newDataContent.slice(0, -1) : newDataContent;
     
     });
     setAlertsTotalRecords((value) => value + 1);
@@ -145,9 +142,8 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
 
   useEffect(() => {
     const valueCoinPairUrlEffect = valueCoinPair ==='' ? '' : `&symbol=${valueCoinPair.replace('/', '_')}`;
-
     getData(isFavorite, valueCoinPairUrlEffect);
-  }, [getData, isFavorite, valueCoinPair]);
+  }, [isFavorite, valueCoinPair]);
 
   useEffect(() => {
     getData();
@@ -157,9 +153,9 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   useEffect(() => {
     if (alertExecuted) {
       setDataContent((currentDataContent) => {
-      const newDataContent = [alertExecuted, ...currentDataContent.filter(({id})=> alertExecuted.id !== id)];
-      return newDataContent.length > dataContent.length ? newDataContent.slice(0, -1) : newDataContent;
-    });
+        const newDataContent = [alertExecuted, ...currentDataContent.filter(({id})=> alertExecuted.id !== id)];
+        return newDataContent.length > dataContent.length ? newDataContent.slice(0, -1) : newDataContent;
+      });
     };
   }, [alertExecuted]);
 
