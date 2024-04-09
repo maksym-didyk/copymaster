@@ -9,12 +9,13 @@ interface Props {
   data: AlertsListTypeContent,
   alertsPrice: any,
   onDelete: (id: number) => void,
-  onChange: (editedData: any) => void
+  onChange: (editedData: any) => Promise<boolean | undefined>
 }
 
 export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChange }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [marketPriceValue, setMarketPriceValue] = useState(0);
+  const [alertPriceValue, setAlertPriceValue] = useState(data.price);
 
   const isExecutedSeen = data.executed && !data.seen;
 
@@ -29,14 +30,19 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChang
     }
   };
 
-  const handleEditAlertsPriceData = (value: number) => {
+  const handleEditAlertsPriceData = async (value: number) => {
     if (data.price !== value) {
       const editedData = {
         id: data.id,
         price: value
       }
 
-      onChange(editedData);
+      const checkOnChange = await onChange(editedData);
+
+      if (checkOnChange === false) {
+        setAlertPriceValue(() => data.price);
+        return false;
+      }
     }
   };
 
@@ -89,29 +95,49 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChang
             <Col>
               <Stack direction='horizontal' gap={3}>
                 <div style={{ width: '0.3rem', height: '0.3rem', borderRadius: '50%', backgroundColor: data.executed ? (data.seen ? 'green' : '#ff363a') : 'transparent' }} />
+
                 <div style={{ width: '5rem' }}>{data.symbol.replace('_', '/')}</div>
+
+                {data.type === 'PRICE_RISES_ABOVE' && (
+                  <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M6.29289 0.292893C6.68342 -0.0976311 7.31658 -0.0976311 7.70711 0.292893L13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711C13.3166 8.09763 12.6834 8.09763 12.2929 7.70711L8 3.41421L8 19C8 19.5523 7.55228 20 7 20C6.44771 20 6 19.5523 6 19L6 3.41421L1.70711 7.70711C1.31658 8.09763 0.683417 8.09763 0.292893 7.70711C-0.0976311 7.31658 -0.0976311 6.68342 0.292893 6.29289L6.29289 0.292893Z" fill="#36FF6C"/>
+                  </svg>
+                )}
+
+                {data.type === 'PRICE_DROPS_BELOW' && (
+                  <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M7 0C7.55228 0 8 0.447715 8 1L8 16.5858L12.2929 12.2929C12.6834 11.9024 13.3166 11.9024 13.7071 12.2929C14.0976 12.6834 14.0976 13.3166 13.7071 13.7071L7.70711 19.7071C7.31658 20.0976 6.68342 20.0976 6.29289 19.7071L0.292893 13.7071C-0.0976311 13.3166 -0.0976311 12.6834 0.292893 12.2929C0.683417 11.9024 1.31658 11.9024 1.70711 12.2929L6 16.5858L6 1C6 0.447715 6.44771 0 7 0Z" fill="#FF363A"/>
+                  </svg> 
+                )}
+
+                {data.type === 'PRICE_REACHES' && (
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line y1="1.5" x2="14" y2="1.5" stroke="#FF8001" strokeWidth="3"/>
+                    <line y1="8.5" x2="14" y2="8.5" stroke="#FF8001" strokeWidth="3"/>
+                  </svg>
+                )}
               </Stack>
             </Col>
-            <Col xs={2}><span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Market Price:</span> <span className='fw-bold'>{marketPriceValue}</span></Col>
-            <Col xs={2} >
+            <Col><span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Market Price:</span> <span className='fw-bold'>{marketPriceValue}</span></Col>
+            <Col>
               <Stack direction='horizontal' gap={1} className='align-items-center'>
                 <span style={{color: '#9c9fa4', fontSize: '0.65rem'}}>Alert Price:</span>
-                <AlertsTableInputAlertPrice inputValue={data.price} handler={handleEditAlertsPriceData} />
+                <AlertsTableInputAlertPrice inputValue={alertPriceValue} handler={handleEditAlertsPriceData} />
               </Stack>
             </Col>
             <Col xs={3}>
               <AlertsTableInput inputValue={data.comment} placeHolder='Type comment' handler={handleEditCommentData} />
             </Col>
-            <Col xs={3}>
+            <Col>
               <Stack direction='horizontal'>
-                <button className='alerts-table__icon'>
+                <button className='alerts-table__icon' style={{ cursor: 'not-allowed' }}>
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.49933 1L7.49895 13.9983" stroke="#8997DC" strokeWidth="2" strokeLinecap="round"/>
                     <path d="M13.9993 7.49805L1.00103 7.49842" stroke="#8997DC" strokeWidth="2" strokeLinecap="round"/>
                   </svg>
                 </button>
 
-                <button className='alerts-table__icon'>
+                <button className='alerts-table__icon' style={{ cursor: 'not-allowed' }}>
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="10.166" y="4.5" width="5.83333" height="7" rx="1" fill="#8997DC"/>
                     <rect x="12.5" y="3.33398" width="1.16667" height="9.33333" rx="0.583333" fill="#8997DC"/>
@@ -158,15 +184,14 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChang
                 <button className={`alerts-table__icon ${data.active ? 'text-success' : 'text-danger'}`} onClick={() => handleEditBooleanData('active')}>
                   {data.active ? 'ON' : 'OFF'}
                 </button>
+
+                {data.id}
+                <button className='alerts-table__icon' style={{ backgroundColor: 'transparent' }}>
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.21913 9.02391L0.299756 1.62469C-0.224054 0.969931 0.242119 -8.9938e-07 1.08063 -8.62727e-07L12.9194 -3.45239e-07C13.7579 -3.08587e-07 14.2241 0.969932 13.7002 1.6247L7.78087 9.02391C7.38054 9.52432 6.61946 9.52432 6.21913 9.02391Z" fill="#9C9FA4"/>
+                  </svg>
+                </button>
               </Stack>
-            </Col>
-            <Col>
-              {data.id}
-              {/* <button style={{ backgroundColor: 'transparent' }}>
-                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6.21913 9.02391L0.299756 1.62469C-0.224054 0.969931 0.242119 -8.9938e-07 1.08063 -8.62727e-07L12.9194 -3.45239e-07C13.7579 -3.08587e-07 14.2241 0.969932 13.7002 1.6247L7.78087 9.02391C7.38054 9.52432 6.61946 9.52432 6.21913 9.02391Z" fill="#9C9FA4"/>
-                </svg>
-              </button> */}
             </Col>
           </Row>
         </Col>

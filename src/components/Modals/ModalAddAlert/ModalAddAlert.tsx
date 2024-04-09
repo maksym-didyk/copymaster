@@ -108,7 +108,8 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
     }
 
     setValueMarketPrice(0);
-  }, [alertsPrice, valueCoinPair]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [valueCoinPair]);
 
   return (
     <Modal show={show} onHide={onClose} data-bs-theme='dark' fullscreen='sm-down' centered>

@@ -132,7 +132,6 @@ export const Markets = () => {
       stompClient.subscribe(`/user/${sessionId}/BINANCE/alert-price-executed`, (message: any) => {
           const marketMessage = JSON.parse(message.body);
           setAlertExecuted(marketMessage);
-          console.log(marketMessage);
       });
     };
 

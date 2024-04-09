@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import './AlertsTable.scss';
 import { Col, Container, Row, Stack } from 'react-bootstrap';
@@ -47,6 +48,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
     } catch (error) {
       toast.error(`${error}`);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMarket]);
 
   const getPairsData = useCallback(async () => {
@@ -106,7 +108,8 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
       const updatedData = await client.patch<any>('/api/alert/', editedData);
 
       if (updatedData.error) {
-        return toast.error(updatedData.error);
+        toast.error(updatedData.error);
+        return false;
       }
 
       const targetIndex = dataContent.findIndex(item => item.id === updatedData.id);

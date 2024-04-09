@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, FormEvent, useId, useState } from 'react';
 
 interface Props {
   inputValue: number | string,
-  handler: (newValue: number) => void
+  handler: (newValue: number) => Promise<boolean | undefined>
 }
 
 export const AlertsTableInputAlertPrice: FC<Props> = ({ inputValue, handler }) => {
@@ -36,11 +36,15 @@ export const AlertsTableInputAlertPrice: FC<Props> = ({ inputValue, handler }) =
     setValue(newValue);
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
     setIsEditing(() => false);
-    handler(+value);
+    const checkHandler = await handler(+value);
+
+    if (checkHandler === false) {
+      setValue(() => inputValue);
+    }
   };
 
   const handleButtonClick = () => {
