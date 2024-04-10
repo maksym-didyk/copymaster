@@ -101,7 +101,7 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType, mar
   }, [counterEarning, data]);
 
   return (
-    <div className='mt-4' style={{ borderLeft: '1px solid #545d88' } }>
+    <div className='mt-4' style={{ borderLeft: '1px solid #545d88' } }> {data[0].blockId}
       {/* (averageQuantity === 100 || averageQuantity === 0) ? '1px solid transparent' : */}
       {averageQuantity === 100
         ? <MarketsTableRow
