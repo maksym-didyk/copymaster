@@ -119,6 +119,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
         updatedDataArray[targetIndex] = updatedData;
         setDataContent(updatedDataArray);
         // toast.success('Updated successfully');
+        return true;
       }
     } catch (error) {
       toast.error(`${error}`);

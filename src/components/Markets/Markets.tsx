@@ -16,6 +16,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { MarketsTable } from '../MarketsTable/MarketsTable';
 import { MarketsTabs } from './MarketsTabs/MarketsTabs';
 import { AlertsTable } from '../AlertsTable/AlertsTable';
+import useAlertSeen from '../../hooks/useAlertSeen';
 
 export const Markets = () => {
   const [markets, setMarkets] = useState<string[]>([]);
@@ -25,12 +26,13 @@ export const Markets = () => {
   const [symbolPrice, setSymbolPrice] = useState(0);
   const [alertsPrice, setAlertsPrice] = useState(0);
   const [alertExecuted, setAlertExecuted] = useState<AlertsListTypeContent>();
-  const [alertsNotSeenList, setAlertsNotSeenList] = useState<number[]>([]);
   const [counterEarning, setCounterEarning] = useLocalStorage('counterEarning', true);
   const [tradeType, setTradeType] = useState('SPOT');
   const [tradeTypes, setTradeTypes] = useState<string[]>([]);
   const [userBalance, setUserBalance] = useState<BalanceType>();
   const [currentTab, setCurrentTab] = useState<MarketsTabsType>(MarketsTabsType.buy);
+
+  const { setAlertsNotSeenList } = useAlertSeen();
 
   const websocketUrl = '/websocket-url';
 
@@ -40,7 +42,7 @@ export const Markets = () => {
   const handleCurrentTabChange = (tab: MarketsTabsType) => {
     setCurrentTab(tab);
     navigate(`/markets/${tradeType.toLocaleLowerCase()}/${tab}/${currentMarket.toLocaleLowerCase()}/${currentSymbol}`);
-  }
+};
 
   const currentUrlToType = (tabValue: string | undefined) => {
     const enumValue = Object.values(MarketsTabsType).find(tab => tab === tabValue);
@@ -48,7 +50,7 @@ export const Markets = () => {
     if (enumValue !== undefined) {
       setCurrentTab(enumValue);
     }
-  }
+  };
 
   useEffect(() => {
     currentUrlToType(currentTabUrl);
@@ -245,7 +247,7 @@ export const Markets = () => {
         </Stack>
       </div>
 
-      <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} aletsNotSeen={alertsNotSeenList.length} />
+      <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} />
 
       {(currentTab === MarketsTabsType.buy || currentTab === MarketsTabsType.sell || currentTab === MarketsTabsType.all) &&
         <MarketsTable tabType={currentTab} counterEarning={counterEarning} marketPrice={symbolPrice} tradeType={tradeType} currentMarket={currentMarket} currentSymbol={currentSymbol} />

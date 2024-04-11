@@ -83,14 +83,14 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
       favorite: false,
       sendToTelegram: checkedTelegram,
       active: true
-    }
+    };
 
     try {
       const loadedData: AlertsListTypeContent = await client.post('/api/alert/', newAlert);
 
       if (loadedData.error) {
         return toast.error(loadedData.error);
-      }
+      };
 
         onAdd(loadedData);
         toast.success('Alert added');
@@ -100,15 +100,26 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
     }
   };
 
-  useEffect(()=> {
-    const valueCoinPairFormatted = valueCoinPair.replace('/', '_');
+  const handleSelectCoinPair = (event: ChangeEvent<HTMLInputElement>)=> {
+    const newValue = event.target.value;
+    const valueCoinPairFormatted = newValue.replace('/', '_');
 
-    if (valueCoinPair && alertsPrice.hasOwnProperty(valueCoinPairFormatted)) {
+    if (alertsPrice.hasOwnProperty(valueCoinPairFormatted)) {
         return setValueMarketPrice(alertsPrice[valueCoinPairFormatted]);
-    }
+    };
 
     setValueMarketPrice(0);
-  }, [alertsPrice, valueCoinPair]);
+  };
+
+    // useEffect(()=> {
+    //   const valueCoinPairFormatted = valueCoinPair.replace('/', '_');
+
+    //   if (valueCoinPair && alertsPrice.hasOwnProperty(valueCoinPairFormatted)) {
+    //       return setValueMarketPrice(alertsPrice[valueCoinPairFormatted]);
+    //   };
+
+    //   setValueMarketPrice(0);
+    // }, [alertsPrice, valueCoinPair]);
 
   return (
     <Modal show={show} onHide={onClose} data-bs-theme='dark' fullscreen='sm-down' centered>
@@ -134,6 +145,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
                   value={valueCoinPair}
                   placeholder='Choose pair'
                   onChange={(event) => setValueCoinPair(event.target.value)}
+                  onSelect={handleSelectCoinPair}
                   className='alerts-table__input-modal-coinpair'
                 />
                 <datalist id="coinpairs">

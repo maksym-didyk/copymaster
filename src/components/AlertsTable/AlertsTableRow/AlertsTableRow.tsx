@@ -4,6 +4,7 @@ import { AlertsTableInput } from '../AlertsTableInput/AlertsTableInput';
 import { AlertsListTypeContent } from '../../../types/types';
 import { AlertsTableInputAlertPrice } from '../AlertsTableInputAlertPrice/AlertsTableInputAlertPrice';
 import classNames from 'classnames';
+import useAlertSeen from '../../../hooks/useAlertSeen';
 
 interface Props {
   data: AlertsListTypeContent,
@@ -16,6 +17,8 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChang
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [marketPriceValue, setMarketPriceValue] = useState(0);
   const [alertPriceValue, setAlertPriceValue] = useState(data.price);
+
+  const { alertsNotSeenList, setAlertsNotSeenList } = useAlertSeen();
 
   const isExecutedSeen = data.executed && !data.seen;
 
@@ -52,20 +55,25 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChang
     const editedData = {
       id: data.id,
       [editKey]: !propertyValue
-    }
+    };
 
     onChange(editedData);
   };
 
-  const onClickRow = () => {
+  const onClickRow = async () => {
     if (isExecutedSeen) {
       const editedData = {
         id: data.id,
         seen: true
-      }
+      };
 
-      onChange(editedData);
-    }
+      const checkOnChange = await onChange(editedData);
+
+      if (checkOnChange) {
+        const alertsNotSeenListEdited = alertsNotSeenList.filter((id) => id !== editedData.id);
+        setAlertsNotSeenList(alertsNotSeenListEdited);
+      };
+    };
   };
   
   useEffect(() => {

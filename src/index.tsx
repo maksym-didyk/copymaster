@@ -6,6 +6,7 @@ import App from './App';
 import './assets/styles/index.scss';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { AlertsNotSeenProvider } from './context/AlertsNotSeenProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,16 +15,18 @@ root.render(
   // <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <>
-          <App />
-          <ToastContainer
-            position='bottom-right'
-            autoClose={5000}
-            theme="dark"
-            closeButton
-            pauseOnHover
-          />
-        </>
+        <AlertsNotSeenProvider>
+          <>
+            <App />
+            <ToastContainer
+              position='bottom-right'
+              autoClose={5000}
+              theme="dark"
+              closeButton
+              pauseOnHover
+            />
+          </>
+        </AlertsNotSeenProvider>
       </AuthProvider>
     </BrowserRouter>
   // </React.StrictMode>

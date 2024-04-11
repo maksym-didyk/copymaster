@@ -1,30 +1,22 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
 import { MarketsTabsType } from '../../../types/enums';
-import { client } from '../../../api/fetchClient';
-import { toast } from 'react-toastify';
+import useAlertSeen from '../../../hooks/useAlertSeen';
 
 interface Props {
   currentTab: MarketsTabsType,
-  tabChange: (tab: MarketsTabsType) => void,
-  aletsNotSeen: number
+  tabChange: (tab: MarketsTabsType) => void
 }
 
-export const MarketsTabs: FC<Props> = ({ currentTab, tabChange: handleCurrentTabChange, aletsNotSeen }) => {
-  const [aletsStatus, setAlertsStatus] = useState(false);
-
-  useEffect(() => {
-    if (aletsNotSeen > 0) {
-      setAlertsStatus(true);
-    }
-  }, [aletsNotSeen]);
+export const MarketsTabs: FC<Props> = ({ currentTab, tabChange: handleCurrentTabChange }) => {
+  const { alertsNotSeenList } = useAlertSeen();
 
   return (
     <Stack direction="horizontal" gap={3} className='mt-5 ps-5 text-secondary' >
       <div onClick={() => handleCurrentTabChange(MarketsTabsType.buy)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.buy ? 'text-white' : ''}>BUY</div>
       <div onClick={() => handleCurrentTabChange(MarketsTabsType.sell)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.sell ? 'text-white' : ''}>SELL</div>
       <div onClick={() => handleCurrentTabChange(MarketsTabsType.all)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.all ? 'text-white' : ''}>ALL Positions</div>
-      <div onClick={() => handleCurrentTabChange(MarketsTabsType.alerts)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.alerts ? 'text-white' : ''}>Alerts {aletsStatus && <sup style={{ color: '#ff363a', fontSize: '1.5rem', fontWeight: '700' }}>.</sup>}</div>
+      <div onClick={() => handleCurrentTabChange(MarketsTabsType.alerts)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.alerts ? 'text-white' : ''}>Alerts <sup style={{ color: `${alertsNotSeenList.length > 0 ? '#ff363a' : 'transparent'}`, fontSize: '1.5rem', fontWeight: '700' }}>.</sup></div>
       <div onClick={() => handleCurrentTabChange(MarketsTabsType.history)} style={{cursor: 'pointer'}} className={currentTab === MarketsTabsType.history ? 'text-white' : ''}>History</div>
       <OverlayTrigger
         placement='auto'
