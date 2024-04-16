@@ -10,7 +10,7 @@ interface Props {
   data: AlertsListTypeContent,
   alertsPrice: any,
   onDelete: (id: number) => void,
-  onChange: (editedData: any) => Promise<boolean | undefined>
+  onChange: (editedData: any, isSeen?: boolean) => Promise<boolean | undefined>
 }
 
 export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChange }) => {
@@ -67,7 +67,7 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChang
         seen: true
       };
 
-      const checkOnChange = await onChange(editedData);
+      const checkOnChange = await onChange(editedData, true);
 
       if (checkOnChange) {
         const alertsNotSeenListEdited = alertsNotSeenList.filter((id) => id !== editedData.id);
@@ -75,7 +75,7 @@ export const AlertsTableRow: FC<Props> = ({ data, alertsPrice, onDelete, onChang
       };
     };
   };
-  
+
   useEffect(() => {
     if (alertsPrice.hasOwnProperty(data.symbol)) {
       setMarketPriceValue(alertsPrice[data.symbol]);

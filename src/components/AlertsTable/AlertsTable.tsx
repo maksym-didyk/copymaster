@@ -103,9 +103,16 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
     }
   };
 
-  const handleEditData = async (editedData: any) => {
+  const handleEditData = async (editedData: any, isSeen = false) => {
+    let updatedData: any;
+
     try {
-      const updatedData = await client.patch<any>('/api/alert/', editedData);
+
+      if (isSeen) {
+        updatedData = await client.patch<any>(`/api/alert/seen/${editedData.id}`, '');
+      } else {
+        updatedData = await client.patch<any>('/api/alert/', editedData);
+      };
 
       if (updatedData.error) {
         toast.error(updatedData.error);

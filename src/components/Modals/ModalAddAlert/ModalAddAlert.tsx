@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
 import { Button, Col, Form, Modal, Row, Spinner, Stack } from 'react-bootstrap';
 import { capitalizeFirstLetter } from '../../../utils/helpers';
 import classNames from 'classnames';

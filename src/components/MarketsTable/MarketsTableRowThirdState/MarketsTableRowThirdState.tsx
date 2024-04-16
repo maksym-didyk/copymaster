@@ -15,17 +15,19 @@ interface Props {
   sumFilledQuantity: string,
   averageQuantity?: number,
   profitValue?: number,
+  marketPrice: number,
   isFilled?: boolean,
   isRed?: boolean
 }
 
-export const MarketsTableRowAdditional: FC<Props> = ({
+export const MarketsTableRowThirdState: FC<Props> = ({
   data,
   counterEarning,
   tabType,
   sumFilledQuantity,
   averageQuantity = 0,
   profitValue = 0,
+  marketPrice,
   isFilled = false,
   isRed = false
 }) => {
@@ -112,23 +114,21 @@ export const MarketsTableRowAdditional: FC<Props> = ({
           </Row>
         </Col>
         <Col xs={2}>
-          {isFilled ||
-            <Stack direction="horizontal" className='markets-table__inputwrapper'>
-                <MarketsTableInput placeHolder={'S.L.'} inputValue={isTakeProfit ? '' : bigDecimal.round(dataRow.sellStopLossPrice, 2)} />
-                <span style={{color: '#7783c0'}}>/</span>
-                <MarketsTableInput placeHolder={'T.P.'} inputValue={isTakeProfit? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : ''} />
-                <button className='markets-table__button' onClick={handleShowModal}>
-                  More
-                </button>
-              </Stack>
-          }
+          <Stack direction="horizontal" className='markets-table__inputwrapper'>
+            <MarketsTableInput placeHolder={'S.L.'} inputValue={isTakeProfit ? '' : bigDecimal.round(dataRow.sellStopLossPrice, 2)} />
+            <span style={{color: '#7783c0'}}>/</span>
+            <MarketsTableInput placeHolder={'T.P.'} inputValue={isTakeProfit? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : ''} />
+            <button className='markets-table__button' onClick={handleShowModal}>
+              More
+            </button>
+          </Stack>
         </Col>
       </Row>
 
       <Collapse in={open}>
         <div id={collapseId}>
           {data.map((subRow: any, index: number) => (
-            <MarketsTableSubRowAdditional key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} isFilled={isFilled} />
+            <MarketsTableSubRowAdditional key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} marketPrice={marketPrice} isFilled={isFilled} />
           ))}
         </div>
       </Collapse>

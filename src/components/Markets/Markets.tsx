@@ -194,6 +194,7 @@ export const Markets = () => {
     };
 
     getAlertsCount();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -250,7 +251,14 @@ export const Markets = () => {
       <MarketsTabs currentTab={currentTab} tabChange={handleCurrentTabChange} />
 
       {(currentTab === MarketsTabsType.buy || currentTab === MarketsTabsType.sell || currentTab === MarketsTabsType.all) &&
-        <MarketsTable tabType={currentTab} counterEarning={counterEarning} marketPrice={symbolPrice} tradeType={tradeType} currentMarket={currentMarket} currentSymbol={currentSymbol} />
+        <MarketsTable
+          tabType={currentTab}
+          counterEarning={counterEarning}
+          marketPrice={0.6201} // {symbolPrice}
+          tradeType={tradeType}
+          currentMarket={currentMarket}
+          currentSymbol={currentSymbol}
+        />
       }
 
       {currentTab === MarketsTabsType.alerts &&
