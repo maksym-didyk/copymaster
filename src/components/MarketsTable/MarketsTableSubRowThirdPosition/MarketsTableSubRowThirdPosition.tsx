@@ -11,29 +11,27 @@ interface Props {
   isFilled?: boolean
 };
 
-export const MarketsTableSubRowAdditional: FC<Props> = ({ data, currentSymbol, counterEarning, marketPrice = 0, isFilled = false }) => {
+export const MarketsTableSubRowThirdPosition: FC<Props> = ({ data, currentSymbol, counterEarning, marketPrice = 0, isFilled = false }) => {
   const isTakeProfit = data.sellTakeProfitPrice > 0 ? true : false;
   const dataValue = counterEarning
     ? isTakeProfit ? data.sellTakeProfitQuantity : data.sellStopLossQuantity
     : isTakeProfit ? data.sellTakeProfitCounterQuantity : data.sellStopLossCounterQuantity;
-
   const dataValueFilled = counterEarning
     ? isTakeProfit ? data.sellFilledTakeProfitQuantity : data.sellFilledStopLossQuantity
-    : isTakeProfit ? data.sellBuyFilledTakeProfitCounterQuantity : data.sellBuyFilledStopLossCounterQuantity;
-
+    : isTakeProfit ? data.sellFilledTakeProfitCounterQuantity : data.sellFilledStopLossCounterQuantity;
   const dataProgress = isFilled
     ? isTakeProfit ? takeAverage(data.sellFilledTakeProfitQuantity, data.sellTakeProfitQuantity) : takeAverage(data.sellFilledStopLossQuantity, data.sellStopLossQuantity)
     : 0;
-
   const dataProgressRemain = dataProgress > 0 ? 100 - dataProgress : 0;
+
   const marketPriceDecimal = new bigDecimal(marketPrice);
   const profitCounterQuantityCalculate = isTakeProfit
-    ? new bigDecimal(data.sellFilledTakeProfitCounterQuantity).subtract(new bigDecimal(data.sellBuyFilledTakeProfitCounterQuantity)).round(data.counterRound, bigDecimal.RoundingModes.FLOOR)
-    : new bigDecimal(data.sellFilledStopLossCounterQuantity).subtract(new bigDecimal(data.sellBuyFilledStopLossCounterQuantity)).round(data.counterRound, bigDecimal.RoundingModes.FLOOR);
+    ? new bigDecimal(data.sellTakeProfitQuantity).multiply(marketPriceDecimal).subtract(new bigDecimal(data.sellTakeProfitCounterQuantity)).round(data.counterRound, bigDecimal.RoundingModes.FLOOR)
+    : new bigDecimal(data.sellTakeStopLossQuantity).multiply(marketPriceDecimal).subtract(new bigDecimal(data.sellTakeStopLossCounterQuantity)).round(data.counterRound, bigDecimal.RoundingModes.FLOOR);
   const profitCounterQuantity = profitCounterQuantityCalculate.getValue();
   const profitQuantity = marketPrice === 0 ? new bigDecimal('0') : profitCounterQuantityCalculate.divide(marketPriceDecimal).round(data.baseRound, bigDecimal.RoundingModes.DOWN).getValue();
   const profitValue = counterEarning ? Number(profitQuantity) : Number(profitCounterQuantity);
-  const profitPercentCalculate = dataValueFilled === 0 ? new bigDecimal(dataValueFilled) : new bigDecimal(profitValue).divide(new bigDecimal (dataValueFilled)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
+  const profitPercentCalculate = dataValue === 0 ? new bigDecimal(dataValue) : new bigDecimal(profitValue).divide(new bigDecimal (dataValue)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
   const profitPercentValue = Number(profitPercentCalculate.getValue());
 
   return (

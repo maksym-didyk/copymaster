@@ -254,7 +254,7 @@ export const Markets = () => {
         <MarketsTable
           tabType={currentTab}
           counterEarning={counterEarning}
-          marketPrice={0.6201} // {symbolPrice}
+          marketPrice={symbolPrice}
           tradeType={tradeType}
           currentMarket={currentMarket}
           currentSymbol={currentSymbol}

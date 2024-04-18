@@ -6,13 +6,13 @@ import { MarketsTabsType } from '../../../types/enums';
 import { toast } from 'react-toastify';
 import bigDecimal from 'js-big-decimal';
 import { MarketsTableInput } from '../MarketsTableInput/MarketsTableInput';
-import { MarketsTableSubRowAdditional } from '../MarketsTableSubRowAdditional/MarketsTableSubRowAdditional';
+import { MarketsTableSubRowThirdPosition } from '../MarketsTableSubRowThirdPosition/MarketsTableSubRowThirdPosition';
 
 interface Props {
   data: any,
   counterEarning: boolean,
   tabType: MarketsTabsType,
-  sumFilledQuantity: string,
+  sumQuantity: string,
   averageQuantity?: number,
   profitValue?: number,
   marketPrice: number,
@@ -20,11 +20,11 @@ interface Props {
   isRed?: boolean
 }
 
-export const MarketsTableRowThirdState: FC<Props> = ({
+export const MarketsTableRowThirdPosition: FC<Props> = ({
   data,
   counterEarning,
   tabType,
-  sumFilledQuantity,
+  sumQuantity,
   averageQuantity = 0,
   profitValue = 0,
   marketPrice,
@@ -49,7 +49,7 @@ export const MarketsTableRowThirdState: FC<Props> = ({
   const averageQuantityProgressBar = isFilled ? averageQuantity : 0;
   const averageQuantityRemain = averageQuantityProgressBar > 0 ? 100 - averageQuantityProgressBar : 0;
 
-  const profitPercentCalculate = Number(sumFilledQuantity) === 0 ? new bigDecimal(sumFilledQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumFilledQuantity)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
+  const profitPercentCalculate = Number(sumQuantity) === 0 ? new bigDecimal(sumQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumQuantity)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
   const profitPercentValue = Number(profitPercentCalculate.getValue());
 
   return (
@@ -67,7 +67,7 @@ export const MarketsTableRowThirdState: FC<Props> = ({
               three: true, // need to add logic of state
               'markets-table__status--dark-blue': (tabType === MarketsTabsType.buy || tabType === MarketsTabsType.all) && isFilled === false,
               'markets-table__status--orange': tabType === MarketsTabsType.sell,
-             })}></div>
+             })} />
           </div>
         </Col>
         <Col xs={9}>
@@ -81,7 +81,7 @@ export const MarketsTableRowThirdState: FC<Props> = ({
               <p style={{ color: '#ff363a' }}>{dataPrice}</p>
               </Col>
             <Col>{dataRow.symbol}</Col>
-            <Col>{`${sumFilledQuantity} ${currentSymbol}`}</Col>
+            <Col>{`${sumQuantity} ${currentSymbol}`}</Col>
             {profitValue > 0
               ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>
               : <Col className='text-danger'>{`${profitValue} ${currentSymbol}`}</Col>
@@ -128,7 +128,7 @@ export const MarketsTableRowThirdState: FC<Props> = ({
       <Collapse in={open}>
         <div id={collapseId}>
           {data.map((subRow: any, index: number) => (
-            <MarketsTableSubRowAdditional key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} marketPrice={marketPrice} isFilled={isFilled} />
+            <MarketsTableSubRowThirdPosition key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} marketPrice={marketPrice} />
           ))}
         </div>
       </Collapse>
