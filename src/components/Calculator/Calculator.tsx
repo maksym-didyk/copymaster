@@ -1,22 +1,25 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { CalculatorInput } from './CalculatorInput/CalculatorInput';
 import './Calculator.scss';
 import { CalculatorButtonType } from '../../types/enums';
 import classNames from 'classnames';
 import { Col, Stack, Row } from 'react-bootstrap';
 import { BalanceTypeData } from '../../types/types';
+import MarketPriceProvider from '../../context/MarketPriceProvider';
 
 interface Props {
   currency: string[],
   type: CalculatorButtonType,
-  marketPrice: number,
+  // marketPrice: number,
   balance?: BalanceTypeData,
 }
 
-export const Calculator: FC<Props> = ({ currency, type, marketPrice, balance }) => {
+export const Calculator: FC<Props> = ({ currency, type, balance }) => {
   const [inputPrice, setInputPrice] = useState<string | number>('');
   const [inputQuantity, setInputQuantity] = useState<string | number>('');
   const [inputAll, setInputAll] = useState<string | number>('');
+
+  const { marketPriceContext: marketPrice } = useContext(MarketPriceProvider);
 
   const handleSetInputQuantity = (value: number | string) => {
     setInputQuantity(() => value);

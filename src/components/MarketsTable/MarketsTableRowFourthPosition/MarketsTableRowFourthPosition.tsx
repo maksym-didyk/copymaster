@@ -15,17 +15,19 @@ interface Props {
   sumFilledQuantity: string,
   averageQuantity?: number,
   profitValue?: number,
+  value: string,
   isFilled?: boolean,
   isRed?: boolean
 }
 
-export const MarketsTableRowAdditional: FC<Props> = ({
+export const MarketsTableRowFourthPosition: FC<Props> = ({
   data,
   counterEarning,
   tabType,
   sumFilledQuantity,
   averageQuantity = 0,
   profitValue = 0,
+  value,
   isFilled = false,
   isRed = false
 }) => {
@@ -43,7 +45,8 @@ export const MarketsTableRowAdditional: FC<Props> = ({
   const dataFilledPrice = bigDecimal.round(dataRow.buyFilledPrice, 2);
   const dataPrice = isTakeProfit ? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : bigDecimal.round(dataRow.sellStopLossPrice, 2);
   const currentSymbolArray = dataRow.symbol.split('/');
-  const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
+  const currentSymbol = counterEarning ? currentSymbolArray[1] : currentSymbolArray[0];
+  const currentSymbolValue = currentSymbolArray[1];
   const averageQuantityProgressBar = isFilled ? averageQuantity : 0;
   const averageQuantityRemain = averageQuantityProgressBar > 0 ? 100 - averageQuantityProgressBar : 0;
 
@@ -79,7 +82,7 @@ export const MarketsTableRowAdditional: FC<Props> = ({
               <p style={{ color: '#ff363a' }}>{dataPrice}</p>
               </Col>
             <Col>{dataRow.symbol}</Col>
-            <Col>{`${sumFilledQuantity} ${currentSymbol}`}</Col>
+            <Col>{`${value} ${currentSymbolValue}`}</Col>
             {profitValue > 0
               ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>
               : <Col className='text-danger'>{`${profitValue} ${currentSymbol}`}</Col>

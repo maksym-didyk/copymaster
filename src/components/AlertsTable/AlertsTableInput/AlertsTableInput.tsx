@@ -10,17 +10,6 @@ export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '',
   const [value, setValue] = useState(inputValue);
   const id = useId();
   const formId = useId();
-  // const customValue = handler ? inputValue : value;
-
-  // const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const newValue = event.target.value;
-
-  //   if (handler) {
-  //     handler(newValue);
-  //   } else {
-  //     setValue(newValue);
-  //   }
-  // };
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -32,7 +21,7 @@ export const AlertsTableInput: FC<Props> = ({ inputValue = '', placeHolder = '',
       <input
         id={id}
         type='text'
-        maxLength={12}
+        maxLength={200}
         value={value}
         onChange={(event) => setValue(event.target.value)}
         onBlur={handleSubmit}

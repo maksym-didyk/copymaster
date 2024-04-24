@@ -15,17 +15,19 @@ interface Props {
   sumFilledQuantity: string,
   averageQuantity: number,
   profitValue: number,
-  marketPrice: number
+  marketPrice: number,
+  value: string
 }
 
-export const MarketsTableRowFilled: FC<Props> = ({
+export const MarketsTableRowSecondPosition: FC<Props> = ({
   data,
   counterEarning,
   tabType,
   sumFilledQuantity,
   averageQuantity,
   profitValue,
-  marketPrice
+  marketPrice,
+  value
 }) => {
   const [open, setOpen] = useState(false);
   const collapseId = useId();
@@ -34,7 +36,8 @@ export const MarketsTableRowFilled: FC<Props> = ({
   const dateString = milisecondsToDate(dataRow.buyFilledTime);
   const dataBuyCreationPrice = bigDecimal.round(dataRow.buyCreationPrice, 2);
   const currentSymbolArray = dataRow.symbol.split('/');
-  const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
+  const currentSymbol = counterEarning ? currentSymbolArray[1] : currentSymbolArray[0];
+  const currentSymbolValue= currentSymbolArray[1];
   const averageQuantityRemain = averageQuantity > 0 ? 100 - averageQuantity : 0;
 
   const profitPercentCalculate = +sumFilledQuantity === 0 ? new bigDecimal(sumFilledQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumFilledQuantity)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
@@ -63,7 +66,7 @@ export const MarketsTableRowFilled: FC<Props> = ({
             <Col>{dateString}</Col>
             <Col style={{ color: '#5b6aff' }}>{dataBuyCreationPrice}</Col>
             <Col>{dataRow.symbol}</Col>
-            <Col>{`${sumFilledQuantity} ${currentSymbol}`}</Col>
+            <Col>{`${value} ${currentSymbolValue}`}</Col>
             {profitValue > 0
               ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>
               : <Col className='text-danger'>{`${profitValue} ${currentSymbol}`}</Col>

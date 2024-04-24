@@ -11,19 +11,18 @@ interface Props {
   data: any,
   counterEarning: boolean,
   tabType: MarketsTabsType,
-  sumQuantity: string,
+  value?: string,
   isRed?: boolean
 }
 
-export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQuantity, isRed = false }) => {
+export const MarketsTableRowFirstPosition: FC<Props> = ({ data, counterEarning, tabType, value, isRed = false }) => {
   const [open, setOpen] = useState(false);
   const collapseId = useId();
 
   const dataRow = data[0];
   const dateString = milisecondsToDate(dataRow.buyCreationTime);
   const dataBuyCreationPrice = bigDecimal.round(dataRow.buyCreationPrice, 2);
-  const currentSymbolArray = dataRow.symbol.split('/');
-  const currentSymbol = counterEarning ? currentSymbolArray[0] : currentSymbolArray[1];
+  const currentSymbol = dataRow.symbol.split('/')[1];
 
   return (
     <div style={{border: isRed ? '1px solid red': ''}}>
@@ -48,7 +47,7 @@ export const MarketsTableRow: FC<Props> = ({ data, counterEarning, tabType, sumQ
             <Col>{dateString}</Col>
             <Col style={{ color: '#5b6aff' }}>{dataBuyCreationPrice}</Col>
             <Col>{dataRow.symbol}</Col>
-            <Col>{`${sumQuantity} ${currentSymbol}`}</Col>
+            <Col>{`${value} ${currentSymbol}`}</Col>
             <Col className='text-danger'></Col>
             <Col className='text-danger'></Col>
             <Col className='text-success'>Buy</Col>

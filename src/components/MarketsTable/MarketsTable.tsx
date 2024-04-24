@@ -9,13 +9,12 @@ import { MarketsTabsType } from '../../types/enums';
 interface Props {
   tabType: MarketsTabsType,
   counterEarning: boolean,
-  marketPrice: number,
   tradeType: string,
   currentMarket: string,
   currentSymbol: string
 }
 
-export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice, tradeType, currentMarket, currentSymbol }) => {
+export const MarketsTable: FC<Props> = ({ tabType, counterEarning, tradeType, currentMarket, currentSymbol }) => {
   const [tableData, setTableData] = useState<any>({});
   const [dataKeys, setDataKeys] = useState<string[]>([]);
 
@@ -37,8 +36,8 @@ export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice, 
       }
     };
 
-    getData(`/${tradeType}/${tabType}/${currentMarket}/${currentSymbol}`);
-  }, [currentMarket, currentSymbol, tabType, tradeType]);
+    getData(`/${tradeType}/${tabType}/${currentMarket}/${currentSymbol}?counterEarning=${counterEarning}`);
+  }, [counterEarning, currentMarket, currentSymbol, tabType, tradeType]);
 
   return (
     <Container fluid className='markets-table my-4'>
@@ -64,13 +63,12 @@ export const MarketsTable: FC<Props> = ({ tabType, counterEarning, marketPrice, 
           </Col>
       </Row>
 
-      {dataKeys.map((key) => 
-        <MarketsTableRows 
+      {dataKeys.map((key) =>
+        <MarketsTableRows
           key={key}
           data={tableData[key]}
           counterEarning={counterEarning} 
           tabType={tabType}
-          marketPrice={marketPrice}
         />)}
     </Container>
   );

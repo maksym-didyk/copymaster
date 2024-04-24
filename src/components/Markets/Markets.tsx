@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import './Markets.scss';
 import { Calculator } from '../Calculator';
 import { CalculatorButtonType, MarketsTabsType } from '../../types/enums';
@@ -17,39 +17,49 @@ import { MarketsTable } from '../MarketsTable/MarketsTable';
 import { MarketsTabs } from './MarketsTabs/MarketsTabs';
 import { AlertsTable } from '../AlertsTable/AlertsTable';
 import useAlertSeen from '../../hooks/useAlertSeen';
+import MarketPriceProvider from '../../context/MarketPriceProvider';
 
 export const Markets = () => {
   const [markets, setMarkets] = useState<string[]>([]);
   const [currentMarket, setCurrentMarket] = useState('BINANCE');
   const [symbols, setSymbols] = useState<string[]>([]);
   const [currentSymbol, setCurrentSymbol] = useState('XRP_USDT');
-  const [symbolPrice, setSymbolPrice] = useState(0);
+  // const [symbolPrice, setSymbolPrice] = useState(0);
   const [alertsPrice, setAlertsPrice] = useState(0);
   const [alertExecuted, setAlertExecuted] = useState<AlertsListTypeContent>();
-  const [counterEarning, setCounterEarning] = useLocalStorage('counterEarning', true);
   const [tradeType, setTradeType] = useState('SPOT');
   const [tradeTypes, setTradeTypes] = useState<string[]>([]);
   const [userBalance, setUserBalance] = useState<BalanceType>();
   const [currentTab, setCurrentTab] = useState<MarketsTabsType>(MarketsTabsType.buy);
+  const [counterEarning, setCounterEarning] = useLocalStorage('counterEarning', true);
 
   const { setAlertsNotSeenList } = useAlertSeen();
+  const { marketPriceContext, setMarketPriceContext } = useContext(MarketPriceProvider);
 
   const websocketUrl = '/websocket-url';
 
   let { tradeTypeUrl, currentMarketUrl, currentSymbolUrl, currentTabUrl } = useParams();
   const navigate = useNavigate();
 
+  // const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
+  // const counterEarningParam = searchParams.get('counterEarning');
+
+  // let [searchParams, setSearchParams] = useSearchParams();
+
+  // console.log(searchParams.get('counterEarning'));
+
   const handleCurrentTabChange = (tab: MarketsTabsType) => {
     setCurrentTab(tab);
     navigate(`/markets/${tradeType.toLocaleLowerCase()}/${tab}/${currentMarket.toLocaleLowerCase()}/${currentSymbol}`);
-};
+  };
 
   const currentUrlToType = (tabValue: string | undefined) => {
     const enumValue = Object.values(MarketsTabsType).find(tab => tab === tabValue);
 
     if (enumValue !== undefined) {
       setCurrentTab(enumValue);
-    }
+    };
   };
 
   useEffect(() => {
@@ -57,26 +67,27 @@ export const Markets = () => {
   }, [currentTabUrl]);
 
   const currentSymbolArray = currentSymbol.split('_');
-  const counterEarningIndex = counterEarning ? 0 : 1;
+  const counterEarningIndex = counterEarning ? 1 : 0;
 
   const getMarketsData = useCallback(async (url = '') => {
     try {
       const loadedData = await client.get<MarketsSpotType>('/api/markets' + url);
 
       if (loadedData.hasOwnProperty('error')) {
-        navigate('/markets');
-      } else {
-        const { markets, market, symbols, symbol, symbolPrice, counterEarning, tradeType, tradeTypes } = loadedData.body;
-
-        setMarkets([...markets, 'BYBIT', 'COINBASE']);
-        setCurrentMarket(market);
-        setSymbols(symbols);
-        setCurrentSymbol(symbol);
-        setCounterEarning(counterEarning);
-        setTradeType(tradeType);
-        setTradeTypes([...tradeTypes, 'FUTURES', 'INVERSE']);
-        setSymbolPrice(symbolPrice === null ? 0 : symbolPrice);
+        return navigate('/markets');
       }
+
+      const { markets, market, symbols, symbol, symbolPrice, counterEarning, tradeType, tradeTypes } = loadedData.body;
+
+      setMarkets([...markets, 'BYBIT', 'COINBASE']);
+      setCurrentMarket(market);
+      setSymbols(symbols);
+      setCurrentSymbol(symbol);
+      setCounterEarning(counterEarning);
+      setTradeType(tradeType);
+      setTradeTypes([...tradeTypes, 'FUTURES', 'INVERSE']);
+      // setSymbolPrice(symbolPrice === null ? 0 : symbolPrice);
+      setMarketPriceContext(symbolPrice === null ? 0 : symbolPrice);
     } catch (error) {
       toast.error(`${error}`);
     }
@@ -99,7 +110,8 @@ export const Markets = () => {
   };
 
   const handleSymbolsChange = async (symbol: string) => {
-    setSymbolPrice(() => 0);
+    // setSymbolPrice(() => 0);
+    setMarketPriceContext(0);
     await getMarketsData(`/${tradeType}/${currentMarket}/${symbol}?counterEarning=${counterEarning}`);
 
     navigate(`/markets/${tradeType.toLocaleLowerCase()}/${currentTab}/${currentMarket.toLocaleLowerCase()}/${symbol}`);
@@ -119,7 +131,8 @@ export const Markets = () => {
     const connectMarketPriceWebsocket = (stompClient: any, sessionId: string) => {
       stompClient.subscribe(`/user/${sessionId}/market-price`, (message: any) => {
           const marketMessage = JSON.parse(message.body);
-          setSymbolPrice(() => marketMessage.price);
+          // setSymbolPrice(() => marketMessage.price);
+          setMarketPriceContext(marketMessage.price);
       });
     };
 
@@ -173,7 +186,7 @@ export const Markets = () => {
 
     if (!isConnected) {
       websocketMarketPrice();
-    }
+    };
 
     getUserBalance(`/${tradeType}/symbol-quantities/${currentMarket}/${currentSymbol}`);
 
@@ -225,8 +238,8 @@ export const Markets = () => {
       </Stack>
 
       <div className='d-flex gap-3 flex-wrap flex-lg-row flex-column-reverse'>
-        <Calculator currency={currentSymbolArray} type={CalculatorButtonType.buy} marketPrice={symbolPrice} balance={userBalance?.first} />
-        <Calculator currency={currentSymbolArray} type={CalculatorButtonType.sell} marketPrice={symbolPrice} balance={userBalance?.second} />
+        <Calculator currency={currentSymbolArray} type={CalculatorButtonType.buy} balance={userBalance?.first} />
+        <Calculator currency={currentSymbolArray} type={CalculatorButtonType.sell} balance={userBalance?.second} />
 
         <Stack direction="vertical" gap={3}>
           <div className='markets__marketprice earn'>
@@ -243,7 +256,7 @@ export const Markets = () => {
 
           <div className='markets__marketprice'>
             Market price:
-            <p className='markets__marketprice-value'>{symbolPrice}</p>
+            <p className='markets__marketprice-value'>{marketPriceContext}</p>
           </div>
         </Stack>
       </div>
@@ -254,7 +267,6 @@ export const Markets = () => {
         <MarketsTable
           tabType={currentTab}
           counterEarning={counterEarning}
-          marketPrice={symbolPrice}
           tradeType={tradeType}
           currentMarket={currentMarket}
           currentSymbol={currentSymbol}
