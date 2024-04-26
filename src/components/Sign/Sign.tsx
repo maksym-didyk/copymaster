@@ -178,10 +178,8 @@ export const Sign = () => {
     };
 
     if (isAuthenticated === true) {
-      toNavigate();
-      toast.info('You are already authorized');
-
-      return;
+      // toast.info('You are already authorized');
+      return toNavigate();
     }
 
     checkUser();

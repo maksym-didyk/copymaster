@@ -1,17 +1,21 @@
-import React, { FC } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Col, ProgressBar, Row } from 'react-bootstrap';
 import bigDecimal from 'js-big-decimal';
 import { showProgress, takeAverage } from '../../../utils/helpers';
+import MarketPriceProvider from '../../../context/MarketPriceProvider';
 
 interface Props {
   data: any,
   currentSymbol: string,
   counterEarning: boolean,
-  marketPrice?: number,
   isFilled?: boolean
 };
 
-export const MarketsTableSubRowThirdPosition: FC<Props> = ({ data, currentSymbol, counterEarning, marketPrice = 0, isFilled = false }) => {
+export const MarketsTableSubRowThirdPosition: FC<Props> = ({ data, currentSymbol, counterEarning, isFilled = false }) => {
+  const [marketPrice, setMarketPrice] = useState(0);
+
+  const { marketPriceContext } = useContext(MarketPriceProvider);
+
   const isTakeProfit = data.sellTakeProfitPrice > 0 ? true : false;
   const dataValue = counterEarning
     ? isTakeProfit ? data.sellTakeProfitQuantity : data.sellStopLossQuantity
@@ -33,6 +37,10 @@ export const MarketsTableSubRowThirdPosition: FC<Props> = ({ data, currentSymbol
   const profitValue = counterEarning ? Number(profitQuantity) : Number(profitCounterQuantity);
   const profitPercentCalculate = dataValue === 0 ? new bigDecimal(dataValue) : new bigDecimal(profitValue).divide(new bigDecimal (dataValue)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
   const profitPercentValue = Number(profitPercentCalculate.getValue());
+
+  useEffect(() => {
+    setMarketPrice(() => marketPriceContext);
+  }, [marketPriceContext]);
 
   return (
     <Row>

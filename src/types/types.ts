@@ -73,3 +73,13 @@ export interface AlertsListTypeContent {
   sendToTelegram: boolean;
   error: string;
 }
+
+export interface AlertsSymbolsType {
+  id: number;
+  name: string,
+  market: string;
+  minCounterQuantity: number;
+  baseRound: number;
+  counterRound: number;
+  simpleName: string;
+}

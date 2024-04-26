@@ -12,10 +12,9 @@ interface Props {
   data: any,
   counterEarning: boolean,
   tabType: MarketsTabsType,
-  sumQuantity: string,
   averageQuantity?: number,
-  profitValue?: number,
-  marketPrice: number,
+  profitValue?: string,
+  profitPercent: string,
   value: string,
   isFilled?: boolean,
   isRed?: boolean
@@ -25,10 +24,9 @@ export const MarketsTableRowThirdPosition: FC<Props> = ({
   data,
   counterEarning,
   tabType,
-  sumQuantity,
   averageQuantity = 0,
   profitValue = 0,
-  marketPrice,
+  profitPercent = 0,
   value,
   isFilled = false,
   isRed = false
@@ -51,9 +49,6 @@ export const MarketsTableRowThirdPosition: FC<Props> = ({
   const currentSymbolValue = currentSymbolArray[1];
   const averageQuantityProgressBar = isFilled ? averageQuantity : 0;
   const averageQuantityRemain = averageQuantityProgressBar > 0 ? 100 - averageQuantityProgressBar : 0;
-
-  const profitPercentCalculate = Number(sumQuantity) === 0 ? new bigDecimal(sumQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumQuantity)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
-  const profitPercentValue = Number(profitPercentCalculate.getValue());
 
   return (
     <div style={{border: isRed ? '1px solid red': ''}}>
@@ -85,13 +80,13 @@ export const MarketsTableRowThirdPosition: FC<Props> = ({
               </Col>
             <Col>{dataRow.symbol}</Col>
             <Col>{`${value} ${currentSymbolValue}`}</Col>
-            {profitValue > 0
+            {+profitValue > 0
               ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>
               : <Col className='text-danger'>{`${profitValue} ${currentSymbol}`}</Col>
             }
-            {profitPercentValue > 0
-              ? <Col className='text-success'>{`+${profitPercentValue}%`}</Col>
-              : <Col className='text-danger'>{`${profitPercentValue}%`}</Col>
+            {+profitPercent > 0
+              ? <Col className='text-success'>{`+${profitPercent}%`}</Col>
+              : <Col className='text-danger'>{`${profitPercent}%`}</Col>
             }
             <Col className='text-success'>Buy</Col>
             <Col>
@@ -131,7 +126,7 @@ export const MarketsTableRowThirdPosition: FC<Props> = ({
       <Collapse in={open}>
         <div id={collapseId}>
           {data.map((subRow: any, index: number) => (
-            <MarketsTableSubRowThirdPosition key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} marketPrice={marketPrice} />
+            <MarketsTableSubRowThirdPosition key={index} data={subRow} currentSymbol={currentSymbol} counterEarning={counterEarning} />
           ))}
         </div>
       </Collapse>

@@ -89,11 +89,11 @@ export const Header = () => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item eventKey="1">
-                  Dashboard
+                <Dropdown.Item href='/account' eventKey="1">
+                  Account
                 </Dropdown.Item>
-                <Dropdown.Item eventKey="2">
-                  Settings
+                <Dropdown.Item href='/api' eventKey="2">
+                  Your API
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item eventKey="3" onClick={handleLogout}>

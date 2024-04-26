@@ -49,9 +49,14 @@ export const Markets = () => {
 
   // console.log(searchParams.get('counterEarning'));
 
+  // const [searchParams, setSearchParams] = useSearchParams();
+
+  // Установка параметров запроса
+  // setSearchParams({ counterEarning: 'true' });
+
   const handleCurrentTabChange = (tab: MarketsTabsType) => {
     setCurrentTab(tab);
-    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${tab}/${currentMarket.toLocaleLowerCase()}/${currentSymbol}`);
+    navigate(`/markets/${tradeType.toLocaleLowerCase()}/${tab}/${currentMarket.toLocaleLowerCase()}/${currentSymbol}`); //  + searchParams.toString()
   };
 
   const currentUrlToType = (tabValue: string | undefined) => {

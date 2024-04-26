@@ -5,13 +5,13 @@ import classNames from 'classnames';
 import { CustomSelect } from '../../CustomSelect';
 import { toast } from 'react-toastify';
 import { client } from '../../../api/fetchClient';
-import { AlertsListTypeContent } from '../../../types/types';
+import { AlertsListTypeContent, AlertsSymbolsType } from '../../../types/types';
 
 interface Props {
   show: boolean,
   markets: string[],
   currentMarket: string,
-  pairsData: string[],
+  pairsData: AlertsSymbolsType[],
   alertsPrice: any,
   onClose: () => void,
   onAdd: (newAlert: AlertsListTypeContent) => void
@@ -25,6 +25,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
   const [valueFrequency, setValueFrequency] = useState('');
   const [valueComment, setValueComment] = useState('');
   const [checkedTelegram, setCheckedTelegram] = useState(false);
+  const [counterRound, setCounterRound] = useState(8);
 
   const currency = valueCoinPair.split('/')[1];
 
@@ -35,9 +36,12 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
     newValue = newValue.replace(/,/g, '.');
 
     // Обмеження 8 цифр після крапки
+    // const valueCoinPairFormatted = valueCoinPair.replace('/', '_');
+    // const findCoinPair = pairsData.find(pair => pair.name === valueCoinPairFormatted);
+    // const counterRound = findCoinPair !== undefined ? findCoinPair.counterRound : 8;
     const [integerPart, decimalPart] = newValue.split('.');
-    if (decimalPart && decimalPart.length > 8) {
-      newValue = `${integerPart}.${decimalPart.slice(0, 8)}`;
+    if (decimalPart && decimalPart.length > counterRound) {
+      newValue = `${integerPart}.${decimalPart.slice(0, counterRound)}`;
     }
 
     // Дозволяємо вводити тільки цифри та один раз крапку
@@ -48,7 +52,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
     if (dotCount > 1) {
       const lastDotIndex = newValue.lastIndexOf('.');
       newValue = newValue.slice(0, lastDotIndex) + newValue.slice(lastDotIndex + 1);
-    }
+    };
 
     setValue(newValue);
   };
@@ -59,9 +63,10 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
 
   const handleAddAlert = async () => {
     const valueCoinPairFormatted = valueCoinPair.replace('/', '_');
-    const isCoinPairOk = pairsData.indexOf(valueCoinPairFormatted);
+    // const isCoinPairOk = pairsData.indexOf(valueCoinPairFormatted);
+    const isCoinPairOk = pairsData.some(pair => pair.name === valueCoinPairFormatted);
 
-    if (isCoinPairOk === -1) {
+    if (isCoinPairOk) {
       return toast.error('Coin pair incorrect. Choose again');
     };
 
@@ -103,9 +108,14 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
   const handleSelectCoinPair = (event: ChangeEvent<HTMLInputElement>)=> {
     const newValue = event.target.value;
     const valueCoinPairFormatted = newValue.replace('/', '_');
+    const findCoinPair = pairsData.find(pair => pair.name === valueCoinPairFormatted);
+
+    if (findCoinPair !== undefined) {
+      setCounterRound(() => findCoinPair.counterRound);
+    };
 
     if (alertsPrice.hasOwnProperty(valueCoinPairFormatted)) {
-        return setValueMarketPrice(alertsPrice[valueCoinPairFormatted]);
+      return setValueMarketPrice(alertsPrice[valueCoinPairFormatted]);
     };
 
     setValueMarketPrice(0);
@@ -122,7 +132,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
     // }, [alertsPrice, valueCoinPair]);
 
   return (
-    <Modal show={show} onHide={onClose} data-bs-theme='dark' fullscreen='sm-down' centered>
+    <Modal show={show} onHide={onClose} data-bs-theme='dark' fullscreen='sm-down' centered >
       <Modal.Header closeButton>
         <Modal.Title>Add notification</Modal.Title>
       </Modal.Header>
@@ -136,9 +146,9 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
             )}
           </div>
 
-          <Stack direction='vertical' className='calculator' gap={3}>
+          <Stack direction='vertical' gap={3} style={{background: '#1c1e29', borderRadius: '1rem', padding: '1rem'}}>
             <Row className='align-items-center'>
-              <Col>Coin pair:</Col>
+              <Col>Coin pair</Col>
               <Col>
                 <input
                   list="coinpairs"
@@ -150,7 +160,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
                 />
                 <datalist id="coinpairs">
                 {pairsData.map((pair) =>
-                  <option key={pair} value={pair.replace('_', '/')} />
+                  <option key={pair.id} value={pair.name.replace('_', '/')} />
                 )}
                 </datalist>
               </Col>
