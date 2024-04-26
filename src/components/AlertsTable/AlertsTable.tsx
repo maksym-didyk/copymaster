@@ -4,7 +4,7 @@ import './AlertsTable.scss';
 import { Col, Container, Row, Stack } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { client } from '../../api/fetchClient';
-import { AlertsListType, AlertsListTypeContent, AlertsSymbolsType } from '../../types/types';
+import { AlertsListType, AlertsListTypeContent, SymbolType } from '../../types/types';
 import { AlertsTableRow } from './AlertsTableRow/AlertsTableRow';
 import { ModalAddAlert } from '../Modals/ModalAddAlert/ModalAddAlert';
 import { Pagination } from '../Pagination/Pagination';
@@ -20,7 +20,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
   const [alertsData, setAlertsData] = useState<AlertsListType>();
   const [alertsTotalRecords, setAlertsTotalRecords] = useState(0);
   const [dataContent, setDataContent] = useState<AlertsListTypeContent[]>([]);
-  const [pairsData, setPairsData] = useState<AlertsSymbolsType[]>([]);
+  const [pairsData, setPairsData] = useState<SymbolType[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showModalAddAlert, setShowModalAddAlert] = useState(false);
   const [valueCoinPair, setValueCoinPair] = useState('');
@@ -59,7 +59,7 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
         return toast.error(loadedData.error);
       };
 
-      const arrayLoadedData: AlertsSymbolsType[] = loadedData[currentMarket];
+      const arrayLoadedData: SymbolType[] = loadedData[currentMarket];
       const arrayLoadedDataSorted = arrayLoadedData.sort((a, b) => a.name.localeCompare(b.name));
 
       setPairsData(arrayLoadedDataSorted);

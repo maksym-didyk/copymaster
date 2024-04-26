@@ -23,9 +23,9 @@ export interface UserPostDataType {
 export interface MarketsSpotType {
   body: {
     market: string;
-    symbol: string;
+    symbol: SymbolType;
     markets: string[];
-    symbols: string[];
+    symbols: SymbolType[];
     symbolPrice: number | null;
     counterEarning: boolean;
     tradeType: string;
@@ -74,11 +74,13 @@ export interface AlertsListTypeContent {
   error: string;
 }
 
-export interface AlertsSymbolsType {
+export interface SymbolType {
   id: number;
   name: string,
   market: string;
   minCounterQuantity: number;
+  baseCurrency: string;
+  counterCurrency: string;
   baseRound: number;
   counterRound: number;
   simpleName: string;

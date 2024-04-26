@@ -5,13 +5,13 @@ import classNames from 'classnames';
 import { CustomSelect } from '../../CustomSelect';
 import { toast } from 'react-toastify';
 import { client } from '../../../api/fetchClient';
-import { AlertsListTypeContent, AlertsSymbolsType } from '../../../types/types';
+import { AlertsListTypeContent, SymbolType } from '../../../types/types';
 
 interface Props {
   show: boolean,
   markets: string[],
   currentMarket: string,
-  pairsData: AlertsSymbolsType[],
+  pairsData: SymbolType[],
   alertsPrice: any,
   onClose: () => void,
   onAdd: (newAlert: AlertsListTypeContent) => void
@@ -174,7 +174,37 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
             <Row className='align-items-center'>
               <Col>
                 <CustomSelect
-                  data={['PRICE_REACHES', 'PRICE_RISES_ABOVE', 'PRICE_DROPS_BELOW']}
+                  data={[{
+                    id: 1, 
+                    name: 'PRICE_REACHES',
+                    market: '',
+                    minCounterQuantity: 0,
+                    baseCurrency: '',
+                    counterCurrency: '',
+                    baseRound: 0,
+                    counterRound: 0,
+                    simpleName: ''
+                  }, {
+                    id: 2, 
+                    name: 'PRICE_RISES_ABOVE',
+                    market: '',
+                    minCounterQuantity: 0,
+                    baseCurrency: '',
+                    counterCurrency: '',
+                    baseRound: 0,
+                    counterRound: 0,
+                    simpleName: ''
+                  }, {
+                    id: 3, 
+                    name: 'PRICE_DROPS_BELOW',
+                    market: '',
+                    minCounterQuantity: 0,
+                    baseCurrency: '',
+                    counterCurrency: '',
+                    baseRound: 0,
+                    counterRound: 0,
+                    simpleName: ''
+                  }]}
                   title={valueAlertType ? valueAlertType : 'Alert type '}
                   value={valueAlertType}
                   handler={handleAlertTypeChange} 
@@ -182,7 +212,27 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
               </Col>
               <Col>
                 <CustomSelect
-                  data={['ONLY_ONCE', 'ALWAYS']}
+                  data={[{
+                    id: 1, 
+                    name: 'ONLY_ONCE',
+                    market: '',
+                    minCounterQuantity: 0,
+                    baseCurrency: '',
+                    counterCurrency: '',
+                    baseRound: 0,
+                    counterRound: 0,
+                    simpleName: ''
+                  }, {
+                    id: 1, 
+                    name: 'ALWAYS',
+                    market: '',
+                    minCounterQuantity: 0,
+                    baseCurrency: '',
+                    counterCurrency: '',
+                    baseRound: 0,
+                    counterRound: 0,
+                    simpleName: ''
+                  }]}
                   title={valueFrequency ? valueFrequency : 'Frequency '}
                   value={valueFrequency}
                   handler={setValueFrequency}

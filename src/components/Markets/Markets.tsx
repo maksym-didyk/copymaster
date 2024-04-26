@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { toast } from 'react-toastify';
 import { client } from '../../api/fetchClient';
 import { Stack } from 'react-bootstrap';
-import { AlertsListTypeContent, BalanceType, BalanceTypeBody, MarketsSpotType } from '../../types/types';
+import { AlertsListTypeContent, BalanceType, BalanceTypeBody, MarketsSpotType, SymbolType } from '../../types/types';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { capitalizeFirstLetter } from '../../utils/helpers';
@@ -22,7 +22,7 @@ import MarketPriceProvider from '../../context/MarketPriceProvider';
 export const Markets = () => {
   const [markets, setMarkets] = useState<string[]>([]);
   const [currentMarket, setCurrentMarket] = useState('BINANCE');
-  const [symbols, setSymbols] = useState<string[]>([]);
+  const [symbols, setSymbols] = useState<SymbolType[]>([]);
   const [currentSymbol, setCurrentSymbol] = useState('XRP_USDT');
   // const [symbolPrice, setSymbolPrice] = useState(0);
   const [alertsPrice, setAlertsPrice] = useState(0);
@@ -87,7 +87,7 @@ export const Markets = () => {
       setMarkets([...markets, 'BYBIT', 'COINBASE']);
       setCurrentMarket(market);
       setSymbols(symbols);
-      setCurrentSymbol(symbol);
+      setCurrentSymbol(symbol.name);
       setCounterEarning(counterEarning);
       setTradeType(tradeType);
       setTradeTypes([...tradeTypes, 'FUTURES', 'INVERSE']);
@@ -237,7 +237,39 @@ export const Markets = () => {
         </Stack>
 
         <Stack direction="horizontal" gap={3} className='flex-wrap justify-content-end py-3'>
-          <CustomSelect data={['Split position','Choose average','Average All']} title={'Average '} />
+          <CustomSelect data={[{
+            id: 1,
+            name: 'Split position',
+            market: '',
+            minCounterQuantity: 0,
+            baseCurrency: '',
+            counterCurrency: '',
+            baseRound: 0,
+            counterRound: 0,
+            simpleName: ''
+          },
+          {
+            id: 2,
+            name: 'Choose average',
+            market: '',
+            minCounterQuantity: 0,
+            baseCurrency: '',
+            counterCurrency: '',
+            baseRound: 0,
+            counterRound: 0,
+            simpleName: ''
+          },
+          {
+            id: 3,
+            name: 'Average All',
+            market: '',
+            minCounterQuantity: 0,
+            baseCurrency: '',
+            counterCurrency: '',
+            baseRound: 0,
+            counterRound: 0,
+            simpleName: ''
+          }]} title={'Average '} />
           <CustomSelect data={symbols} title={currentSymbol} handler={handleSymbolsChange} isSymbols />
         </Stack>
       </Stack>

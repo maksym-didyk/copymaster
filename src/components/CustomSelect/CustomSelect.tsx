@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useId, useState } from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { SymbolType } from '../../types/types';
 
 interface Props {
-  data: string[],
+  data: SymbolType[],
   title: string,
   value?: string,
   isSymbols?: boolean,
@@ -34,15 +35,15 @@ export const CustomSelect: FC<Props> = ({ data, title, value = '', isSymbols = f
       title={customTitle}
       data-bs-theme='dark'
     >
-      {data.map((item, idx) => (
+      {data.map((item) => (
         <Dropdown.Item
-          key={idx}
-          eventKey={idx}
-          onClick={() => handleChange(item)}
-          active={isSymbols ? customTitle === item : dropdownItem === item}
+          key={item.id}
+          eventKey={item.id}
+          onClick={() => handleChange(item.name)}
+          active={isSymbols ? customTitle === item.name : dropdownItem === item.name}
           bsPrefix='dropdown-item'
         >
-          {item}
+          {item.name}
         </Dropdown.Item>
       ))}
     </DropdownButton>
