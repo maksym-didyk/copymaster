@@ -1,20 +1,16 @@
 import React, { FC, useState } from 'react';
-import { Button, Col, Modal, Row, Spinner, Stack } from 'react-bootstrap';
+import { Button, Col, Modal, Row, Stack } from 'react-bootstrap';
 
 interface Props {
   show: boolean,
-  markets: string[],
+  markets?: string[],
   onClose: () => void
 }
 
 export const ModalAddApi: FC<Props> = ({show, markets, onClose}) => {
   const [valueApiName, setValueApiName] = useState('');
-  const [valueMarketPrice, setValueMarketPrice] = useState(0);
-  const [value, setValue] = useState<string | number>(0);
-  const [valueAlertType, setAlertType] = useState('');
-  const [valueFrequency, setValueFrequency] = useState('');
-  const [valueComment, setValueComment] = useState('');
-  const [checkedTelegram, setCheckedTelegram] = useState(false);
+  const [valueApiKey, setValueApiKey] = useState('');
+  const [valueSecretKey, setValueSecretKey] = useState('');
 
   return (
     <Modal show={show} onHide={onClose} data-bs-theme='dark' fullscreen='sm-down' centered>
@@ -26,27 +22,44 @@ export const ModalAddApi: FC<Props> = ({show, markets, onClose}) => {
           <Stack direction='vertical' className='calculator' gap={3}>
             <Row className='align-items-center'>
               <Col>API name</Col>
-              <Col>
-                <input
-                  type='text'
-                  value={valueApiName}
-                  size={20}
-                  onChange={(event) => setValueApiName(event.target.value)}
-                  className='alerts-table__input-modal-coinpair'
-                  style={{background: 'transparent', outline: 'none', border: '0'}}
-                />
-              </Col>
-            </Row>
-
-            <Row className='align-items-center'>
-              <Col>Value</Col>
               <Col className='text-white fw-bold'>
                 <div className='alerts-table__inputwrapper-modal'>
                   <input
                     type='text'
-                    value={value}
+                    value={valueApiName}
                     size={20}
-                    style={{background: 'transparent', outline: 'none', border: '0'}}
+                    onChange={(event) => setValueApiName(event.target.value)}
+                    style={{ background: 'transparent', outline: 'none', border: '0' }}
+                  />
+                </div>
+              </Col>
+            </Row>
+
+            <Row className='align-items-center'>
+              <Col>API key</Col>
+              <Col className='text-white fw-bold'>
+                <div className='alerts-table__inputwrapper-modal'>
+                  <input
+                    type='text'
+                    value={valueApiKey}
+                    size={20}
+                    style={{ background: 'transparent', outline: 'none', border: '0' }}
+                    onChange={(event) => setValueApiKey(event.target.value)}
+                  />
+                </div>
+              </Col>
+            </Row>
+
+            <Row className='align-items-center'>
+              <Col>Secret key</Col>
+              <Col className='text-white fw-bold'>
+                <div className='alerts-table__inputwrapper-modal'>
+                  <input
+                    type='password'
+                    value={valueSecretKey}
+                    size={20}
+                    style={{ background: 'transparent', outline: 'none', border: '0' }}
+                    onChange={(event) => setValueSecretKey(event.target.value)}
                   />
                 </div>
               </Col>
@@ -55,8 +68,8 @@ export const ModalAddApi: FC<Props> = ({show, markets, onClose}) => {
         </Stack>
       </Modal.Body>
       <Modal.Footer className='justify-content-center'>
-      <Button variant='secondary' className='px-4' onClick={() => onClose()}>Decline</Button>
-        <Button variant='primary' className='px-4'>Next</Button>
+        <Button variant='secondary' className='px-4' onClick={() => onClose()}>Decline</Button>
+        <Button variant='primary' className='px-4'>Add API</Button>
       </Modal.Footer>
     </Modal>
   )

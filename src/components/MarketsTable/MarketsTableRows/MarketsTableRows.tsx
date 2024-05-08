@@ -19,7 +19,6 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType }) =
   const [dataTakeProfitStopLossQuantity, setDataTakeProfitStopLossQuantity] = useState('');
   const [dataFilledTakeProfitStopLossCounterQuantity, setDataFilledTakeProfitStopLossCounterQuantity] = useState('');
   const [dataFilledTakeProfitStopLossQuantity, setDataFilledTakeProfitStopLossQuantity] = useState('');
-  // const [dataFilledTakeProfitStopLossPrice, setDataFilledTakeProfitStopLossPrice] = useState('');
   const [dataBuyFilledTakeProfitStopLossCounterQuantity, setDataBuyFilledTakeProfitStopLossCounterQuantity] = useState('');
   const [dataBuyTakeProfitStopLossCounterQuantity, setDataBuyTakeProfitStopLossCounterQuantity] = useState('');
   const [marketPrice, setMarketPrice] = useState(0);
@@ -87,12 +86,8 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType }) =
   const showThirdPosition = counterEarning
     ? sumFilledTakeProfitStopLossQuantity.compareTo(sumTakeProfitStopLossQuantity) !== 0
     : sumFilledCounterQuantityStable.compareTo(sumTakeProfitStopLossCounterQuantity) !== 0 && sumTakeProfitStopLossCounterQuantity.compareTo(bigDecimalZero) !== 0;
-  // buyFilledCounterQuantity.compareTo(sellTakeProfitCounterQuantity || sellStopLossCounterQuantity) !==0
   const showFourthPosition = sumFilledTakeProfitStopLossQuantity.compareTo(bigDecimalZero) !== 0;
   const showCssLine = [showFirstPosition, showSecondPosition, showThirdPosition, showFourthPosition].filter(Boolean).length > 1;
-
-  if (data[0].blockId === 1712642121667) { console.log(data[0].blockId, sumFilledTakeProfitStopLossQuantity, sumTakeProfitStopLossQuantity); }
-  
 
   const sumQuantity = counterEarning ? sumCounterQuantity : sumQuantityStable;
   const sumFilledQuantity = counterEarning ? sumFilledCounterQuantityStable : sumFilledQuantityStable;
@@ -105,7 +100,6 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType }) =
  // calculate 3-rd position
   const resultSumTakeProfitStopLossQuantity = counterEarning ? sumBuyTakeProfitStopLossCounterQuantity : sumFilledQuantityStable; // sumTakeProfitStopLossQuantity
   const profitTakeProfitStopLossCounterQuantity = sumTakeProfitStopLossQuantity.multiply(marketPriceDecimal).subtract(sumBuyTakeProfitStopLossCounterQuantity).round(data[0].counterRound, bigDecimal.RoundingModes.FLOOR);
-  // const profitTakeProfitStopLossCounterQuantity = profitTakeProfitStopLossCounterQuantityCalculate.getValue();
   const profitTakeProfitStopLossQuantity = marketPrice === 0 ? bigDecimalZero : (sumFilledQuantityStable.multiply(marketPriceDecimal).subtract(sumFilledQuantityStable.multiply(new bigDecimal( data[0].buyFilledPrice)))).divide(marketPriceDecimal).round(data[0].baseRound, bigDecimal.RoundingModes.DOWN);
   const profitTakeProfitStopLossValue = counterEarning ? profitTakeProfitStopLossCounterQuantity : profitTakeProfitStopLossQuantity;
   const profitTakeProfitStopLossPercent = Number(resultSumTakeProfitStopLossQuantity.getValue()) === 0 ? resultSumTakeProfitStopLossQuantity : profitTakeProfitStopLossValue.divide(resultSumTakeProfitStopLossQuantity).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
@@ -124,7 +118,6 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType }) =
       setDataTakeProfitStopLossQuantity(() => 'sellTakeProfitQuantity');
       setDataFilledTakeProfitStopLossCounterQuantity(() => 'sellFilledTakeProfitCounterQuantity');
       setDataFilledTakeProfitStopLossQuantity(() => 'sellFilledTakeProfitQuantity');
-      // setDataFilledTakeProfitStopLossPrice(() => 'sellFilledTakeProfitPrice');
       setDataBuyFilledTakeProfitStopLossCounterQuantity(() => 'sellBuyFilledTakeProfitCounterQuantity');
       setDataBuyTakeProfitStopLossCounterQuantity(() => 'sellBuyTakeProfitCounterQuantity');
     } else if (data[0].sellStopLossPrice > 0) {
@@ -132,7 +125,6 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType }) =
       setDataTakeProfitStopLossQuantity(() => 'sellStopLossQuantity');
       setDataFilledTakeProfitStopLossCounterQuantity(() => 'sellFilledStopLossCounterQuantity');
       setDataFilledTakeProfitStopLossQuantity(() => 'sellFilledStopLossQuantity');
-      // setDataFilledTakeProfitStopLossPrice(() => 'sellFilledStopLossPrice');
       setDataBuyFilledTakeProfitStopLossCounterQuantity(() => 'sellBuyFilledStopLossCounterQuantity');
       setDataBuyTakeProfitStopLossCounterQuantity(() => 'sellBuyStopLossCounterQuantity');
     }

@@ -66,7 +66,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
     // const isCoinPairOk = pairsData.indexOf(valueCoinPairFormatted);
     const isCoinPairOk = pairsData.some(pair => pair.name === valueCoinPairFormatted);
 
-    if (isCoinPairOk) {
+    if (!isCoinPairOk) {
       return toast.error('Coin pair incorrect. Choose again');
     };
 
