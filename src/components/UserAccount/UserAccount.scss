@@ -17,16 +17,19 @@
   }
 
   &__bgfield {
-    // width: 1185px;
     border-radius: 1rem;
     background: #1C1E29;
     padding: 2.3rem;
+
+    &.additional {
+      background: #13141D;
+      padding: 4rem;
+    }
   }
 
   &__grey {
     color: #7B7C85;
     font-size: 0.8rem;
-    // line-height: 120%;
   }
 
   &__hr {

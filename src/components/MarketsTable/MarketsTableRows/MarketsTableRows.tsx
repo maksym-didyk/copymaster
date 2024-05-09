@@ -135,7 +135,7 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType }) =
   }, [marketPriceContext]);
 
   return (
-    <div className='mt-4' style={{ borderLeft: showCssLine ? '1px solid #545d88' : '1px solid transparent' } }> {data[0].blockId}
+    <div className='mt-4' style={{ borderLeft: showCssLine ? '1px solid #545d88' : '1px solid transparent' }}> {data[0].blockId}
 
     {showFirstPosition &&
       <MarketsTableRowFirstPosition
