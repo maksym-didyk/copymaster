@@ -22,7 +22,7 @@ export const MarketsTableRowFirstPosition: FC<Props> = ({ data, counterEarning, 
   const dataRow = data[0];
   const dateString = milisecondsToDate(dataRow.buyCreationTime);
   const dataBuyCreationPrice = bigDecimal.round(dataRow.buyCreationPrice, 2);
-  const currentSymbol = dataRow.symbol.split('/')[1];
+  const currentSymbol = dataRow.symbol.counterCurrency;
 
   return (
     <div style={{border: isRed ? '1px solid red': ''}}>
@@ -46,7 +46,7 @@ export const MarketsTableRowFirstPosition: FC<Props> = ({ data, counterEarning, 
           <Row className='markets-table__row'>
             <Col>{dateString}</Col>
             <Col style={{ color: '#5b6aff' }}>{dataBuyCreationPrice}</Col>
-            <Col>{dataRow.symbol}</Col>
+            <Col>{dataRow.symbol.name}</Col>
             <Col>{`${value} ${currentSymbol}`}</Col>
             <Col className='text-danger'></Col>
             <Col className='text-danger'></Col>

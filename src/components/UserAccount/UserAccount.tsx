@@ -313,14 +313,14 @@ export const UserAccount = () => {
                     <h4>Add API-key to repeat your deals</h4>
                     Press “Add” to start work with API-key
                   </Stack>
-                  <button className='header__button header__button--fill fw-bold px-4 py-2'>Add</button>
+                  <button className='header__button header__button--fill fw-bold px-5'>Add</button>
                 </>
               : <>
                   <Stack direction="vertical" gap={3}>
                     <h4>Add API key</h4>
                     Press “Add” to start work with Sub-account
                   </Stack>
-                  <button className='header__button header__button--fill fw-bold px-4 py-2' onClick={() => setIsAddedAPIKey(true)}>Add</button>
+                  <button className='header__button header__button--fill fw-bold px-5' onClick={() => setIsAddedAPIKey(true)}>Add</button>
                 </>
             }
           </Stack>

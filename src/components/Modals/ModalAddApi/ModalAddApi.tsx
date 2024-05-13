@@ -4,13 +4,19 @@ import { Button, Col, Modal, Row, Stack } from 'react-bootstrap';
 interface Props {
   show: boolean,
   markets?: string[],
-  onClose: () => void
+  onClose: () => void,
+  handler: () => void
 }
 
-export const ModalAddApi: FC<Props> = ({show, markets, onClose}) => {
+export const ModalAddApi: FC<Props> = ({show, markets, onClose, handler}) => {
   const [valueApiName, setValueApiName] = useState('');
   const [valueApiKey, setValueApiKey] = useState('');
   const [valueSecretKey, setValueSecretKey] = useState('');
+
+  const onClickHandle = () => {
+    handler();
+    onClose();
+  }
 
   return (
     <Modal show={show} onHide={onClose} data-bs-theme='dark' fullscreen='sm-down' centered>
@@ -69,7 +75,7 @@ export const ModalAddApi: FC<Props> = ({show, markets, onClose}) => {
       </Modal.Body>
       <Modal.Footer className='justify-content-center'>
         <Button variant='secondary' className='px-4' onClick={() => onClose()}>Decline</Button>
-        <Button variant='primary' className='px-4'>Add API</Button>
+        <Button variant='primary' className='px-4' onClick={onClickHandle}>Add API</Button>
       </Modal.Footer>
     </Modal>
   )

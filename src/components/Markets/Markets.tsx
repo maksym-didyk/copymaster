@@ -179,7 +179,7 @@ export const Markets = () => {
           connectAlertsExecutedWebsocket(stompClient, message.body);
         });
 
-        stompClient.send('/app/init-web-id', {}, JSON.stringify({ userName, symbol: currentSymbol }));
+        stompClient.send('/app/init-web-id', {}, JSON.stringify({ userName, market: currentMarket, symbolName: currentSymbol }));
       }, (message: any) => {
         if (message.startsWith('Whoops! Lost connection to')) {
           toast.error('Socket lost. Reload this page');

@@ -35,9 +35,11 @@ export const MarketsTableRowSecondPosition: FC<Props> = ({
   const dataRow = data[0];
   const dateString = milisecondsToDate(dataRow.buyFilledTime);
   const dataBuyCreationPrice = bigDecimal.round(dataRow.buyCreationPrice, 2);
-  const currentSymbolArray = dataRow.symbol.split('/');
-  const currentSymbol = counterEarning ? currentSymbolArray[1] : currentSymbolArray[0];
-  const currentSymbolValue= currentSymbolArray[1];
+  // const currentSymbolArray = dataRow.symbol.name.split('_');
+  // const currentSymbol = counterEarning ? currentSymbolArray[1] : currentSymbolArray[0];
+  // const currentSymbolValue= currentSymbolArray[1];
+  const currentSymbol = counterEarning ? dataRow.symbol.counterCurrency : dataRow.symbol.baseCurrency;
+  const currentSymbolValue= dataRow.symbol.counterCurrency;
   const averageQuantityRemain = averageQuantity > 0 ? 100 - averageQuantity : 0;
 
   const profitPercentCalculate = +sumFilledQuantity === 0 ? new bigDecimal(sumFilledQuantity) : new bigDecimal(profitValue).divide(new bigDecimal (sumFilledQuantity)).multiply(new bigDecimal('100')).round(2, bigDecimal.RoundingModes.FLOOR);
@@ -65,7 +67,7 @@ export const MarketsTableRowSecondPosition: FC<Props> = ({
           <Row className='markets-table__row'>
             <Col>{dateString}</Col>
             <Col style={{ color: '#5b6aff' }}>{dataBuyCreationPrice}</Col>
-            <Col>{dataRow.symbol}</Col>
+            <Col>{dataRow.symbol.name}</Col>
             <Col>{`${value} ${currentSymbolValue}`}</Col>
             {profitValue > 0
               ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>

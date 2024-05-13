@@ -53,18 +53,19 @@ export const AlertsTable: FC<Props> = ({ alertsPrice, alertExecuted, currentMark
 
   const getPairsData = useCallback(async () => {
     try {
-      const loadedData = await client.get<any>(`/api/alert/symbols?market=${currentMarket}`);
+      // const loadedData = await client.get<any>(`/api/alert/symbols?market=${currentMarket}`);
+      const loadedData = await client.get<any>(`/api/symbols/${currentMarket}?permissions=SPOT`);
 
       if (loadedData.error === 'undefined') {
         return toast.error(loadedData.error);
       };
 
-      const arrayLoadedData: SymbolType[] = loadedData[currentMarket];
+      const arrayLoadedData: SymbolType[] = loadedData;
       const arrayLoadedDataSorted = arrayLoadedData.sort((a, b) => a.name.localeCompare(b.name));
 
       setPairsData(arrayLoadedDataSorted);
     } catch (error) {
-      toast.error(`${error}`);
+      toast.error(`Lalala${error}`);
     }
   }, [currentMarket]);
 

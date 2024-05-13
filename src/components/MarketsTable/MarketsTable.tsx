@@ -67,7 +67,7 @@ export const MarketsTable: FC<Props> = ({ tabType, counterEarning, tradeType, cu
         <MarketsTableRows
           key={key}
           data={tableData[key]}
-          counterEarning={counterEarning} 
+          counterEarning={counterEarning}
           tabType={tabType}
         />)}
     </Container>

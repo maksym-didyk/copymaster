@@ -16,13 +16,15 @@ function App() {
         <Route path="/signup" element={<SignPage />} />
         <Route path="/signin" element={<SignPage />} />
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/account" element={<AccountPage />} />
+        <Route path="/api" element={<APIPage />} />
         {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
 
         <Route element={<PrivateRoute />}>
           <Route path="/markets/:tradeTypeUrl/:currentTabUrl/:currentMarketUrl/:currentSymbolUrl/" element={<MarketsPage />} />
           <Route path="/markets" element={<Navigate to="/markets/spot/buy/binance/XRP_USDT" />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/api" element={<APIPage />} />
+          {/* <Route path="/account" element={<AccountPage />} />
+          <Route path="/api" element={<APIPage />} /> */}
         </Route>
       </Routes>
   );

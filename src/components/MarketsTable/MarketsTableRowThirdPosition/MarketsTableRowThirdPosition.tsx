@@ -44,9 +44,8 @@ export const MarketsTableRowThirdPosition: FC<Props> = ({
   const dateTime = isTakeProfit ? milisecondsToDate(dataRow.sellTakeProfitTime) : milisecondsToDate(dataRow.sellStopLossTime);
   const dataFilledPrice = bigDecimal.round(dataRow.buyFilledPrice, 2);
   const dataPrice = isTakeProfit ? bigDecimal.round(dataRow.sellTakeProfitPrice, 2) : bigDecimal.round(dataRow.sellStopLossPrice, 2);
-  const currentSymbolArray = dataRow.symbol.split('/');
-  const currentSymbol = counterEarning ? currentSymbolArray[1] : currentSymbolArray[0];
-  const currentSymbolValue = currentSymbolArray[1];
+  const currentSymbol = counterEarning ? dataRow.symbol.counterCurrency : dataRow.symbol.baseCurrency;
+  const currentSymbolValue= dataRow.symbol.counterCurrency;
   const averageQuantityProgressBar = isFilled ? averageQuantity : 0;
   const averageQuantityRemain = averageQuantityProgressBar > 0 ? 100 - averageQuantityProgressBar : 0;
 
@@ -78,7 +77,7 @@ export const MarketsTableRowThirdPosition: FC<Props> = ({
               <p style={{ color: '#5b6aff' }}>{dataFilledPrice}</p>
               <p style={{ color: '#ff363a' }}>{dataPrice}</p>
               </Col>
-            <Col>{dataRow.symbol}</Col>
+            <Col>{dataRow.symbol.name}</Col>
             <Col>{`${value} ${currentSymbolValue}`}</Col>
             {+profitValue > 0
               ? <Col className='text-success'>{`+${profitValue} ${currentSymbol}`}</Col>

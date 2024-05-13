@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Modal, Stack } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import avatar_1 from '../../../assets/images/avatars/1.png';
 import avatar_2 from '../../../assets/images/avatars/2.png';
 import avatar_3 from '../../../assets/images/avatars/3.png';

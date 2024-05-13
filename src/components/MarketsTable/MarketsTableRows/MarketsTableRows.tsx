@@ -137,13 +137,13 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType }) =
   return (
     <div className='mt-4' style={{ borderLeft: showCssLine ? '1px solid #545d88' : '1px solid transparent' }}> {data[0].blockId}
 
-    {showFirstPosition &&
-      <MarketsTableRowFirstPosition
-        data={data}
-        counterEarning={counterEarning}
-        tabType={tabType}
-        value={sumCounterQuantity.getValue()}
-      />
+      {showFirstPosition &&
+        <MarketsTableRowFirstPosition
+          data={data}
+          counterEarning={counterEarning}
+          tabType={tabType}
+          value={sumCounterQuantity.getValue()}
+        />
       }
 
       {showSecondPosition &&
@@ -172,15 +172,15 @@ export const MarketsTableRows: FC<Props> = ({ data, counterEarning, tabType }) =
 
       {showFourthPosition &&
         <MarketsTableRowFourthPosition
-            data={data}
-            counterEarning={counterEarning}
-            tabType={tabType}
-            sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantityAdditional.getValue()}
-            averageQuantity={averageTakeProfitStopLossQuantityAdditional}
-            profitValue={profitFilledTakeProfitStopLossValue}
-            value={sumBuyFilledTakeProfitStopLossCounterQuantity.getValue()}
-            isFilled
-          />
+          data={data}
+          counterEarning={counterEarning}
+          tabType={tabType}
+          sumFilledQuantity={resultSumFilledTakeProfitStopLossQuantityAdditional.getValue()}
+          averageQuantity={averageTakeProfitStopLossQuantityAdditional}
+          profitValue={profitFilledTakeProfitStopLossValue}
+          value={sumBuyFilledTakeProfitStopLossCounterQuantity.getValue()}
+          isFilled
+        />
       }
     </div>
   );

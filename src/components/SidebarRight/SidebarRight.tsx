@@ -49,9 +49,10 @@ const SidebarRight = () => {
           )}
 
             <ul className='d-flex flex-column gap-2' >
-              <li><Link to='#'>Buy</Link></li>
+              <li><Link to='/bots'>Bots</Link></li>
               <li><Link to='/markets'>Markets</Link></li>
-              <li><Link to='#'>Trade</Link></li>
+              <li><Link to='/alerts'>Alerts</Link></li>
+              <li><Link to='/api'>API</Link></li>
               <li><img src={imageLanguage} alt='Language switcher' /> English</li>
               {isAuthenticated &&  <li><Link to='#' onClick={handleLogout}>Logout</Link></li>}
             </ul>

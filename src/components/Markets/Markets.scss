@@ -61,7 +61,7 @@
     background: none;
     padding: 0.74rem 2.5rem;
     color: #9C9FA4;
-    cursor: pointer;
+    cursor: not-allowed;
 
     &.active {
       border-radius: 0.6rem;
@@ -70,6 +70,7 @@
 
       &:first-child {
         border-radius: 0.6rem 0rem 0.6rem 0.6rem;
+        cursor: pointer;
       }
 
       &:last-child {
