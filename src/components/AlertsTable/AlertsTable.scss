@@ -5,6 +5,9 @@
   text-align: center;
 
   &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent;
     width: 2.5rem;
     height: 2.5rem;
@@ -12,7 +15,6 @@
 
     &:hover {
       background: #2a2e41;
-
     }
   }
 

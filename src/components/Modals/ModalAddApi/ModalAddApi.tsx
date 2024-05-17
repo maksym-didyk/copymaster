@@ -3,12 +3,11 @@ import { Button, Col, Modal, Row, Stack } from 'react-bootstrap';
 
 interface Props {
   show: boolean,
-  markets?: string[],
   onClose: () => void,
   handler: () => void
 }
 
-export const ModalAddApi: FC<Props> = ({show, markets, onClose, handler}) => {
+export const ModalAddApi: FC<Props> = ({show, onClose, handler}) => {
   const [valueApiName, setValueApiName] = useState('');
   const [valueApiKey, setValueApiKey] = useState('');
   const [valueSecretKey, setValueSecretKey] = useState('');
@@ -21,7 +20,7 @@ export const ModalAddApi: FC<Props> = ({show, markets, onClose, handler}) => {
   return (
     <Modal show={show} onHide={onClose} data-bs-theme='dark' fullscreen='sm-down' centered>
       <Modal.Header closeButton>
-        <Modal.Title>Add your control API</Modal.Title>
+        <Modal.Title>Add API</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Stack direction='vertical' gap={3}>

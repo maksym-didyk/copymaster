@@ -33,13 +33,31 @@
     }
   }
 
+  &__cardwrapper {
+    border-radius: 1rem;
+    background: #161822;
+
+    // &:hover {
+    //   background: #35384E;
+    // }
+  }
+
   &__card {
     border-radius: 1rem;
     background: #232533;
+
+    &:hover {
+      background: #35384E;
+    }
 
     &.main {
       border-radius: 1rem;
       background: linear-gradient(90deg, rgba(39, 171, 87, 0.10) 0%, rgba(39, 171, 87, 0.01) 100%), #232533;
     }
+  }
+
+  &__hr {
+    border-left: 1px solid #fff;
+    height: 100%;
   }
 }
