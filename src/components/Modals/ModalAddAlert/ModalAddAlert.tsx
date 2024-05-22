@@ -35,10 +35,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
     // Заміна коми на крапку
     newValue = newValue.replace(/,/g, '.');
 
-    // Обмеження 8 цифр після крапки
-    // const valueCoinPairFormatted = valueCoinPair.replace('/', '_');
-    // const findCoinPair = pairsData.find(pair => pair.name === valueCoinPairFormatted);
-    // const counterRound = findCoinPair !== undefined ? findCoinPair.counterRound : 8;
+    // Обмеження цифр після крапки
     const [integerPart, decimalPart] = newValue.split('.');
     if (decimalPart && decimalPart.length > counterRound) {
       newValue = `${integerPart}.${decimalPart.slice(0, counterRound)}`;
@@ -140,10 +137,16 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
         <Stack direction='vertical' gap={3}>
           <div className='markets__spot'>
             {markets.map((market, index) =>
-              <span key={index} style={{padding: '0.5rem 2rem', fontSize: '0.9rem'}} className={classNames('markets__switcher', {
+              <span key={index} style={{padding: '0.5rem 2rem', fontSize: '0.9rem'}} className={classNames('markets__switcher nocursor', {
                 active: market === currentMarket,
               })}>{capitalizeFirstLetter(market)}</span>
             )}
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="6" height="24" viewBox="0 0 6 24" fill="none">
+              <path d="M2.90894 23.668C2.24227 23.668 1.68498 23.4388 1.23706 22.9805C0.789144 22.5117 0.565186 21.8919 0.565186 21.1211C0.565186 20.3503 0.789144 19.7357 1.23706 19.2773C1.68498 18.8086 2.24227 18.5742 2.90894 18.5742C3.5756 18.5742 4.13289 18.8086 4.58081 19.2773C5.02873 19.7357 5.25269 20.3503 5.25269 21.1211C5.25269 21.8919 5.02873 22.5117 4.58081 22.9805C4.13289 23.4388 3.5756 23.668 2.90894 23.668Z" fill="#9C9FA4"/>
+              <path d="M2.90894 14.3867C2.24227 14.3867 1.68498 14.1576 1.23706 13.6992C0.789144 13.2305 0.565186 12.6107 0.565186 11.8398C0.565186 11.069 0.789144 10.4544 1.23706 9.99609C1.68498 9.52734 2.24227 9.29297 2.90894 9.29297C3.5756 9.29297 4.13289 9.52734 4.58081 9.99609C5.02873 10.4544 5.25269 11.069 5.25269 11.8398C5.25269 12.6107 5.02873 13.2305 4.58081 13.6992C4.13289 14.1576 3.5756 14.3867 2.90894 14.3867Z" fill="#9C9FA4"/>
+              <path d="M2.90894 5.10547C2.24227 5.10547 1.68498 4.8763 1.23706 4.41797C0.789144 3.94922 0.565186 3.32943 0.565186 2.55859C0.565186 1.78776 0.789144 1.17318 1.23706 0.714844C1.68498 0.246094 2.24227 0.0117187 2.90894 0.0117188C3.5756 0.0117188 4.13289 0.246094 4.58081 0.714844C5.02873 1.17318 5.25269 1.78776 5.25269 2.55859C5.25269 3.32943 5.02873 3.94922 4.58081 4.41797C4.13289 4.8763 3.5756 5.10547 2.90894 5.10547Z" fill="#9C9FA4"/>
+            </svg>
           </div>
 
           <Stack direction='vertical' gap={3} style={{background: '#1c1e29', borderRadius: '1rem', padding: '1rem'}}>
@@ -223,7 +226,7 @@ export const ModalAddAlert: FC<Props> = ({show, markets, currentMarket, pairsDat
                     counterRound: 0,
                     simpleName: ''
                   }, {
-                    id: 1, 
+                    id: 2, 
                     name: 'ALWAYS',
                     market: '',
                     minCounterQuantity: 0,

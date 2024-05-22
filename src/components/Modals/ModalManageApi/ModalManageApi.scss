@@ -1,0 +1,55 @@
+@import '../../../assets/styles/mixins';
+
+.modalmanageapi {
+  &__switcher {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0.6rem;
+    background: #13141D;
+  }
+
+  &__table-row{
+    border-radius: 1rem;
+    background: #3E435D;
+    height: 3rem;
+  }
+
+  &__row {
+    border-radius: 1rem;
+    background: #2A2E41;
+    height: 2.4rem;
+  }
+
+  &__maxrows {
+    padding: 0 0.8rem;
+    max-height: 10rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    @include onPhone {
+      max-height: 100%;
+    }
+    
+    &::-webkit-scrollbar {
+      width: 0.2rem; /* Ширина скроллбара */
+      background-color: transparent;
+  
+      &-thumb {
+        background-color: #8997DC; /* Цвет ползунка */
+        border-radius: 5px;
+  
+        &:hover {
+          background-color: #888;
+        }
+      }
+  
+      &-track {
+        background-color: transparent; /* Цвет трека */
+      }
+  
+      &-button {
+        display: none; /* Скрываем кнопки */
+      }
+    }
+  }
+}

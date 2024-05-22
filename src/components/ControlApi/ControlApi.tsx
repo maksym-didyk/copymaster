@@ -7,7 +7,7 @@ import { ControlApiCard } from './ControlApiCard/ControlApiCard';
 
 export const ControlApi = () => {
   const [showModalAddAlert, setShowModalAddAlert] = useState(false);
-  const [isAddedAPIKey, setIsAddedAPIKey] = useState(true);
+  const [isAddedAPIKey, setIsAddedAPIKey] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
   const [mainId, setMainId] = useState(2);
   const [data, setData] = useState<any[]>([]);

@@ -221,7 +221,7 @@ export const Markets = () => {
         <Stack direction="horizontal" gap={3}>
           <div className='markets__spot'>
             {tradeTypes.map((trade, index) =>
-              <span key={index} className={classNames('markets__switcher', {
+              <span key={index} className={classNames('markets__switcher nocursor', {
                 active: trade === tradeType,
               })}>{capitalizeFirstLetter(trade)}</span>
             )}
@@ -229,7 +229,7 @@ export const Markets = () => {
 
           <div className='markets__spot'>
             {markets.map((market, index) =>
-              <span key={index} className={classNames('markets__switcher', {
+              <span key={index} className={classNames('markets__switcher nocursor', {
                 active: market === currentMarket,
               })}>{capitalizeFirstLetter(market)}</span>
             )}

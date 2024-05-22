@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
-import { Button, Col, Modal, Row, Stack } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row, Stack } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 interface Props {
   show: boolean,
@@ -67,6 +68,18 @@ export const ModalAddApi: FC<Props> = ({show, onClose, handler}) => {
                     onChange={(event) => setValueSecretKey(event.target.value)}
                   />
                 </div>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <Stack direction='horizontal' gap={2}>
+                  <Form.Check
+                    id='testId'
+
+                  />
+                  I have read the <Link to='#' style={{color: '#3548FE'}}>Usage Policy</Link>
+                </Stack>
               </Col>
             </Row>
           </Stack>
